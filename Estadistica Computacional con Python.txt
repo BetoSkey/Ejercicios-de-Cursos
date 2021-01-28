@@ -1,0 +1,18 @@
+Estadistica Computacional con Python
+    Programacion Dinamica:
+        El nombre no tiene nada que ver con lo que es.
+
+        Subestructura optima.- Una solucion global optima se puede encontrar al combinar soluciones optimas de
+            subproblemas locales. (Partir en problemas mas pequeños)
+        
+        Problemas empalmados.- Una solucion optima que involucra resolver el mismo problema en varias ocasiones.
+            (Fibonacci y Problema del morral), (ejemplo, recursividad)
+
+            Soluciones a problemas empalmados:
+                Memoization .- (memorizacion) Es una tecnica para guardar computos previos y evitar realizarlos nuevamente.
+                    (DRY, evitar computos adicionales guardando el resultado de computaciones previas adentro de un diccionario, o
+                    de una estructura de datos (diccionarios / sets)).
+
+                    Las consultas a diccionarios o sets se pueden hacer en O(1).
+
+                    Con esto se puede "intercambiar tiempo por espacio"
