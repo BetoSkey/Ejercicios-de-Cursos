@@ -2,10 +2,12 @@ Estadistica Computacional con Python
     Programacion Dinamica:
         El nombre no tiene nada que ver con lo que es.
 
-        Subestructura optima.- Una solucion global optima se puede encontrar al combinar soluciones optimas de
-            subproblemas locales. (Partir en problemas mas pequeños)
+        Subestructura optima:
+            Una solucion global optima se puede encontrar al combinar soluciones optimas de subproblemas locales. 
+            (Partir en problemas mas pequeños)
         
-        Problemas empalmados.- Una solucion optima que involucra resolver el mismo problema en varias ocasiones.
+        Problemas empalmados:
+            Una solucion optima que involucra resolver el mismo problema en varias ocasiones.
             (Fibonacci y Problema del morral), (ejemplo, recursividad)
 
             Soluciones a problemas empalmados:
@@ -16,3 +18,9 @@ Estadistica Computacional con Python
                     Las consultas a diccionarios o sets se pueden hacer en O(1).
 
                     Con esto se puede "intercambiar tiempo por espacio"
+        
+        Caminos Aleatorios:
+            Es una simulacion que elige aleatoriamente una decision dentro de un conjunto de desiciones validas.
+            * Se utiliza cuando los sistemas no son deterministas (deterministas = un solo resultado) 
+                e incluyen elementos de aleatoriedad.
+                
