@@ -20,7 +20,25 @@ Estadistica Computacional con Python
                     Con esto se puede "intercambiar tiempo por espacio"
         
         Caminos Aleatorios:
+            # A un mismo input pudiera haber un distinto output (estocastico = sometido al azar y es objeto de analisis estadistico)
             Es una simulacion que elige aleatoriamente una decision dentro de un conjunto de desiciones validas.
-            * Se utiliza cuando los sistemas no son deterministas (deterministas = un solo resultado) 
+            * Se utiliza cuando los sistemas no son deterministas (deterministico = un mismo input tiene un solo resultado) 
                 e incluyen elementos de aleatoriedad.
+            Para realizar un analisis estocastico, tenemos que realizar la simulacion varias veces y analizar la media de 
+            todas las simulaciones.
                 
+                Ejemplo de caminos aleatorios seria tratar de simular el 'movimiento brauniano' = moleculas de polen en agua explicado
+                por Albert Einstein.
+                
+                Quantum Cloud Structure fue hecha por Antony Gormley a traves de un algoritmo.
+                
+            Problema del borracho:
+                Con la abstraccion podemos definir 3 objetos:
+                    El Borracho
+                    El Campo
+                    La Coordenada
+                
+                La idea es realizar multiples corridas con diferentes numeros de pasos para promediar los resultados e ir graficando
+                el movimiento del borracho
+                    Para calcular la distancia recorrida entre la coordenada inicial y final de cada corrida 
+                    se utilizara el teorema de pitagoras 
