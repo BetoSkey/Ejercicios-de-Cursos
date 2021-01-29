@@ -38,7 +38,7 @@ Estadistica Computacional con Python
                     El Campo
                     La Coordenada
                 
-                La idea es realizar multiples corridas con diferentes numeros de pasos para promediar los resultados e ir graficando
-                el movimiento del borracho
-                    Para calcular la distancia recorrida entre la coordenada inicial y final de cada corrida 
+                La idea es realizar multiples simulaciones con diferentes numeros de pasos determinar la media de los resultados para
+                posteriormente graficar el movimiento del borracho
+                    # Para calcular la distancia recorrida entre la coordenada inicial y final de cada corrida 
                     se utilizara el teorema de pitagoras 

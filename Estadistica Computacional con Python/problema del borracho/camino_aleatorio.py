@@ -3,28 +3,42 @@ from campo import Campo
 from coordenada import Coordenada
 
 def caminata(campo, borracho, pasos):
-  inicio = campo.obtener_cooredenada(borracho)
+  # Nos da las coordenadas iniciales del borracho
+  inicio = campo.obtener_coordenada(borracho)
 
+  # Por cada paso nos da la nueva coordenada del borracho simulando que se mueve de lugar
   for _ in range(pasos):
     campo.mover_borracho(borracho)
   
+  # Regresa la distancia entre las coordenadas de inicio y la ultima coordenada del borracho
   return inicio.distancia(campo.obtener_coordenada(borracho))
 
 def simular_caminata(pasos, numero_de_intentos, tipo_de_borracho):
+  # Crea una instancia de un borracho
   borracho = tipo_de_borracho(nombre='David')
+  # Crea una instancia de coordenada
   origen = Coordenada(0, 0)
+  #Lista para almacenar las distancias en cada movimiento del borracho
   distancias = []
 
   for _ in range(numero_de_intentos):
+    # Se crea una instancia de campo que nos regresa las coordenadas de los borrachos
     campo = Campo()
+    # Se añade el borracho con su coordenada de origen al campo
     campo.anadir_borracho(borracho, origen)
+    # Nos regresa la distancia de caminata del borracho a la cantidad de pasos
     simulacion_caminata = caminata(campo, borracho, pasos)
+    # Se agrega la distancia a la lista de distancias redondeandolo para que no tenga ningun decimal
     distancias.append(round(simulacion_caminata, 1))
 
+  return distancias
+    
 def main(distancias_de_caminata, numero_de_intentos, tipo_de_borracho):
 
   for pasos in distancias_de_caminata:
+    
     distancias = simular_caminata(pasos, numero_de_intentos, tipo_de_borracho)
+    # Calcular los datos estadisticos
     distancia_media = round(sum(distancias) / len(distancias), 4)
     distancia_maxima = max(distancias)
     distancia_minima = min(distancias)
