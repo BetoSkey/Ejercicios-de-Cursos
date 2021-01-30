@@ -3,6 +3,8 @@ from campo import Campo
 from coordenada import Coordenada
 from bokeh.plotting import figure, show
 
+# La caminata regresa la distancia recorrida despues de un numero de pasos
+
 
 def caminata(campo, borracho, pasos):
     # Nos da las coordenadas iniciales del borracho
@@ -14,6 +16,10 @@ def caminata(campo, borracho, pasos):
 
     # Regresa la distancia entre las coordenadas de inicio y la ultima coordenada del borracho
     return inicio.distancia(campo.obtener_coordenada(borracho))
+
+# Simular caminata crea un borracho y por cada intento ingresa el borracho a una instancia de campo,
+# lo hace caminar y añade la distancia a una lista; al final regresa la lista con las distancias recorridas
+# de cada intento
 
 
 def simular_caminata(pasos, numero_de_intentos, tipo_de_borracho):
@@ -36,6 +42,8 @@ def simular_caminata(pasos, numero_de_intentos, tipo_de_borracho):
 
     return distancias
 
+# funcion para graficar
+
 
 def graficar(x, y):
     f = figure(
@@ -43,9 +51,12 @@ def graficar(x, y):
         x_axis_label='pasos',
         y_axis_label='distancia')
 
-    f.circle(x, y, legend='distancia media')
+    f.line(x, y, legend='distancia media')
 
     show(f)
+
+# formula para ejecutar la simulacion de caminata y obtener la estadistica de las distancias;
+# despues agrega las distancias medias de cada analisis para posteriormente graficarlas.
 
 
 def main(distancias_de_caminata, numero_de_intentos, tipo_de_borracho):
@@ -67,6 +78,7 @@ def main(distancias_de_caminata, numero_de_intentos, tipo_de_borracho):
         print(f'Max = {distancia_maxima}')
         print(f'Min = {distancia_minima}')
 
+    # crea grafica
     graficar(x=distancias_de_caminata, y=distancias_medias_por_caminata)
 
 
