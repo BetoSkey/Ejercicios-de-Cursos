@@ -1,4 +1,4 @@
-from borracho import BorrachoTradicional
+from borracho import BorrachoGarza, BorrachoEnano, BorrachoTradicional
 from campo import Campo
 from coordenada import Coordenada
 from bokeh.plotting import figure, show
@@ -87,3 +87,5 @@ if __name__ == '__main__':
     numero_de_intentos = 100
 
     main(distancias_de_caminata, numero_de_intentos, BorrachoTradicional)
+    main(distancias_de_caminata, numero_de_intentos, BorrachoGarza)
+    main(distancias_de_caminata, numero_de_intentos, BorrachoEnano)
