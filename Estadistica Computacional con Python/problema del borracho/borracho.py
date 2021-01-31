@@ -14,7 +14,7 @@ class BorrachoTradicional(Borracho):
     def __init__(self, nombre):
         super().__init__(nombre)
 
-    def camina(self):
+    def generar_nueva_ubicacion(self):
         # Genera coordenadas aleatorias con la misma probabilidad (x,y)
         return random.choice([(0, 1), (0, -1), (1, 0), (-1, 0)])
 
@@ -26,7 +26,7 @@ class BorrachoGarza(Borracho):
     def __init__(self, nombre):
         super().__init__(nombre)
 
-    def camina(self):
+    def generar_nueva_ubicacion(self):
         # Genera coordenadas aleatorias con la misma probabilidad (x,y)
         return random.choice([(0, 4), (0, -1), (1, 0), (-1, 0)])
 
@@ -38,6 +38,6 @@ class BorrachoEnano(Borracho):
     def __init__(self, nombre):
         super().__init__(nombre)
 
-    def camina(self):
+    def generar_nueva_ubicacion(self):
         # Genera coordenadas aleatorias con la misma probabilidad (x,y)
         return random.choice([(0, 1), (0, -4), (1, 0), (-1, 0)])
