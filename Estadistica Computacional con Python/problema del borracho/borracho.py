@@ -28,7 +28,7 @@ class BorrachoGarza(Borracho):
 
     def generar_nueva_ubicacion(self):
         # Genera coordenadas aleatorias con la misma probabilidad (x,y)
-        return random.choice([(0, 4), (0, -1), (1, 0), (-1, 0)])
+        return random.choice([(0, 7), (0, -1), (1, 0), (-1, 0)])
 
 
 class BorrachoEnano(Borracho):
@@ -40,4 +40,4 @@ class BorrachoEnano(Borracho):
 
     def generar_nueva_ubicacion(self):
         # Genera coordenadas aleatorias con la misma probabilidad (x,y)
-        return random.choice([(0, 1), (0, -4), (1, 0), (-1, 0)])
+        return random.choice([(0, 1), (0, -7), (1, 0), (-1, 0)])

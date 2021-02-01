@@ -16,19 +16,20 @@ def caminata(campo, borracho, pasos):
     # Regresa la distancia entre las coordenadas de inicio y la ultima coordenada del borracho
     return inicio.distancia(campo.obtener_coordenada(borracho))
 
+
 def simular_caminata(pasos, numero_de_intentos, tipo_de_borracho):
     ''' Formula que realiza lo siguiente: 
     * Crea una instancia de Borracho,
     * Crea una coordenada de origen
-    
+
     Por cada intento:
     * Crea una instancia de Campo
     * Añade al borracho en el origen
     * Hace caminar al borracho el numero de pasos indicado y nos regresa la distancia recorrida
     * Añade la distancia recorrida a la lista de distancias
-    
+
     La formula regresa la lista de distancias'''
-    
+
     # Crea una instancia de un borracho
     borracho = tipo_de_borracho(nombre='David')
     # Crea una instancia de coordenada
@@ -60,16 +61,17 @@ def graficar(x, y):
 
     show(f)
 
+
 def main(distancias_de_caminata, numero_de_intentos, tipo_de_borracho):
     '''Formula para ejecutar la formula simulacion de caminata y obtener la estadistica de las distancias;
     despues agrega las distancias medias de cada analisis para posteriormente graficarlas.'''
-    
+
     distancias_medias_por_caminata = []
 
     for pasos in distancias_de_caminata:
         distancias = simular_caminata(
             pasos, numero_de_intentos, tipo_de_borracho)
-        print(distancias)
+        # print(distancias)
         # Calcular los datos estadisticos
         distancia_media = round(sum(distancias) / len(distancias), 4)
         distancia_maxima = max(distancias)
