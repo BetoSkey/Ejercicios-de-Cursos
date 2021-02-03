@@ -18,4 +18,4 @@ class Coordenada:
         delta_x = self.x - otra_coordenada.x
         delta_y = self.y - otra_coordenada.y
 
-        return (delta_x**2 + delta_y**2)**.05
+        return (delta_x**2 + delta_y**2)**.5
