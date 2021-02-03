@@ -1,5 +1,5 @@
 Estadistica Computacional con Python
-    Programacion Dinamica:
+    PROGRAMACION DINAMICA:
         El nombre no tiene nada que ver con lo que es.
 
         Subestructura optima:
@@ -41,4 +41,49 @@ Estadistica Computacional con Python
                 La idea es realizar multiples simulaciones con diferentes numeros de pasos determinar la media de los resultados para
                 posteriormente graficar el movimiento del borracho
                     # Para calcular la distancia recorrida entre la coordenada inicial y final de cada corrida 
-                    se utilizara el teorema de pitagoras 
+                    se utilizara el teorema de pitagoras
+
+    PROGRAMACION ESTOCASTICA:
+
+        Programa Deterministico: con el mismo input produce el mismo output
+            Existen problemas que no pueden resolverse de esa manera.
+        
+        Programa Estocastico: permite introducir aleatoriedad para crear simulaciones que permiten      
+            resolver otro tipo de problemas.
+            * Las distribuciones probabilisticas de un problema se conocen o pueden ser estimadas
+              a traves de "inferencia estadistica", implica conocer la poblacion.
+            
+        Calculo de probabilidades:
+            Se calcula entre 0 y 1:
+                0 = jamas sucedera
+                1 = garantizado que sucedera en el futuro  
+            
+            * La probabilidad habla de la fraccion de todos los posibles eventos tiene la propiedad que buscamos
+            
+            Probabilidades:
+              * La suma del complemento de las probabilidades siempre sera 1
+                  P(A) + P(~A)=1
+                  
+              * Ley multiplicativa .- La probabilidad de que suceda un evento "y" otro evento:
+                  P(A y B) = P(A) * P(B)
+                  # Siempre sera menor la probabilidad de que suceda A y B a que solo suceda A o solo suceda B
+              
+              * Ley aditiva .- La probalbilidad de que suceda un evento "o" otro evento:
+                  P(A o B) = P(A) + P(B) (mutuamente exclusivos)
+                  P(A o B) = P(A) + P(B) - P(A y B) (no exclusivos)
+              
+              Ejemplo:
+                En un dado de 6 lados:
+                  Probabilidad de que salga un 1:
+                  P(1)   + P(~1)  = 1
+                  P(1/6) + P(1-(1/6)) = 1
+
+                  Probabilidad de que salga un 1 y un 2:
+                  P(1 y 2) + P(~(1 y 2)) = 1
+                  P(1/6 * 1/6) + P(~(1-(1/6 * 1/6))) = 1
+                  
+
+
+        
+         
+        
