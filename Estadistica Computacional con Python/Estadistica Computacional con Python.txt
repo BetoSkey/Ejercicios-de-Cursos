@@ -51,7 +51,7 @@ Estadistica Computacional con Python
         Programa Estocastico: permite introducir aleatoriedad para crear simulaciones que permiten      
             resolver otro tipo de problemas.
             * Las distribuciones probabilisticas de un problema se conocen o pueden ser estimadas
-              a traves de "inferencia estadistica", implica conocer la poblacion.
+            a traves de "inferencia estadistica", implica conocer la poblacion.
             
         Calculo de probabilidades:
             Se calcula entre 0 y 1:
@@ -62,28 +62,33 @@ Estadistica Computacional con Python
             
             Probabilidades:
               * La suma del complemento de las probabilidades siempre sera 1
-                  P(A) + P(~A)=1
-                  
+                P(A) + P(~A)=1
+                
               * Ley multiplicativa .- La probabilidad de que suceda un evento "y" otro evento:
-                  P(A y B) = P(A) * P(B)
-                  # Siempre sera menor la probabilidad de que suceda A y B a que solo suceda A o solo suceda B
-              
+                    P(A y B) = P(A) * P(B)
+                    # Siempre sera menor la probabilidad de que suceda A y B a que solo suceda A o solo suceda B
+            
               * Ley aditiva .- La probalbilidad de que suceda un evento "o" otro evento:
-                  P(A o B) = P(A) + P(B) (mutuamente exclusivos)
-                  P(A o B) = P(A) + P(B) - P(A y B) (no exclusivos)
-              
-              Ejemplo:
-                En un dado de 6 lados:
-                  Probabilidad de que salga un 1:
-                  P(1)   + P(~1)  = 1
-                  P(1/6) + P(1-(1/6)) = 1
+                    P(A o B) = P(A) + P(B) (mutuamente exclusivos)
+                    P(A o B) = P(A) + P(B) - P(A y B) (no exclusivos)
+            
+                Ejemplo:
+                    En un dado de 6 lados:
+                    Probabilidad de que salga un 1:
+                    P(1)   + P(~1)  = 1
+                    P(1/6) + P(1-(1/6)) = 1
 
-                  Probabilidad de que salga un 1 y un 2:
-                  P(1 y 2) + P(~(1 y 2)) = 1
-                  P(1/6 * 1/6) + P(~(1-(1/6 * 1/6))) = 1
-                  
+                    Probabilidad de que salga un 1 y un 2:
+                    P(1 y 2) + P(~(1 y 2)) = 1
+                    P(1/6 * 1/6) + P(~(1-(1/6 * 1/6))) = 1
+
+                    Probabilidad de que salga un 1 o un 2:
+                    P(1 o 2) + P(~(1 o 2)) = 1
+                    P(1/6 + 1/6) + P(~(1-(1/6 + 1/6))) = 1
+
+                    
+                
 
 
         
-         
-        
+
