@@ -94,9 +94,42 @@ Estadistica Computacional con Python
                             tiros_con_1 = 2
                             probabilidad_tiros_con_1 = 2/3 intentos(listas dentro de la lista tiros)
 
+    
+    Inferencia Estadística:
+    
+        * Con las simulaciones podemos calcular la probabilidad de eventos mas complejos 
+            sabiendo las probabilidades de eventos simples
+            
+        * Para saber la probabilidad de eventos simples, la tecnica de inferencia estadistica permite inferir/concluir
+            las propiedades de una poblacion a partir de una muestra aleatoria.
+        
+        Proceso:
+            Tomar una muestra "representativa" y "aleatoria" para generar conclusiones de la poblacion en general.
+            
+            Ley de los grandes numeros:
+                * En pruebas independientes repetidas con la misma probabilidad p de un resultado, la fracción de 
+                    desviaciones de p converge a cero conforme la cantidad de pruebas se acerca al infinito.
                     
+                    P( lim n -> ∞ (media(n) = media(mu) ) = 1
+                    
+                    la probabilidad de que la media de la muestra sea igual a la media de la poblacion, mientras que 
+                    los limites (o eventos) se acerquen al infinito (osea mientras mas eventos existan) sera igual a 1 (100%)
+                    
+                    # Osea que mientras mas pruebas de muestras aleatorias se hagan, la probabilidad de los eventos se acercaran
+                        cada vez mas a la probabilidad de la real.
+                    
+            Falacia del apostador
+                * Señala que despues de un evento extremo, ocuriran eventos menos extremos para nivelar la media
+                * La regresion a la media señala que despues de un evento aleatorio extremo, el siguiente evento 
+                    probablemente sera menos extremo.
+                    
+            Medidas de tendencia central:
+                * media aritmetica (promedio)
+                * mediana
+                * σ2 (Varianza)
+                * σ (Desviacion Estandar / sigma)
                 
-
+                    
 
         
 
