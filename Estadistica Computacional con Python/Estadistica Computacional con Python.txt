@@ -86,6 +86,14 @@ Estadistica Computacional con Python
                     P(1 o 2) + P(~(1 o 2)) = 1
                     P(1/6 + 1/6) + P(~(1-(1/6 + 1/6))) = 1
 
+                    # En el ejercicio tiros.py, crea una lista de tiros, que contiene listas de tiros 
+                        por cada intento para despues verificar si se encuentra un 1 dentro y cuenta 
+                        cuantas veces se encontro un 1 dentro de estas listas; posteriormente se saca 
+                        un promedio de cuantas veces se encontro un 1 en cada intento.
+                            tiros = [[xxxxx1xxx], [xxxxxxxx], [xxxxx1xxx]]
+                            tiros_con_1 = 2
+                            probabilidad_tiros_con_1 = 2/3 intentos(listas dentro de la lista tiros)
+
                     
                 
 
