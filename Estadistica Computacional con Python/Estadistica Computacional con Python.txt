@@ -145,6 +145,18 @@ Estadistica Computacional con Python
                     Pr(mu -3σ <= X <= mu +3σ) = 0.9973
             
             SIMULACIONES DE MONTECARLO:
+                Metodo estadistico para resolver problemas matematicos complejos a traves de variables aleatorias.
+                
+                * Consiste en repetir o duplicar las caracteristicas y comportamientos de un sistema real, esto es, intentar
+                imitar el comportamiento de variables para analizar o predecir como van a evolucionar.
+                
+                Usos comunes:
+                    * analizar carteras de inversion.
+                    * valorar productos financieros complejos como las "opciones financieras".
+                    * creacion de modelos de gestion de riesgo.
+                    * Bolsa de Valores (movimientos de una accion)
+                    
+                   
                 
 
                     
