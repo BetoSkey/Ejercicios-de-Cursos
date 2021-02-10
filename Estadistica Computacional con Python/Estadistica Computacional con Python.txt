@@ -128,7 +128,37 @@ Estadistica Computacional con Python
                 * mediana
                 * σ2 (Varianza)
                 * σ (Desviacion Estandar / sigma)
+            
+            Distribucion Normal:
+                * Se define completamente por su media y su desviacion estandar
+                * Permite calcular intervalos de confianza con la regla empirica.
+                * Se puede convertir una distribucion que no es normal a una normal a traves del "teorema de limite central".
+                * Las distribuciones normales son "simetricas"
+                * Para graficar se puede usar un histograma.
+
+                Regla empirica:
+                * Tambien se conoce como la regla del 68-95-99.7
+                * Señala cual es la dispersion de los datos en una distribucion normal a uno, dos o tres sigmas
+                * Permite calcular probabilidades con la densidad de la distribucion normal
+                    Pr(mu -1σ <= X <= mu +1σ) = 0.6827
+                    Pr(mu -2σ <= X <= mu +2σ) = 0.9545
+                    Pr(mu -3σ <= X <= mu +3σ) = 0.9973
+            
+            SIMULACIONES DE MONTECARLO:
+                Metodo estadistico para resolver problemas matematicos complejos a traves de variables aleatorias.
                 
+                * Consiste en repetir o duplicar las caracteristicas y comportamientos de un sistema real, esto es, intentar
+                imitar el comportamiento de variables para analizar o predecir como van a evolucionar.
+                
+                Usos comunes:
+                    * analizar carteras de inversion.
+                    * valorar productos financieros complejos como las "opciones financieras".
+                    * creacion de modelos de gestion de riesgo.
+                    * Bolsa de Valores (movimientos de una accion)
+                    
+                   
+                
+
                     
 
         
