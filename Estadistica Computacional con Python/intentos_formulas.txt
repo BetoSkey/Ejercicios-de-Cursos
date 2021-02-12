@@ -1,0 +1,47 @@
+ESCALERAS = [
+        ['As',  '2',  '3',  '4',  '5'],
+        ['2', '3',  '4',  '5',  '6'],
+        ['3', '4',  '5',  '6',  '7'],
+        ['4', '5',  '6',  '7',  '8'],
+        ['5', '6',  '7',  '8',  '9'],
+        ['6', '7',  '8',  '9',  '10'],
+        ['7', '8',  '9',  '10', 'Jota'],
+        ['8', '9',  '10', 'Jota', 'Reina'],
+        ['9', '10', 'Jota', 'Reina',  'Rey'],
+        ['10',  'Jota', 'Reina',  'Rey', 'As'],
+        ['Jota',  'Reina',  'Rey', 'As', '2'],
+        ['Reina', 'Rey', 'As', '2', '3'],
+        ['Rey', 'As', '2', '3', '4']
+    ]
+
+
+dictEscaleras = dict([(id, list) for id, list in enumerate(ESCALERAS)])
+
+escaleras = dict([(id, dict([(id,value) for id, value in enumerate(list)])) for id, list in dictEscaleras.items()])
+
+
+#Union de escaleras con dictEscaleras
+escaleras = dict([(id, dict([(id,value) for id, value in enumerate(list)])) for id, list in dict([(id, list) for id, list in enumerate(ESCALERAS)]).items()])
+
+#Lista de diccionarios de escaleras
+escaleras = [(dict([(id,value) for id, value in enumerate(list)])) for list in ESCALERAS]
+
+
+dict1 = {0: 'As', 1: '2', 2: '3', 3: '4', 4: '5'}
+
+dict2 = {0: '2', 1: 'As', 2: '3', 3: '4', 4: '5'}
+
+dict3 = {0: 'As', 1: '2', 2: '3', 3: '4', 4: '5'}
+
+dict4 = {0: 'As', 1: '2', 2: '3', 3: '4', 4: '5'}
+
+  
+all( dict3[k]==dict4[k] for k in dict3 )
+
+all( dict1[k]==dict2[k] for k in dict1 )
+
+all( dict3[k] in dict4[k] for k in dict3 )
+
+all( dict1[k] in dict2.values() for k in dict1 )
+
+all( dict1[k] in escaleras[0].values() for k in dict1 )
