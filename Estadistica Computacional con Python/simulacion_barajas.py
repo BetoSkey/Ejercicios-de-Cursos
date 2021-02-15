@@ -68,18 +68,27 @@ def main(tamano_mano, simulaciones=1):
         # Agregar numeros de la mano a lista de numeros para analisis
         for carta in mano:
             numeros.append(carta[0])
-        numeros_coincidentes_escalera = 0
+        
+        
+        # Analisis de escaleras en mano
+        dict_numeros = dict(
+                          [(id, value) for id, value in enumerate(numeros)]
+        )
 
+        for escalera in range(len(escaleras)):
+            print(f'escaleras[escalera] = {escaleras[escalera]}')
+            # *** Intentar remover numeros duplicados en vairable temporal la cual se evaluara solo para las escaleras.
+            # *** temp = {val : key for key, val in test_dict.items()}
+            # *** res = {val : key for key, val in temp.items()}
+            temp = {val: key for key, val in dict_numeros.items()}
+            dict_numeros_unicos = {val: key for key, val in temp.items()}
+            if len(dict_numeros_unicos) == 5 and all(
+                dict_numeros[k] in escaleras[escalera].values()
+                for k in dict_numeros
+            ):
+                escalera_mano += 1
+                print(f'Escalera encontrada,\nnumeros: {numeros}\nEscalera: {escalera})
         # Analisis de los numeros
-        if all(
-            dict(
-                [(id, value) for id, value in enumerate(numeros)]
-            )[k] in escaleras[0].values()
-            for k in dict([(id, value) for id, value in enumerate(numeros)])
-        ):
-            escalera_mano += 1
-            print(f'True numeros en escalera {numeros}, {escaleras[0]}')
-
         for numero in numeros:
             # Contar las jugadas
             if numeros.count(numero) == 4:
@@ -98,7 +107,9 @@ def main(tamano_mano, simulaciones=1):
                     numeros.remove(numero)
 
         # Probabilidades
-        if poquer_mano >= 1:
+        if escalera_mano >= 1:
+            escalera += 1
+        elif poquer_mano >= 1:
             poquer += 1
             tercia += 1
             par += 1
@@ -118,10 +129,11 @@ def main(tamano_mano, simulaciones=1):
     probabilidad_par = par/simulaciones
     probabilidad_dos_pares = dos_pares/simulaciones
     probabilidad_tercia = tercia/simulaciones
+    probabilidad_escalera = escalera/simulaciones
     probabilidad_full = full/simulaciones
     probabilidad_poquer = poquer/simulaciones
 
-    print(f'Probabilidades:\nPar: {probabilidad_par}\nDos pares: {probabilidad_dos_pares}\nTercia: {probabilidad_tercia}\nFull: {probabilidad_full}\nPoquer: {probabilidad_poquer}')
+    print(f'Probabilidades:\nPar: {probabilidad_par}\nDos pares: {probabilidad_dos_pares}\nTercia: {probabilidad_tercia}\nFull: {probabilidad_full}\nEscalera: {probabilidad_escalera}\nPoquer: {probabilidad_poquer}')
 
 
 if '__main__' == __name__:

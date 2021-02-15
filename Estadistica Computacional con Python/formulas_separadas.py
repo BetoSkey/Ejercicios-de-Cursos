@@ -42,5 +42,5 @@ if '__main__' == __name__:
         else:
             print(False)
 
-        for k in dict_numeros:
-            print(dict_numeros[k])
+        #for k in dict_numeros:
+        #    print(dict_numeros[k])
