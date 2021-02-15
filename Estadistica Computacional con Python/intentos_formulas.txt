@@ -45,3 +45,6 @@ all( dict3[k] in dict4[k] for k in dict3 )
 all( dict1[k] in dict2.values() for k in dict1 )
 
 all( dict1[k] in escaleras[0].values() for k in dict1 )
+
+all(dict([(id, value) for id, value in enumerate(numeros)])[k] in escaleras[0].values() for k in dict([(id, value) for id, value in enumerate(numeros)]))
+

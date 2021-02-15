@@ -26,7 +26,6 @@ class Baraja:
         ['Rey', 'As', '2', '3', '4']
     ]
 
-
     def __init__(self):
         self.baraja = [
             (valor, palo) for palo in self.PALOS
@@ -43,7 +42,10 @@ class Baraja:
 def main(tamano_mano, simulaciones=1):
     baraja = Baraja()
     # Creacion de diccionarios dentro de un diccionario de escaleras.
-    escaleras = [(dict([(id,value) for id, value in enumerate(list)])) for list in baraja.ESCALERAS]
+    escaleras = [
+        (dict([(id, value) for id, value in enumerate(list)]))
+        for list in baraja.ESCALERAS
+    ]
     manos = []
     par = 0
     dos_pares = 0
@@ -52,8 +54,7 @@ def main(tamano_mano, simulaciones=1):
     escalera = 0
     full = 0
 
-    print(escaleras)
-    '''for simulacion in range(simulaciones):
+    for simulacion in range(simulaciones):
         mano = baraja.obtener_mano(baraja, tamano_mano)
         manos.append(mano)
 
@@ -70,9 +71,14 @@ def main(tamano_mano, simulaciones=1):
         numeros_coincidentes_escalera = 0
 
         # Analisis de los numeros
-        if mano in baraja.ESCALERAS:
+        if all(
+            dict(
+                [(id, value) for id, value in enumerate(numeros)]
+            )[k] in escaleras[0].values()
+            for k in dict([(id, value) for id, value in enumerate(numeros)])
+        ):
             escalera_mano += 1
-            print(mano)
+            print(f'True numeros en escalera {numeros}, {escaleras[0]}')
 
         for numero in numeros:
             # Contar las jugadas
@@ -115,7 +121,7 @@ def main(tamano_mano, simulaciones=1):
     probabilidad_full = full/simulaciones
     probabilidad_poquer = poquer/simulaciones
 
-    print(f'Probabilidades:\nPar: {probabilidad_par}\nDos pares: {probabilidad_dos_pares}\nTercia: {probabilidad_tercia}\nFull: {probabilidad_full}\nPoquer: {probabilidad_poquer}')'''
+    print(f'Probabilidades:\nPar: {probabilidad_par}\nDos pares: {probabilidad_dos_pares}\nTercia: {probabilidad_tercia}\nFull: {probabilidad_full}\nPoquer: {probabilidad_poquer}')
 
 
 if '__main__' == __name__:
