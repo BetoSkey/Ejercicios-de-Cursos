@@ -8,10 +8,7 @@ ESCALERAS = [
     ['7',     '8',    '9',    '10',   'Jota'],
     ['8',     '9',    '10',   'Jota', 'Reina'],
     ['9',     '10',   'Jota', 'Reina', 'Rey'],
-    ['10',    'Jota', 'Reina', 'Rey',  'As'],
-    ['Jota',  'Reina', 'Rey',  'As',   '2'],
-    ['Reina', 'Rey',  'As',   '2',    '3'],
-    ['Rey',   'As',   '2',    '3',    '4']
+    ['10',    'Jota', 'Reina', 'Rey',  'As']
 ]
 
 escaleras = [
@@ -19,14 +16,14 @@ escaleras = [
     for list in ESCALERAS
 ]
 
-numeros = ['Jota', '9',   '10',    '8',    'Reina']
+numeros = ['10',    'Jota', 'Reina', 'Rey',  'As']
 
 dict_numeros = dict(
     [(id, value) for id, value in enumerate(numeros)]
 )
 
 if '__main__' == __name__:
-
+    print(f'Numeros: {numeros}')
     for escalera in range(len(escaleras)):
         print(f'escaleras[escalera] = {escaleras[escalera]}')
         # *** Intentar remover numeros duplicados en vairable temporal la cual se evaluara solo para las escaleras.
@@ -42,5 +39,5 @@ if '__main__' == __name__:
         else:
             print(False)
 
-        #for k in dict_numeros:
+        # for k in dict_numeros:
         #    print(dict_numeros[k])

@@ -19,14 +19,11 @@ class Baraja:
         ['6',	'7',	'8',	'9',	'10'],
         ['7',	'8',	'9',	'10',	'Jota'],
         ['8',	'9',	'10',	'Jota',	'Reina'],
-        ['9',	'10',	'Jota',	'Reina',	'Rey'],
-        ['10',	'Jota',	'Reina',	'Rey', 'As'],
-        ['Jota',	'Reina',	'Rey', 'As', '2'],
-        ['Reina',	'Rey', 'As', '2', '3'],
-        ['Rey', 'As', '2', '3', '4']
+        ['9',	'10',	'Jota',	'Reina', 'Rey'],
+        ['10',	'Jota',	'Reina', 'Rey',  'As']
     ]
 
-    ESCALERA_REAL = {0:['10',	'Jota',	'Reina',	'Rey', 'As']}
+    ESCALERA_REAL = {0: ['10',	'Jota',	'Reina',	'Rey', 'As']}
 
     def __init__(self):
         self.baraja = [
@@ -77,39 +74,40 @@ def main(tamano_mano, simulaciones=1):
         for carta in mano:
             numeros_mano.append(carta[0])
             palos_mano.append(carta[1])
-        #print(palos_mano)
-        #---------------------------------------------------------------
+        # print(palos_mano)
+        # ---------------------------------------------------------------
 
         # Analisis de escaleras en mano
         dict_numeros = dict(
-                          [(id, value) for id, value in enumerate(numeros_mano)]
+            [(id, value) for id, value in enumerate(numeros_mano)]
         )
-
-        for escalera in range(len(escaleras)):
+        #print(f'escalera total: {escalera}')
+        for escaleramano in range(len(escaleras)):
             # *** Los diccionarios solo aceptan llaves unicas asi que para remover numeros duplicados, se crea una vairable temporal para revertir los valores a llaves y despues se vuelve a regresar las llaves como valores.
             # *** temp = {val : key for key, val in test_dict.items()}
             # *** res = {val : key for key, val in temp.items()}
             temp = {val: key for key, val in dict_numeros.items()}
             dict_numeros_unicos = {val: key for key, val in temp.items()}
             if len(dict_numeros_unicos) == 5 and all(
-                dict_numeros[k] in escaleras[escalera].values()
+                dict_numeros[k] in escaleras[escaleramano].values()
                 for k in dict_numeros
             ):
                 escalera_mano += 1
-                #print(f'Escalera encontrada,\nnumeros: {numeros_mano}\nEscalera: {escaleras[escalera].values()}')
-        #----------------------------------------------------------------------
+        #print(f'escalera total: {escalera}')
+        #print(f'Escalera encontrada,\nnumeros: {numeros_mano}\nEscalera: {escaleras[escalera].values()}')
+        # ----------------------------------------------------------------------
         # Analisis de Color (Palos) en mano
         dict_palos = dict(
-                          [(id, value) for id, value in enumerate(palos_mano)]
+            [(id, value) for id, value in enumerate(palos_mano)]
         )
-        
+
         temp = {val: key for key, val in dict_palos.items()}
         dict_palos_unicos = {val: key for key, val in temp.items()}
 
         if len(dict_palos_unicos) == 1:
-          color_mano += 1
-          #print(dict_palos_unicos.values())
-        #----------------------------------------------------------------------
+            color_mano += 1
+            # print(dict_palos_unicos.values())
+        # ----------------------------------------------------------------------
 
         # Analisis de los numeros
         for numero in numeros_mano:
@@ -128,25 +126,26 @@ def main(tamano_mano, simulaciones=1):
                 par_mano += 1
                 for i in range(1):
                     numeros_mano.remove(numero)
-        
-        #-------------------------------------------------------------
+
+        # -------------------------------------------------------------
 
         # Probabilidades
-        
+
         # analisis "escalera de color":
         if color_mano >= 1 and escalera_mano >= 1:
-          escalera_color += 1
-          color += 1
-          escalera += 1
+            escalera_color += 1
+            color += 1
+            escalera += 1
         # analisis de "solo" color
         elif color_mano >= 1:
             color += 1
         # analisis de solo "escalera", como todos los numeros deben ser consecutivos, no se repiten y por tal en una escalera no existen par de cartas
         elif escalera_mano >= 1:
             escalera += 1
-        # si hay un poquer es porque hay 4 cartas iguales que se puede analizar como sigue: 
+        # si hay un poquer es porque hay 4 cartas iguales que se puede analizar como sigue:
         # (un cuarteto y una carta) o (una tercia y dos carta) o (dos_pares y una carta) o (un par y un par y una carta)
-
+        #print(f'escalera mano: {escalera_mano}')
+        #print(f'escalera total: {escalera}')
         if poquer_mano >= 1:
             poquer += 1
             tercia += 1
@@ -177,7 +176,7 @@ def main(tamano_mano, simulaciones=1):
     probabilidad_full = full/simulaciones
     probabilidad_poquer = poquer/simulaciones
     probabilidad_escalera_color = escalera_color/simulaciones
-    #---------------------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------------------
 
     # Return de formula
     print(f'Probabilidades:\nPar: {probabilidad_par}\nDos pares: {probabilidad_dos_pares}\nTercia: {probabilidad_tercia}\nEscalera: {probabilidad_escalera}\nColor: {probabilidad_color}\nFull: {probabilidad_full}\nPoquer: {probabilidad_poquer}\nEscalera de color: {probabilidad_escalera_color}')
