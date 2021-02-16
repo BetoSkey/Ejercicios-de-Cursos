@@ -1,43 +1,56 @@
-ESCALERAS = [
-    ['As',    '2',    '3',    '4',    '5'],
-    ['2',     '3',    '4',    '5',    '6'],
-    ['3',     '4',    '5',    '6',    '7'],
-    ['4',     '5',    '6',    '7',    '8'],
-    ['5',     '6',    '7',    '8',    '9'],
-    ['6',     '7',    '8',    '9',    '10'],
-    ['7',     '8',    '9',    '10',   'Jota'],
-    ['8',     '9',    '10',   'Jota', 'Reina'],
-    ['9',     '10',   'Jota', 'Reina', 'Rey'],
-    ['10',    'Jota', 'Reina', 'Rey',  'As']
-]
+import random
 
-escaleras = [
-    (dict([(id, value) for id, value in enumerate(list)]))
-    for list in ESCALERAS
-]
 
-numeros = ['10',    'Jota', 'Reina', 'Rey',  'As']
+class Baraja:
+    PALOS = [
+        'Diamantes Rojo', 'Corazones Rojo', 'Espadas Negra', 'Treboles Negro'
+    ]
+    VALORES = [
+        'As', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jota', 'Reina',
+        'Rey'
+    ]
+    ESCALERAS = [['As', '2', '3', '4', '5'], ['2', '3', '4', '5', '6'],
+                 ['3', '4', '5', '6', '7'], ['4', '5', '6', '7', '8'],
+                 ['5', '6', '7', '8', '9'], ['6', '7', '8', '9', '10'],
+                 ['7', '8', '9', '10', 'Jota'],
+                 ['8', '9', '10', 'Jota', 'Reina'],
+                 ['9', '10', 'Jota', 'Reina', 'Rey'],
+                 ['10', 'Jota', 'Reina', 'Rey', 'As']]
 
-dict_numeros = dict(
-    [(id, value) for id, value in enumerate(numeros)]
-)
+    def __init__(self):
+        self.baraja = [(valor, palo) for palo in self.PALOS
+                       for valor in self.VALORES]
+    def __str__(self):
+        return str(self.baraja)
+
+    def obtener_mano(self, baraja, tamano_mano):
+        baraja = self.baraja
+        mano = random.sample(baraja, tamano_mano)
+        for i in mano:
+          self.baraja.remove(i)
+        return mano
 
 if '__main__' == __name__:
-    print(f'Numeros: {numeros}')
-    for escalera in range(len(escaleras)):
-        print(f'escaleras[escalera] = {escaleras[escalera]}')
-        # *** Intentar remover numeros duplicados en vairable temporal la cual se evaluara solo para las escaleras.
-        # *** temp = {val : key for key, val in test_dict.items()}
-        # *** res = {val : key for key, val in temp.items()}
-        temp = {val: key for key, val in dict_numeros.items()}
-        dict_numeros_unicos = {val: key for key, val in temp.items()}
-        if len(dict_numeros_unicos) == 5 and all(
-            dict_numeros[k] in escaleras[escalera].values()
-            for k in dict_numeros
-        ):
-            print(True)
-        else:
-            print(False)
+    baraja = Baraja()
 
-        # for k in dict_numeros:
-        #    print(dict_numeros[k])
+    print(f'\nBaraja ({len(baraja.baraja)}cartas):\n {baraja}')
+
+    mano = baraja.obtener_mano(baraja, 5)
+    
+    print(f'\nMano:\n {mano}')
+
+    print(f'\nBaraja ({len(baraja.baraja)}cartas):\n {baraja}')
+
+    mano = baraja.obtener_mano(baraja, 5)
+
+    print(f'\nMano:\n {mano}')
+
+    print(f'\nBaraja ({len(baraja.baraja)}cartas):\n {baraja}')
+    mano = baraja.obtener_mano(baraja, 5)
+    print(f'\nMano:\n {mano}')
+    mano = baraja.obtener_mano(baraja, 5)
+    print(f'\nMano:\n {mano}')
+    mano = baraja.obtener_mano(baraja, 5)
+    print(f'\nMano:\n {mano}')
+
+    print(f'\nBaraja ({len(baraja.baraja)}cartas):\n {baraja}')

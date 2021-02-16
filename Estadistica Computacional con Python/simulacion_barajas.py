@@ -3,33 +3,23 @@ import random
 
 class Baraja:
     PALOS = [
-        'Diamantes Rojo', 'Corazones Rojo',
-        'Espadas Negra', 'Treboles Negro'
+        'Diamantes Rojo', 'Corazones Rojo', 'Espadas Negra', 'Treboles Negro'
     ]
     VALORES = [
         'As', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jota', 'Reina',
         'Rey'
     ]
-    ESCALERAS = [
-        ['As',	'2',	'3',	'4',	'5'],
-        ['2',	'3',	'4',	'5',	'6'],
-        ['3',	'4',	'5',	'6',	'7'],
-        ['4',	'5',	'6',	'7',	'8'],
-        ['5',	'6',	'7',	'8',	'9'],
-        ['6',	'7',	'8',	'9',	'10'],
-        ['7',	'8',	'9',	'10',	'Jota'],
-        ['8',	'9',	'10',	'Jota',	'Reina'],
-        ['9',	'10',	'Jota',	'Reina', 'Rey'],
-        ['10',	'Jota',	'Reina', 'Rey',  'As']
-    ]
-
-    ESCALERA_REAL = {0: ['10',	'Jota',	'Reina',	'Rey', 'As']}
+    ESCALERAS = [['As', '2', '3', '4', '5'], ['2', '3', '4', '5', '6'],
+                 ['3', '4', '5', '6', '7'], ['4', '5', '6', '7', '8'],
+                 ['5', '6', '7', '8', '9'], ['6', '7', '8', '9', '10'],
+                 ['7', '8', '9', '10', 'Jota'],
+                 ['8', '9', '10', 'Jota', 'Reina'],
+                 ['9', '10', 'Jota', 'Reina', 'Rey'],
+                 ['10', 'Jota', 'Reina', 'Rey', 'As']]
 
     def __init__(self):
-        self.baraja = [
-            (valor, palo) for palo in self.PALOS
-            for valor in self.VALORES
-        ]
+        self.baraja = [(valor, palo) for palo in self.PALOS
+                       for valor in self.VALORES]
 
     def obtener_mano(self, baraja, tamano_mano):
         baraja = self.baraja
@@ -39,13 +29,16 @@ class Baraja:
 
 
 def main(tamano_mano, simulaciones=1):
+    
+# Creacion de baraja y diccionarios dentro de un diccionario de escaleras para comparacion.
     baraja = Baraja()
-    # Creacion de diccionarios dentro de un diccionario de escaleras.
-    escaleras = [
-        (dict([(id, value) for id, value in enumerate(list)]))
-        for list in baraja.ESCALERAS
-    ]
+    escaleras = [(dict([(id, value) for id, value in enumerate(list)]))
+              for list in baraja.ESCALERAS]
+
+    #Lista de manos obtenidas en cada simulacion
     manos = []
+
+    # Contadores Totales
     par = 0
     dos_pares = 0
     tercia = 0
@@ -68,48 +61,51 @@ def main(tamano_mano, simulaciones=1):
         escalera_mano = 0
         poquer_mano = 0
         color_mano = 0
-        escalera_real_mano = 0
+        escalera_mayor_valor_mano = 0
 
         # Agregar numeros de la mano a lista de numeros para analisis
         for carta in mano:
             numeros_mano.append(carta[0])
             palos_mano.append(carta[1])
-        # print(palos_mano)
+
         # ---------------------------------------------------------------
 
-        # Analisis de escaleras en mano
-        dict_numeros = dict(
-            [(id, value) for id, value in enumerate(numeros_mano)]
-        )
-        #print(f'escalera total: {escalera}')
+        # conversion de lista de numeros a diccionario para comparacion con diccionario de escaleras
+        dict_numeros = dict([(id, value)
+                             for id, value in enumerate(numeros_mano)])
+
+        #----------------------------------------------------------------
+
+        #Analisis de "Escalera"
         for escaleramano in range(len(escaleras)):
             # *** Los diccionarios solo aceptan llaves unicas asi que para remover numeros duplicados, se crea una vairable temporal para revertir los valores a llaves y despues se vuelve a regresar las llaves como valores.
-            # *** temp = {val : key for key, val in test_dict.items()}
-            # *** res = {val : key for key, val in temp.items()}
+
             temp = {val: key for key, val in dict_numeros.items()}
             dict_numeros_unicos = {val: key for key, val in temp.items()}
             if len(dict_numeros_unicos) == 5 and all(
-                dict_numeros[k] in escaleras[escaleramano].values()
-                for k in dict_numeros
-            ):
+                    dict_numeros[k] in escaleras[escaleramano].values()
+                    for k in dict_numeros):
                 escalera_mano += 1
-        #print(f'escalera total: {escalera}')
-        #print(f'Escalera encontrada,\nnumeros: {numeros_mano}\nEscalera: {escaleras[escalera].values()}')
-        # ----------------------------------------------------------------------
+        #---------------------------------------------------------------------
+
         # Analisis de Color (Palos) en mano
-        dict_palos = dict(
-            [(id, value) for id, value in enumerate(palos_mano)]
-        )
+        dict_palos = dict([(id, value) for id, value in enumerate(palos_mano)])
 
         temp = {val: key for key, val in dict_palos.items()}
         dict_palos_unicos = {val: key for key, val in temp.items()}
 
         if len(dict_palos_unicos) == 1:
             color_mano += 1
-            # print(dict_palos_unicos.values())
+
         # ----------------------------------------------------------------------
 
-        # Analisis de los numeros
+        # Analisis de "Escalera de mayor valor"
+        if all(dict_numeros[k] in escaleras[9].values() for k in dict_numeros):
+            escalera_mayor_valor_mano += 1
+
+        # ----------------------------------------------------------------------
+
+        # Analisis de los numeros en la mano
         for numero in numeros_mano:
             # Contar las jugadas
             if numeros_mano.count(numero) == 4:
@@ -129,23 +125,31 @@ def main(tamano_mano, simulaciones=1):
 
         # -------------------------------------------------------------
 
-        # Probabilidades
+        # Analisis de JUGADAS de acuerdo a ESCALERAS
+        # (si existe escalera no pueden existir cartas duplicadas)
 
-        # analisis "escalera de color":
-        if color_mano >= 1 and escalera_mano >= 1:
+        # analisis "Escalera Real o Flor Imperial":
+        if escalera_mayor_valor_mano >= 1 and color_mano >= 1:
+            escalera_real += 1
             escalera_color += 1
             color += 1
             escalera += 1
-        # analisis de "solo" color
+        # analisis "Escalera de Color"
+        elif color_mano >= 1 and escalera_mano >= 1:
+            escalera_color += 1
+            color += 1
+            escalera += 1
+        # analisis "Color"
         elif color_mano >= 1:
             color += 1
-        # analisis de solo "escalera", como todos los numeros deben ser consecutivos, no se repiten y por tal en una escalera no existen par de cartas
+        # analisis "Escalera"
         elif escalera_mano >= 1:
             escalera += 1
-        # si hay un poquer es porque hay 4 cartas iguales que se puede analizar como sigue:
-        # (un cuarteto y una carta) o (una tercia y dos carta) o (dos_pares y una carta) o (un par y un par y una carta)
-        #print(f'escalera mano: {escalera_mano}')
-        #print(f'escalera total: {escalera}')
+
+        #--------------------------------------------------------------------------
+
+        # Analisis de JUGADAS de acuerdo a la repeticion de sus NUMEROS
+
         if poquer_mano >= 1:
             poquer += 1
             tercia += 1
@@ -168,18 +172,24 @@ def main(tamano_mano, simulaciones=1):
         elif par_mano == 1:
             par += 1
 
-    probabilidad_par = par/simulaciones
-    probabilidad_dos_pares = dos_pares/simulaciones
-    probabilidad_tercia = tercia/simulaciones
-    probabilidad_escalera = escalera/simulaciones
-    probabilidad_color = color/simulaciones
-    probabilidad_full = full/simulaciones
-    probabilidad_poquer = poquer/simulaciones
-    probabilidad_escalera_color = escalera_color/simulaciones
+    #-----------------------------------------------------------------------------------------------
+
+    # Probabilidades
+    probabilidad_par = par / simulaciones
+    probabilidad_dos_pares = dos_pares / simulaciones
+    probabilidad_tercia = tercia / simulaciones
+    probabilidad_escalera = escalera / simulaciones
+    probabilidad_color = color / simulaciones
+    probabilidad_full = full / simulaciones
+    probabilidad_poquer = poquer / simulaciones
+    probabilidad_escalera_color = escalera_color / simulaciones
+    probabilidad_escalera_real = escalera_real / simulaciones
     # ---------------------------------------------------------------------------------------
 
     # Return de formula
-    print(f'Probabilidades:\nPar: {probabilidad_par}\nDos pares: {probabilidad_dos_pares}\nTercia: {probabilidad_tercia}\nEscalera: {probabilidad_escalera}\nColor: {probabilidad_color}\nFull: {probabilidad_full}\nPoquer: {probabilidad_poquer}\nEscalera de color: {probabilidad_escalera_color}')
+    print(
+        f'Probabilidades:\nPar: veces= {par} | probabilidad= {probabilidad_par}\nDos pares: veces= {dos_pares} | probabilidad= {probabilidad_dos_pares}\nTercia: veces={tercia} | probabilidad= {probabilidad_tercia}\nEscalera: veces= {escalera} | probabilidad= {probabilidad_escalera}\nColor: veces= {color} | probabilidad= {probabilidad_color}\nFull: veces= {full} | probabilidad= {probabilidad_full}\nPoquer: veces= {poquer} | probabilidad= {probabilidad_poquer}\nEscalera de color: veces={escalera_color} | probabilidad= {probabilidad_escalera_color}\nEscalera Real (Flor Imperial): veces= {escalera_real} | probabilidad= {probabilidad_escalera_real}'
+    )
 
 
 if '__main__' == __name__:
