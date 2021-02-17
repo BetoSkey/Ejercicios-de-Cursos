@@ -17,9 +17,12 @@ class Baraja:
                  ['9', '10', 'Jota', 'Reina', 'Rey'],
                  ['10', 'Jota', 'Reina', 'Rey', 'As']]
 
+  
     def __init__(self):
         self.baraja = [(valor, palo) for palo in self.PALOS
                        for valor in self.VALORES]
+        self.escaleras = [(dict([(id, value) for id, value in enumerate(list)]))
+              for list in self.ESCALERAS]
 
     def obtener_mano(self, baraja, tamano_mano):
         baraja = self.baraja
@@ -27,16 +30,29 @@ class Baraja:
 
         return mano
 
+def obtener_manos(baraja, simulaciones):
+    manos = []
+    for simulacion in range(simulaciones):
+      mano = baraja.obtener_mano(baraja, tamano_mano)
+      manos.append(mano)
+    return manos
+
+def separa_valores_palos(mano):
+  numeros_mano = []
+  palos_mano = []
+  for carta in mano:
+      numeros_mano.append(carta[0])
+      palos_mano.append(carta[1])
+  return numeros_mano, palos_mano
 
 def main(tamano_mano, simulaciones=1):
-    
-# Creacion de baraja y diccionarios dentro de un diccionario de escaleras para comparacion.
+# Creacion de baraja y escaleras.
+
     baraja = Baraja()
-    escaleras = [(dict([(id, value) for id, value in enumerate(list)]))
-              for list in baraja.ESCALERAS]
+    escaleras = baraja.escaleras
 
     #Lista de manos obtenidas en cada simulacion
-    manos = []
+    manos = obtener_manos(baraja, simulaciones)
 
     # Contadores Totales
     par = 0
@@ -49,13 +65,8 @@ def main(tamano_mano, simulaciones=1):
     escalera_color = 0
     escalera_real = 0
 
-    for simulacion in range(simulaciones):
-        mano = baraja.obtener_mano(baraja, tamano_mano)
-        manos.append(mano)
-
     for mano in manos:
-        numeros_mano = []
-        palos_mano = []
+        numeros_mano, palos_mano = separa_valores_palos(mano)
         par_mano = 0
         tercia_mano = 0
         escalera_mano = 0
@@ -64,9 +75,7 @@ def main(tamano_mano, simulaciones=1):
         escalera_mayor_valor_mano = 0
 
         # Agregar numeros de la mano a lista de numeros para analisis
-        for carta in mano:
-            numeros_mano.append(carta[0])
-            palos_mano.append(carta[1])
+        
 
         # ---------------------------------------------------------------
 
