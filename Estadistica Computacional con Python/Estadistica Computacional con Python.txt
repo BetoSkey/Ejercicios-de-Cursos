@@ -156,7 +156,39 @@ Estadistica Computacional con Python
                     * creacion de modelos de gestion de riesgo.
                     * Bolsa de Valores (movimientos de una accion)
                     
-                   
+                CALCULO DE PI:
+                    Un metodo estocastico en lugar de deterministico para el calculo de "pi" podria ser mediante el uso
+                    del teorema de pitagoras, el cual indica que la hipotenusa se calcula sacando la raiz cuadrada de 
+                    las sumas de los cuadrados de sus lados siempre y cuando sea un tirangulo rectangulo 
+                    (que tenga un angulo recto):
+
+                    dentro de un cuadrado de 2 cm por lado ponemos un circulo cuyo radio sea de 1 cm y con esto podemos saber que:
+                    area del cuadrado (base x altura) = 4
+                    area circulo es (pi x r2) = pi x 1 = pi
+
+                    entonces por medio del metodo de agujas de buffon, seria aventar agujas aleatoreamente y si la aguja cae dentro del circlo,
+                    podriamos inferir su area por medio de probabilidad.
+
+                    podemos deducir que:
+                    (agujas en circulo/agujas en cuadrado = area circulo / area cuadrado)
+                    entonces: 
+                    (agujas en circulo/agujas en cuadrado = area circulo / 4)
+                    (4* agujas encirculo/agujas en cuadrado = area circulo)
+                    y como el area de circulo es = pi, entonces:
+
+                    (pi = 4 * agujas en circulo/agujas en cuadrado)
+
+                    Solucion propia, otra forma seria:
+                    Perimetro = 2pi x radio
+                    perimetro = 2pi x 1
+                    perimetro/2 = pi
+
+                    todas las agujas que caigan en triagulos cuya hipotenusa sea 1 sera el perimetro
+
+                    para saber si la aguja cae dentro del circulo, usaremos el teorema de pitagoras en donde al aleatoreamente agarrar un punto cualquiera
+                    entre cero y 1 y formamos un triangulo cuadrado, podriamos saber si su hipotenusa es mayor al radio del circulo osea 1, entonces la aguja 
+                    cae fuera del circulo, si no, cae dentro.
+
                 
 
                     
