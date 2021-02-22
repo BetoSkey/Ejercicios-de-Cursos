@@ -1,0 +1,109 @@
+Buenas practicas para escritura de codigo:
+
+El codigo fuente se ecribe para humanos.
+
+Los siguientes elementos dotan de calidad al código:
+    * Legibilidad: qué tan fácil es interpretar lo que el código dice. 
+        (falta de indentacion, nombres de variables malos)
+    * Mantenibilidad: cuánto esfuerzo supondrá adaptar el código a nuevos requerimientos.
+    * Testeabilidad: cuánto esfuerzo supondrá realizar pruebas sobre este código. 
+        esfuerzo para demostrar que el codigo funciona)
+
+Codigo modular:
+    Pedazos de códigos divididos que pueden ser utilizados en cualquier lugar para evitar 
+    tener un solo archivo con un bloque de código gigante.
+
+    Se puede modular:
+    * todo lo que este "dentro" de ciclos for, while
+    * todos los if, verificando que variables regresa y que parametros evalua que serian 
+        los parametros que recibiria la funcion. cuando la funcion regresa dos resultados, 
+        se pueden asignar de la siguiente manera:
+        variable_a, variable_b = funcion_que_regresa_dos_resultados()
+
+Codigo reutilizable:
+
+    * Mantén tu código DRY (O SECO, en español). Es decir “Don’t Repeat Yourself” (O “No te repitas”)
+    * Haz métodos o funciones que hagan solamente una cosa.
+    * Haz pruebas unitarias para tus métodos y que sean fáciles de testear
+    * Trata de pensar de forma abstracta, usa interfaces o clases abstractas
+    * Escribe código que se pueda extender fácilmente en un futuro 
+        (Básicamente que modificarlo no signifique prenderle fuego a medio código)
+    * No escribas código innecesario o que no hace falta en el momento.
+    * Reduce el acoplamiento 
+        (Acoplamiento hace referencia a que, el comportamiento de una función depende enteramente de lo que retorne otra función, y esta de otra, y otra, y otra…)
+    * Usa más código modular.
+    * Escribe tu código como si fuera una API externa 
+        (Que se pueda importar de otro código y sirva completamente)
+
+Codigo organizado:
+    Un ejemplo para mantener organizado un proyecto seria:
+        /public
+            (todos los archivos accesibles fuera del servidor)
+        /src
+            (codigo fuente)
+        /test
+            (pruebas unitarias)
+        /vendor
+            (librerias de terceros)
+
+Evitar el hardcoding:
+    Significa evitar usar literales en lugar de identificadores.
+    Por ejemplo:
+        funcion(a):
+            a + 20
+    en lugar de:
+        b=20
+        funcion(a, b):
+            a + b 
+Evitar efectos colaterales:
+    Evitar usar variables globales; esto es, debes usar variables dentro de las funciones
+    en lugar de usar variables que se encuentren fuera.
+
+PRINCIPIOS SOLID:
+    S: Single Reponsibility Principle
+        (una sola responsabilidad para cada clase, muy concisa)
+        La idea es evitar que una sola clase haga muchas cosas en lo que podría compararse con un “hombre orquesta”.
+    O: Open/Closed Principle
+        (Invita a usar las clases abstractas; abierto para la extensión pero cerrado para la modificación)
+        ejemplo:
+
+        #se pueden crear mas tipos de documentos que se procesen de diferente manera sin modificar los actuales.
+        clase_procesar_documentos:
+            def procesa_documento([docuemntos]):
+                for documento in documentos:
+                    procesa documento
+        
+        class documento1:
+            def procesa_documento()
+                1 + 1
+
+        class documento2:
+            def procesa documento()
+                1 + 3
+    
+    L: Liskov Substitution Principle
+        (una funcion que recia un objeto de la clase padre podra ser sustituido por cualquier clase hija sin que afecte su resultado.)
+    I: Interface Segregation Principle
+        (los clientes de un programa sólo deberían conocer de éste los metodos que realmente usan.)
+        # hace referencia al polimorfismo
+
+        class actividad_a:
+            def realiza_actividad_a():
+                realiza actividad
+        class actividad_b:
+            def realiza_actividad_b():
+                realiza actividad
+        class actividad_c:
+            def realiza_actividad_c():
+                realiza actividad
+
+        class cliente_hace_actividad_a_y_b(actividad_a, actividad_b):
+            def realiza_actividad_a()
+            def realiza_actividad_b()
+
+        class cliente_hace_actividad_b_y_c(actividad_b, actividad_c):
+            def realiza_actividad_b()
+            def realiza_actividad_c()
+
+    D: Dependency Inversion Principle
+    
