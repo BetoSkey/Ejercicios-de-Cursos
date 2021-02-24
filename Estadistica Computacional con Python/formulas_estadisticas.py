@@ -141,11 +141,11 @@ def desviacion_estandar_muestra(lista):
 def valor_z_poblacion(lista):
   media_lista = media(lista)
   desviacion_estandar_poblacion_lista = desviacion_estandar_poblacion(lista)
-  lista_valor_z = []
+  lista_valor_z = {}
 
   for i in range(len(lista)):
     valor_z = (lista[i] - media_lista) / desviacion_estandar_poblacion_lista 
-    lista_valor_z.append((lista[i], round(valor_z,2)))
+    lista_valor_z[lista[i]] = round(valor_z,2)
 
   return lista_valor_z
 
@@ -157,4 +157,6 @@ if '__main__' == __name__:
   print(f'Lista Original: {lista}\nLista Ordenada: {lista_ordenada}')
 
   print(f'Media: {media(lista_ordenada)}\nMediana: {mediana(lista_ordenada)}\nVarianza Poblacion: {round(varianza_poblacion(lista),2)}\nsigma Poblacion: {round(desviacion_estandar_poblacion(lista),2)}\nVarianza Muestra: {round(varianza_muestra(lista),2)}\nsigma Muestra: {round(desviacion_estandar_muestra(lista),2)}\nValores z: {valor_z_poblacion(lista)}')
+
+  print(valor_z_poblacion(lista)[int(input('Numero a convertir a valor z: '))])
   
