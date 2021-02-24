@@ -145,14 +145,14 @@ def valor_z_poblacion(lista):
 
   for i in range(len(lista)):
     valor_z = (lista[i] - media_lista) / desviacion_estandar_poblacion_lista 
-    lista_valor_z.append(round(valor_z,2))
-  
+    lista_valor_z.append((lista[i], round(valor_z,2)))
+
   return lista_valor_z
 
 if '__main__' == __name__:
-  #largo_lista = int(input('Largo de lista: '))
-  #lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
-  lista = [26, 33, 65, 28, 34, 55, 25, 44, 50, 36, 26, 37, 43, 62, 35, 38, 45, 32, 28, 34]
+  largo_lista = int(input('Largo de lista: '))
+  lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
+  #lista = [26, 33, 65, 28, 34, 55, 25, 44, 50, 36, 26, 37, 43, 62, 35, 38, 45, 32, 28, 34]
   lista_ordenada = ordenamiento_insercion(lista)
   print(f'Lista Original: {lista}\nLista Ordenada: {lista_ordenada}')
 
