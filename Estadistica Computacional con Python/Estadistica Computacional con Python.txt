@@ -193,6 +193,7 @@ Estadistica Computacional con Python
 
 Puntuacion Estandar / Unidad Tipificada / Variable Estandarizada o Normalizada / Valor Z:
     https://www.disfrutalasmatematicas.com/datos/distribucion-normal-estandar.html
+    https://www.disfrutalasmatematicas.com/datos/distribucion-normal-estandar-tabla.html
     
     1s = 68% (probable)
     2s = 95% (muy probable)
