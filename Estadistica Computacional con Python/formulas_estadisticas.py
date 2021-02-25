@@ -1,4 +1,5 @@
 import random
+import math
 from collections import Counter
 
 
@@ -109,6 +110,11 @@ def mediana(lista):
 
     return mediana
 
+def modas(lista):
+    conteo_elementos = Counter(lista)
+    maximo = max(conteo_elementos.values())
+    moda = [id for id, value in conteo_elementos.items()if value == maximo]
+    return moda
 
 def varianza_poblacion(lista):
     media_lista = media(lista)
@@ -149,6 +155,7 @@ def desviacion_estandar_muestra(lista):
 
 
 def valor_z(lista):
+    '''Regresa de cada numero dentro de una lista, el alejamiento de la media en "veces desviacion estandar"'''
     media_lista = media(lista)
     desviacion_estandar_poblacion_lista = desviacion_estandar_poblacion(lista)
     lista_valor_z = {}
@@ -161,9 +168,16 @@ def valor_z(lista):
     return lista_valor_z
 
 
-def modas(lista):
-    conteo_elementos = Counter(lista).most_common()
-    return conteo_elementos
+def distribucion_normal(lista):
+    '''Regresa listas de "x" y "y" a partir de una lista, para graficar su distribucion normal'''
+    media_lista = media(lista)
+    sigma_lista = desviacion_estandar_poblacion(lista)
+    valores_x = lista
+    valores_y = []
+    for i in lista:
+        y = (1/(sigma_lista*math.sqrt(2*math.pi)))*math.exp(-1/2*((i-media_lista)/(sigma_lista))**2)
+        valores_y.append(y)
+    return valores_x, valores_y
 
 
 if '__main__' == __name__:
@@ -176,12 +190,15 @@ if '__main__' == __name__:
     print(f'''
 Media: {media(lista_ordenada)}
 Mediana: {mediana(lista_ordenada)}
+Modas: {modas(lista)}
+
 Varianza Poblacion: {round(varianza_poblacion(lista),2)}
 sigma Poblacion: {round(desviacion_estandar_poblacion(lista),2)}
+
 Varianza Muestra: {round(varianza_muestra(lista),2)}
 sigma Muestra: {round(desviacion_estandar_muestra(lista),2)}
 
-Modas: {modas(lista)}
-
 Valores z: {valor_z(lista)}
+
+Distribucion normal: {distribucion_normal(lista)}
 ''')
