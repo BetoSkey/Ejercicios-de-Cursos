@@ -1,4 +1,6 @@
 import random
+from collections import Counter
+
 
 def ubicacion_binaria(lista, comienzo, final, objetivo, ubicacion_meta=0):
 
@@ -49,6 +51,7 @@ def ubicacion_binaria(lista, comienzo, final, objetivo, ubicacion_meta=0):
     else:  # Si el objetivo es menor que la mitad
         return ubicacion_binaria(lista, comienzo, medio - 1, objetivo, ubicacion_meta)
 
+
 def ordenamiento_insercion(lista):
     lista_ordenada = [lista[0]]
     lista_desordenada = lista[1:]
@@ -88,75 +91,97 @@ def ordenamiento_insercion(lista):
 def media(lista):
     return sum(lista) / len(lista)
 
+
 def media_muestra(lista):
     return sum(lista) / (len(lista)-1)
 
+
 def mediana(lista):
-  lista_ordenada = ordenamiento_insercion(lista)
+    lista_ordenada = ordenamiento_insercion(lista)
 
-  if len(lista_ordenada)%2 >0:
-    mediana = lista_ordenada[int(round(len(lista_ordenada)/2,0)-1)]
-  else:
-    numero_medio1 = lista_ordenada[int(round(len(lista_ordenada)/2,0)-1)]
-    numero_medio2 = lista_ordenada[int(round(len(lista_ordenada)/2,0))]
+    if len(lista_ordenada) % 2 > 0:
+        mediana = lista_ordenada[int(round(len(lista_ordenada)/2, 0)-1)]
+    else:
+        numero_medio1 = lista_ordenada[int(round(len(lista_ordenada)/2, 0)-1)]
+        numero_medio2 = lista_ordenada[int(round(len(lista_ordenada)/2, 0))]
 
-    mediana = media([numero_medio1,numero_medio2])
-  
-  return mediana
+        mediana = media([numero_medio1, numero_medio2])
+
+    return mediana
+
 
 def varianza_poblacion(lista):
-  media_lista = media(lista)
-  diferencias_vs_media = []
-  
-  for i in range(len(lista)):
-    diferencia = (lista[i] - media_lista)**2
-    diferencias_vs_media.append(diferencia)
-  
-  varianza = media(diferencias_vs_media)
+    media_lista = media(lista)
+    diferencias_vs_media = []
 
-  return varianza
+    for i in range(len(lista)):
+        diferencia = (lista[i] - media_lista)**2
+        diferencias_vs_media.append(diferencia)
+
+    varianza = media(diferencias_vs_media)
+
+    return varianza
+
 
 def desviacion_estandar_poblacion(lista):
-  varianza_lista = varianza_poblacion(lista)
-  sigma = varianza_lista**0.5
-  return sigma
+    varianza_lista = varianza_poblacion(lista)
+    sigma = varianza_lista**0.5
+    return sigma
+
 
 def varianza_muestra(lista):
-  media_lista = media(lista)
-  diferencias_vs_media = []
-  
-  for i in range(len(lista)):
-    diferencia = (lista[i] - media_lista)**2
-    diferencias_vs_media.append(diferencia)
-  
-  varianza = media_muestra(diferencias_vs_media)
+    media_lista = media(lista)
+    diferencias_vs_media = []
 
-  return varianza
+    for i in range(len(lista)):
+        diferencia = (lista[i] - media_lista)**2
+        diferencias_vs_media.append(diferencia)
+
+    varianza = media_muestra(diferencias_vs_media)
+
+    return varianza
+
 
 def desviacion_estandar_muestra(lista):
-  varianza_lista = varianza_muestra(lista)
-  sigma = varianza_lista**0.5
-  return sigma
+    varianza_lista = varianza_muestra(lista)
+    sigma = varianza_lista**0.5
+    return sigma
 
-def valor_z_poblacion(lista):
-  media_lista = media(lista)
-  desviacion_estandar_poblacion_lista = desviacion_estandar_poblacion(lista)
-  lista_valor_z = {}
 
-  for i in range(len(lista)):
-    valor_z = (lista[i] - media_lista) / desviacion_estandar_poblacion_lista 
-    lista_valor_z[lista[i]] = round(valor_z,2)
+def valor_z(lista):
+    media_lista = media(lista)
+    desviacion_estandar_poblacion_lista = desviacion_estandar_poblacion(lista)
+    lista_valor_z = {}
 
-  return lista_valor_z
+    for i in range(len(lista)):
+        valor_z = (lista[i] - media_lista) / \
+            desviacion_estandar_poblacion_lista
+        lista_valor_z[lista[i]] = round(valor_z, 2)
+
+    return lista_valor_z
+
+
+def modas(lista):
+    conteo_elementos = Counter(lista).most_common()
+    return conteo_elementos
+
 
 if '__main__' == __name__:
-  largo_lista = int(input('Largo de lista: '))
-  lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
-  #lista = [26, 33, 65, 28, 34, 55, 25, 44, 50, 36, 26, 37, 43, 62, 35, 38, 45, 32, 28, 34]
-  lista_ordenada = ordenamiento_insercion(lista)
-  print(f'Lista Original: {lista}\nLista Ordenada: {lista_ordenada}')
+    largo_lista = int(input('Largo de lista: '))
+    lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
+    #lista = [26, 33, 65, 28, 34, 55, 25, 44, 50, 36, 26, 37, 43, 62, 35, 38, 45, 32, 28, 34]
+    lista_ordenada = ordenamiento_insercion(lista)
+    print(f'Lista Original: {lista}\nLista Ordenada: {lista_ordenada}')
 
-  print(f'Media: {media(lista_ordenada)}\nMediana: {mediana(lista_ordenada)}\nVarianza Poblacion: {round(varianza_poblacion(lista),2)}\nsigma Poblacion: {round(desviacion_estandar_poblacion(lista),2)}\nVarianza Muestra: {round(varianza_muestra(lista),2)}\nsigma Muestra: {round(desviacion_estandar_muestra(lista),2)}\nValores z: {valor_z_poblacion(lista)}')
+    print(f'''
+Media: {media(lista_ordenada)}
+Mediana: {mediana(lista_ordenada)}
+Varianza Poblacion: {round(varianza_poblacion(lista),2)}
+sigma Poblacion: {round(desviacion_estandar_poblacion(lista),2)}
+Varianza Muestra: {round(varianza_muestra(lista),2)}
+sigma Muestra: {round(desviacion_estandar_muestra(lista),2)}
 
-  print(valor_z_poblacion(lista)[int(input('Numero a convertir a valor z: '))])
-  
+Modas: {modas(lista)}
+
+Valores z: {valor_z(lista)}
+''')
