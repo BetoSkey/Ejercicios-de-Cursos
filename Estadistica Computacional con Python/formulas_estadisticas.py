@@ -2,7 +2,6 @@ import random
 import math
 from collections import Counter
 
-
 def ubicacion_binaria(lista, comienzo, final, objetivo, ubicacion_meta=0):
 
     if final-comienzo == 1:  # Si la lista se acoto a dos ubicaciones
@@ -183,10 +182,12 @@ def distribucion_normal(lista):
     return valores_x, valores_y
 
 
+
 if '__main__' == __name__:
     largo_lista = int(input('Largo de lista: '))
-    lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
+    #lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
     #lista = [26, 33, 65, 28, 34, 55, 25, 44, 50, 36, 26, 37, 43, 62, 35, 38, 45, 32, 28, 34]
+    lista = [i for i in range(largo_lista)]
     lista_ordenada = ordenamiento_insercion(lista)
     print(f'Lista Original: {lista}\nLista Ordenada: {lista_ordenada}')
 
