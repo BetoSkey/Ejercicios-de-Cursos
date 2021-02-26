@@ -110,11 +110,13 @@ def mediana(lista):
 
     return mediana
 
+
 def modas(lista):
     conteo_elementos = Counter(lista)
     maximo = max(conteo_elementos.values())
     moda = [id for id, value in conteo_elementos.items()if value == maximo]
     return moda
+
 
 def varianza_poblacion(lista):
     media_lista = media(lista)
@@ -175,7 +177,8 @@ def distribucion_normal(lista):
     valores_x = lista
     valores_y = []
     for i in lista:
-        y = (1/(sigma_lista*math.sqrt(2*math.pi)))*math.exp(-1/2*((i-media_lista)/(sigma_lista))**2)
+        y = (1/(sigma_lista*math.sqrt(2*math.pi))) * \
+            math.exp(-1/2*((i-media_lista)/(sigma_lista))**2)
         valores_y.append(y)
     return valores_x, valores_y
 
@@ -200,5 +203,8 @@ sigma Muestra: {round(desviacion_estandar_muestra(lista),2)}
 
 Valores z: {valor_z(lista)}
 
-Distribucion normal: {distribucion_normal(lista)}
+Distribucion normal: 
+x={distribucion_normal(lista)[0]}
+
+y={[round(i,3) for i in distribucion_normal(lista)[1]]}
 ''')

@@ -1,6 +1,7 @@
 import random
 from formulas_estadisticas import modas
 
+
 def aventar_agujas(agujas):
     dentro_del_circulo = 0
 
@@ -16,10 +17,9 @@ def aventar_agujas(agujas):
     return (4 * dentro_del_circulo/agujas)
 
 
-
 if '__main__' == __name__:
-  largo_lista = int(input('Largo de lista: '))
-  lista = [random.randint(1,largo_lista) for i in range(largo_lista)]
-  print(lista)
-  moda_lista = modas(lista)
-  print(moda_lista)
+    largo_lista = int(input('Largo de lista: '))
+    lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
+    print(lista)
+    moda_lista = modas(lista)
+    print(moda_lista)
