@@ -1,6 +1,5 @@
 import random
 import math
-import numpy as np
 import pandas
 from collections import Counter
 
@@ -197,19 +196,31 @@ def probabilidades_dns():
 
 def buscar_z_dns(probabilidad):
     probabilidad_dns = 1-((1-probabilidad)/2)
+    lista_probabilidades_dns = [val for val in probabilidades_dns().values()]
     lista_z = {val: key for key, val in probabilidades_dns().items()}
-    z = lista_z[probabilidad_dns]
+    ubicacion = ubicacion_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns), probabilidad_dns)
+    if ubicacion == probabilidad_dns:
+      z = lista_z[probabilidad_dns]
+    else:
+      z = lista_z[lista_probabilidades_dns[ubicacion]]
     return z
 
 
 if '__main__' == __name__:
     largo_lista = int(input('Largo de lista: '))
-    #lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
+    
+    lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
+    
     #lista = [26, 33, 65, 28, 34, 55, 25, 44, 50, 36, 26, 37, 43, 62, 35, 38, 45, 32, 28, 34]
-    lista = [i for i in range(largo_lista)]
+    
+    #lista = [i for i in range(largo_lista)]
+    
     lista_ordenada = ordenamiento_insercion(lista)
+    
     print(f'Lista Original: {lista}\nLista Ordenada: {lista_ordenada}')
-
+    
+    probabilidad_a_buscar = float(input('Probabilidad a buscar: '))
+    
     print(f'''
 Media: {media(lista_ordenada)}
 Mediana: {mediana(lista_ordenada)}
@@ -229,7 +240,7 @@ x={distribucion_normal(lista)[0]}
 y={[round(i,3) for i in distribucion_normal(lista)[1]]}
 
 Probabilidades de la Distribucion normal estandar : 
-{probabilidades_dns()}
+probabilidades_dns()
 
-Probabilidad .90 = {buscar_z_dns(.90)}
+Z de probabilidad para {int(probabilidad_a_buscar*100)}% : {buscar_z_dns(probabilidad_a_buscar)}
 ''')
