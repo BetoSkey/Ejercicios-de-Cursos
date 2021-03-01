@@ -89,6 +89,21 @@ def ordenamiento_insercion(lista):
 
     return lista_ordenada
 
+def busqueda_binaria(lista, comienzo, final, objetivo, ordenar=True):
+    lista_ordenada = []
+    if ordenar == True:
+        lista_ordenada = ordenamiento_insercion(lista)
+
+    if comienzo > final:
+        return False
+    medio = (comienzo + final) // 2
+    if lista_ordenada[medio] == objetivo:
+        return True
+    elif lista_ordenada[medio] < objetivo:
+        return busqueda_binaria(lista_ordenada, medio + 1, final, objetivo)
+    else:
+        return busqueda_binaria(lista_ordenada, comienzo, medio - 1, objetivo)
+
 
 def media(lista):
     return sum(lista) / len(lista)
@@ -157,7 +172,7 @@ def desviacion_estandar_muestra(lista):
     return sigma
 
 
-def valor_z(lista):
+def lista_valores_z(lista):
     '''Regresa de cada numero dentro de una lista, el alejamiento de la media en "veces desviacion estandar"'''
     media_lista = media(lista)
     desviacion_estandar_poblacion_lista = desviacion_estandar_poblacion(lista)
@@ -171,7 +186,7 @@ def valor_z(lista):
     return lista_valor_z
 
 
-def distribucion_normal(lista):
+def valores_x_y_distribucion_normal(lista):
     '''Regresa listas de "x" y "y" a partir de una lista, para graficar su distribucion normal'''
     media_lista = media(lista)
     sigma_lista = desviacion_estandar_poblacion(lista)
@@ -184,7 +199,7 @@ def distribucion_normal(lista):
     return valores_x, valores_y
 
 
-def probabilidades_dns():
+def diccionario_probabilidades_z_distribucion_normal_estandar():
     '''Regresa las probabilidades de z en la distribucion normal estandar'''
     df = pandas.read_csv('fdp.csv')
     z = df['z']
@@ -194,16 +209,32 @@ def probabilidades_dns():
     return probabilidad_z
 
 
-def buscar_z_dns(probabilidad):
-    probabilidad_dns = 1-((1-probabilidad)/2)
-    lista_probabilidades_dns = [val for val in probabilidades_dns().values()]
-    lista_z = {val: key for key, val in probabilidades_dns().items()}
-    ubicacion = ubicacion_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns), probabilidad_dns)
-    if ubicacion == probabilidad_dns:
-      z = lista_z[probabilidad_dns]
+def buscar_z_dada_una_probabilidad(probabilidad):
+    '''Busca Z en la tabla de probabilidades de la distribucion normal estandar dada una probabilidad'''
+    probabilidad_dns = round(1-((1-probabilidad)/2),5)
+
+    lista_probabilidades_dns = [val for val in diccionario_probabilidades_z_distribucion_normal_estandar().values()]
+
+    lista_z = {val: key for key, val in diccionario_probabilidades_z_distribucion_normal_estandar().items()}
+
+    if busqueda_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns), probabilidad_dns):
+
+        #ubicacion = ubicacion_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns),probabilidad_dns)+1
+
+        #print(f'ubicacion: {lista_probabilidades_dns[ubicacion]} == probabilidad_dns: {probabilidad_dns}')
+
+        z = lista_z[probabilidad_dns]
+
     else:
-      z = lista_z[lista_probabilidades_dns[ubicacion]]
-    return z
+        ubicacion1 = ubicacion_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns),probabilidad_dns) - 1
+        
+        ubicacion2 = ubicacion_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns),probabilidad_dns)
+        
+        #print(f'probabilidad dns: {probabilidad_dns} | ubicacion1: {lista_probabilidades_dns[ubicacion1]} | ubicacion2: {lista_probabilidades_dns[ubicacion2]} | probabilidad intermedia: {(lista_probabilidades_dns[ubicacion1] + lista_probabilidades_dns[ubicacion2])/2}')
+
+        z = (lista_z[lista_probabilidades_dns[ubicacion1]] + lista_z[lista_probabilidades_dns[ubicacion2]]) / 2
+    
+    return round(z, 3)
 
 
 if '__main__' == __name__:
@@ -232,15 +263,14 @@ sigma Poblacion: {round(desviacion_estandar_poblacion(lista),2)}
 Varianza Muestra: {round(varianza_muestra(lista),2)}
 sigma Muestra: {round(desviacion_estandar_muestra(lista),2)}
 
-Valores z: {valor_z(lista)}
+Valores z: {lista_valores_z(lista)}
 
 Distribucion normal: 
-x={distribucion_normal(lista)[0]}
+x={valores_x_y_distribucion_normal(lista)[0]}
 
-y={[round(i,3) for i in distribucion_normal(lista)[1]]}
+y={[round(i,3) for i in valores_x_y_distribucion_normal(lista)[1]]}
 
-Probabilidades de la Distribucion normal estandar : 
-probabilidades_dns()
+Z de probabilidad para {int(probabilidad_a_buscar*100)}% : {buscar_z_dada_una_probabilidad(probabilidad_a_buscar)}
 
-Z de probabilidad para {int(probabilidad_a_buscar*100)}% : {buscar_z_dns(probabilidad_a_buscar)}
+P(-z>= X <=z) = P({-buscar_z_dada_una_probabilidad(probabilidad_a_buscar)} >= {int(probabilidad_a_buscar*100)}% <= {buscar_z_dada_una_probabilidad(probabilidad_a_buscar)})
 ''')
