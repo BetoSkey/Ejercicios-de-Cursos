@@ -1,6 +1,9 @@
 import random
 import math
+import numpy as np
+import pandas
 from collections import Counter
+
 
 def ubicacion_binaria(lista, comienzo, final, objetivo, ubicacion_meta=0):
 
@@ -182,6 +185,22 @@ def distribucion_normal(lista):
     return valores_x, valores_y
 
 
+def probabilidades_dns():
+    '''Regresa las probabilidades de z en la distribucion normal estandar'''
+    df = pandas.read_csv('fdp.csv')
+    z = df['z']
+    probabilidad = df['prob']
+    probabilidad_z = dict([(z[i], probabilidad[i]) for i in range(len(z))])
+
+    return probabilidad_z
+
+
+def buscar_z_dns(probabilidad):
+    probabilidad_dns = 1-((1-probabilidad)/2)
+    lista_z = {val: key for key, val in probabilidades_dns().items()}
+    z = lista_z[probabilidad_dns]
+    return z
+
 
 if '__main__' == __name__:
     largo_lista = int(input('Largo de lista: '))
@@ -208,4 +227,9 @@ Distribucion normal:
 x={distribucion_normal(lista)[0]}
 
 y={[round(i,3) for i in distribucion_normal(lista)[1]]}
+
+Probabilidades de la Distribucion normal estandar : 
+{probabilidades_dns()}
+
+Probabilidad .90 = {buscar_z_dns(.90)}
 ''')

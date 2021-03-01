@@ -194,7 +194,11 @@ Estadistica Computacional con Python
 Puntuacion Estandar / Unidad Tipificada / Variable Estandarizada o Normalizada / Valor Z:
     https://www.disfrutalasmatematicas.com/datos/distribucion-normal-estandar.html
     https://www.disfrutalasmatematicas.com/datos/distribucion-normal-estandar-tabla.html
+    https://calculadorasonline.com/calculadora-de-distribucion-nomal-campana-de-gauss/
     
+    FMP = Funcion de masa de probabilidad
+    FDP | PDF (ingles) = Funcion de densidad de probabilidad
+
     1s = 68% (probable)
     2s = 95% (muy probable)
     3s = 99.7% (casi con seguridad)

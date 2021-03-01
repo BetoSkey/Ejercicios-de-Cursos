@@ -16,6 +16,7 @@ def aventar_agujas(agujas):
 
     return dentro_del_circulo
 
+
 def estimacion_pi(agujas):
     agujas_dentro_de_circulo = aventar_agujas(agujas)
 
@@ -23,45 +24,37 @@ def estimacion_pi(agujas):
 
     return estimacion_pi
 
+
 def simulaciones_estimacion_pi(agujas, intentos):
-  '''Regresa la media y desviacion estandar de los resultados de las estimaciones de pi de cada intento'''
-  estimaciones_pi = []
-  
-  for intento in range(intentos):
-    intento_estimacion_pi = estimacion_pi(agujas)
-    estimaciones_pi.append(intento_estimacion_pi)
+    '''Regresa la media y desviacion estandar de los resultados de las estimaciones de pi de cada intento'''
+    estimaciones_pi = []
 
-  media_estimaciones_pi = media(estimaciones_pi)
-  sigma_estimaciones_pi = desviacion_estandar_poblacion(estimaciones_pi)
+    for intento in range(intentos):
+        intento_estimacion_pi = estimacion_pi(agujas)
+        estimaciones_pi.append(intento_estimacion_pi)
 
-  print(f'''
-    Estimado de pi={round(media_estimaciones_pi, 5)}, 
-    sigma de pi={round(sigma_estimaciones_pi, 5)}
-    ''')
+    media_estimaciones_pi = media(estimaciones_pi)
+    sigma_estimaciones_pi = desviacion_estandar_poblacion(estimaciones_pi)
 
-  return(media_estimaciones_pi, sigma_estimaciones_pi)
+    print(f'''
+        Estimado de pi={round(media_estimaciones_pi, 5)}, 
+        sigma de pi={round(sigma_estimaciones_pi, 5)}
+        ''')
+
+    return(media_estimaciones_pi, sigma_estimaciones_pi)
+
 
 def precision_estimacion_pi(sigma_meta, intentos):
     agujas = 1000
     sigma = sigma_meta
 
-
-    while sigma >= precision / 1.96:
-        media_estimaciones_pi, sigma_estimaciones_pi = simulaciones_estimacion_pi(agujas, intentos)
+    while sigma >= sigma_meta / 1.96:
+        media_estimaciones_pi, sigma_estimaciones_pi = simulaciones_estimacion_pi(
+            agujas, intentos)
         agujas *= 2
-    
+
     return media_estimaciones_pi
- 
-if '__main__' == __name__:
-  precision_estimacion_pi(.01, 1000)
-
-
-
 
 
 if '__main__' == __name__:
-    largo_lista = int(input('Largo de lista: '))
-    lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
-    print(lista)
-    moda_lista = modas(lista)
-    print(moda_lista)
+    precision_estimacion_pi(.01, 1000)

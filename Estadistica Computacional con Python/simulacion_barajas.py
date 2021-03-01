@@ -9,20 +9,23 @@ class Baraja:
         'As', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jota', 'Reina',
         'Rey'
     ]
-    ESCALERAS = [['As', '2', '3', '4', '5'], ['2', '3', '4', '5', '6'],
-                 ['3', '4', '5', '6', '7'], ['4', '5', '6', '7', '8'],
-                 ['5', '6', '7', '8', '9'], ['6', '7', '8', '9', '10'],
-                 ['7', '8', '9', '10', 'Jota'],
-                 ['8', '9', '10', 'Jota', 'Reina'],
-                 ['9', '10', 'Jota', 'Reina', 'Rey'],
-                 ['10', 'Jota', 'Reina', 'Rey', 'As']]
+    ESCALERAS = [['As', '2', '3', '4', '5'],
+    ['2', '3', '4', '5', '6'],
+    ['3', '4', '5', '6', '7'],
+    ['4', '5', '6', '7', '8'],
+    ['5', '6', '7', '8', '9'],
+    ['6', '7', '8', '9', '10'],
+    ['7', '8', '9', '10', 'Jota'],
+    ['8', '9', '10', 'Jota', 'Reina'],
+    ['9', '10', 'Jota', 'Reina', 'Rey'],
+    ['10', 'Jota', 'Reina', 'Rey', 'As']
+    ]
 
-  
     def __init__(self):
         self.baraja = [(valor, palo) for palo in self.PALOS
                        for valor in self.VALORES]
         self.escaleras = [(dict([(id, value) for id, value in enumerate(list)]))
-              for list in self.ESCALERAS]
+                          for list in self.ESCALERAS]
 
     def obtener_mano(self, baraja, tamano_mano):
         baraja = self.baraja
@@ -30,28 +33,31 @@ class Baraja:
 
         return mano
 
+
 def obtener_manos(baraja, simulaciones):
     manos = []
     for simulacion in range(simulaciones):
-      mano = baraja.obtener_mano(baraja, tamano_mano)
-      manos.append(mano)
+        mano = baraja.obtener_mano(baraja, tamano_mano)
+        manos.append(mano)
     return manos
 
+
 def separa_valores_palos(mano):
-  numeros_mano = []
-  palos_mano = []
-  for carta in mano:
-      numeros_mano.append(carta[0])
-      palos_mano.append(carta[1])
-  return numeros_mano, palos_mano
+    numeros_mano = []
+    palos_mano = []
+    for carta in mano:
+        numeros_mano.append(carta[0])
+        palos_mano.append(carta[1])
+    return numeros_mano, palos_mano
+
 
 def main(tamano_mano, simulaciones=1):
-# Creacion de baraja y escaleras.
+    # Creacion de baraja y escaleras.
 
     baraja = Baraja()
     escaleras = baraja.escaleras
 
-    #Lista de manos obtenidas en cada simulacion
+    # Lista de manos obtenidas en cada simulacion
     manos = obtener_manos(baraja, simulaciones)
 
     # Contadores Totales
@@ -75,7 +81,6 @@ def main(tamano_mano, simulaciones=1):
         escalera_mayor_valor_mano = 0
 
         # Agregar numeros de la mano a lista de numeros para analisis
-        
 
         # ---------------------------------------------------------------
 
@@ -83,9 +88,9 @@ def main(tamano_mano, simulaciones=1):
         dict_numeros = dict([(id, value)
                              for id, value in enumerate(numeros_mano)])
 
-        #----------------------------------------------------------------
+        # ----------------------------------------------------------------
 
-        #Analisis de "Escalera"
+        # Analisis de "Escalera"
         for escaleramano in range(len(escaleras)):
             # *** Los diccionarios solo aceptan llaves unicas asi que para remover numeros duplicados, se crea una vairable temporal para revertir los valores a llaves y despues se vuelve a regresar las llaves como valores.
 
@@ -95,7 +100,7 @@ def main(tamano_mano, simulaciones=1):
                     dict_numeros[k] in escaleras[escaleramano].values()
                     for k in dict_numeros):
                 escalera_mano += 1
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         # Analisis de Color (Palos) en mano
         dict_palos = dict([(id, value) for id, value in enumerate(palos_mano)])
@@ -155,7 +160,7 @@ def main(tamano_mano, simulaciones=1):
         elif escalera_mano >= 1:
             escalera += 1
 
-        #--------------------------------------------------------------------------
+        # --------------------------------------------------------------------------
 
         # Analisis de JUGADAS de acuerdo a la repeticion de sus NUMEROS
 
@@ -181,7 +186,7 @@ def main(tamano_mano, simulaciones=1):
         elif par_mano == 1:
             par += 1
 
-    #-----------------------------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------------------------
 
     # Probabilidades
     probabilidad_par = par / simulaciones
