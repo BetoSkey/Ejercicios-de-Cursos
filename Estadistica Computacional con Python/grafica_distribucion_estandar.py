@@ -1,5 +1,5 @@
 import random
-from formulas_estadisticas import ordenamiento_insercion, media, desviacion_estandar_poblacion, distribucion_normal
+from formulas_estadisticas import ordenamiento_insercion, media, desviacion_estandar_poblacion, valores_x_y_distribucion_normal
 from bokeh.plotting import figure
 from bokeh.io import output_file, show
 from bokeh.models.annotations import Span, BoxAnnotation
@@ -11,7 +11,7 @@ def grafica_distribucion_estandar(lista,file="index.html"):
     mu = media(lista_ordenada)
     sigma = desviacion_estandar_poblacion(lista_ordenada)
 
-    x, y = distribucion_normal(lista_ordenada)
+    x, y = valores_x_y_distribucion_normal(lista_ordenada)
 
     output_file(file)
 
@@ -58,8 +58,8 @@ Media: {media(lista_ordenada)}
 sigma: {round(desviacion_estandar_poblacion(lista),2)}
 
 Distribucion normal: 
-x={distribucion_normal(lista)[0]}
+x={valores_x_y_distribucion_normal(lista)[0]}
 
-y={[round(i,3) for i in distribucion_normal(lista)[1]]}
+y={[round(i,3) for i in valores_x_y_distribucion_normal(lista)[1]]}
 ''')
     grafica_distribucion_estandar(lista)

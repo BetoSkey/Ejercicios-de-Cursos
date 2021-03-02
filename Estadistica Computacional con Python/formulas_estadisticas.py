@@ -114,6 +114,20 @@ def media_muestra(lista):
     return sum(lista) / (len(lista)-1)
 
 
+def media_datos_agrupados(dict_xi_fa):
+    '''Recibe un diccionario con valores de x y fracuencias absolutas (FA)'''
+    total_n = sum(dict_xi_fa.values())
+    lista_ni_xi = []
+
+    for xi, ni in dict_xi_fa.items():
+      lista_ni_xi.append(xi * ni)
+
+    suma_lista_ni_xi = sum(lista_ni_xi)
+    media_datos_agrupados = suma_lista_ni_xi / total_n
+
+    return media_datos_agrupados
+
+
 def mediana(lista):
     lista_ordenada = ordenamiento_insercion(lista)
 
@@ -128,6 +142,37 @@ def mediana(lista):
     return mediana
 
 
+def mediana_datos_agrupados(dict_xi_fa):
+    lista_xi_ordenada = ordenamiento_insercion([xi for xi in dict_xi_fa.keys()])
+    
+    #faa = frecuencias absolutas acumuladas (FAA)
+    xi_faa = []
+    faa_list = []
+    for xi in lista_xi_ordenada:
+      fa_xi = dict_xi_fa[xi]
+      if len(xi_faa) == 0:
+          xi_faa.append((fa_xi, xi))
+          faa_list.append(fa_xi)
+      else:
+          xi_faa.append((fa_xi + xi_faa[-1][0], xi))
+          faa_list.append(fa_xi + faa_list[-1])
+    
+    total_n = xi_faa[-1][0]
+    dict_xi_faa = dict(xi_faa)
+    if total_n % 2 > 0:
+        numero_medio = int(round(total_n/2, 0))
+        ubicacion_mediana = faa_list[ubicacion_binaria(faa_list, 0, len(faa_list), numero_medio)+1]
+        mediana = dict_xi_faa[ubicacion_mediana]
+    else:
+        numero_medio1 = int(round(total_n/2, 0)-1)
+        numero_medio2 = int(round(total_n/2, 0))
+        numero_medio = media([numero_medio1, numero_medio2])
+        ubicacion_mediana = faa_list[ubicacion_binaria(faa_list, 0, len(faa_list), numero_medio)+1]
+        mediana = dict_xi_faa[ubicacion_mediana]
+
+    return mediana
+      
+
 def modas(lista):
     conteo_elementos = Counter(lista)
     maximo = max(conteo_elementos.values())
@@ -138,13 +183,10 @@ def modas(lista):
 def varianza_poblacion(lista):
     media_lista = media(lista)
     diferencias_vs_media = []
-
     for i in range(len(lista)):
         diferencia = (lista[i] - media_lista)**2
         diferencias_vs_media.append(diferencia)
-
     varianza = media(diferencias_vs_media)
-
     return varianza
 
 
@@ -157,13 +199,10 @@ def desviacion_estandar_poblacion(lista):
 def varianza_muestra(lista):
     media_lista = media(lista)
     diferencias_vs_media = []
-
     for i in range(len(lista)):
         diferencia = (lista[i] - media_lista)**2
         diferencias_vs_media.append(diferencia)
-
     varianza = media_muestra(diferencias_vs_media)
-
     return varianza
 
 
@@ -178,12 +217,10 @@ def lista_valores_z(lista):
     media_lista = media(lista)
     desviacion_estandar_poblacion_lista = desviacion_estandar_poblacion(lista)
     lista_valor_z = {}
-
     for i in range(len(lista)):
         valor_z = (lista[i] - media_lista) / \
             desviacion_estandar_poblacion_lista
         lista_valor_z[lista[i]] = round(valor_z, 2)
-
     return lista_valor_z
 
 
@@ -206,47 +243,37 @@ def diccionario_probabilidades_z_distribucion_normal_estandar():
     z = df['z']
     probabilidad = df['prob']
     probabilidad_z = dict([(z[i], probabilidad[i]) for i in range(len(z))])
-
     return probabilidad_z
 
 
 def buscar_z_dada_una_probabilidad_intermedia(probabilidad):
     '''Busca Z en la tabla de probabilidades de la distribucion normal estandar dada una probabilidad'''
     probabilidad_dns = round(1-((1-probabilidad)/2), 5)
-
     lista_probabilidades_dns = [
         val for val in diccionario_probabilidades_z_distribucion_normal_estandar().values()]
-
     lista_z = {
         val: key for key,
         val in diccionario_probabilidades_z_distribucion_normal_estandar().items()
     }
-
     if busqueda_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns), probabilidad_dns):
         z = lista_z[probabilidad_dns]
-
     else:
         ubicacion1 = ubicacion_binaria(lista_probabilidades_dns, 0, len(
             lista_probabilidades_dns), probabilidad_dns) - 1
-
         ubicacion2 = ubicacion_binaria(lista_probabilidades_dns, 0, len(
             lista_probabilidades_dns), probabilidad_dns)
-
         z = (
             lista_z[lista_probabilidades_dns[ubicacion1]] +
             lista_z[lista_probabilidades_dns[ubicacion2]]
         ) / 2
-
     return round(z, 3)
 
 
 def buscar_z_dada_una_probabilidad_izquierda(probabilidad):
     '''Busca Z en la tabla de probabilidades de la distribucion normal estandar dada una probabilidad'''
     probabilidad_dns = round(probabilidad, 5)
-
     lista_probabilidades_dns = [
         val for val in diccionario_probabilidades_z_distribucion_normal_estandar().values()]
-
     lista_z = {
         val: key for key,
         val in diccionario_probabilidades_z_distribucion_normal_estandar().items()
@@ -301,7 +328,7 @@ def buscar_z_dada_una_probabilidad_derecha(probabilidad):
 
 
 if '__main__' == __name__:
-    largo_lista = int(input('Largo de lista: '))
+    '''largo_lista = int(input('Largo de lista: '))
 
     lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
 
@@ -315,7 +342,7 @@ if '__main__' == __name__:
 
     probabilidad_a_buscar = float(input('Probabilidad a buscar: '))
 
-    print(f'''
+    print(f#
 Media: {media(lista_ordenada)}
 Mediana: {mediana(lista_ordenada)}
 Modas: {modas(lista)}
@@ -341,4 +368,8 @@ P(X <=z) = P({float(probabilidad_a_buscar*100)}% <= {buscar_z_dada_una_probabili
 
 Probabilidad derecha a {float(probabilidad_a_buscar*100)}% : z= {buscar_z_dada_una_probabilidad_derecha(probabilidad_a_buscar)}
 P(z >= X) = P({buscar_z_dada_una_probabilidad_derecha(probabilidad_a_buscar)} >= {float(probabilidad_a_buscar*100)}% )
-''')
+#)'''
+    dict1 = {6:3, 7:16, 8:20, 9:10, 10:1}
+
+    print(f'media datos agrupados: {media_datos_agrupados(dict1)}')
+    print(f' mediana datos agrupados: {mediana_datos_agrupados(dict1)}')
