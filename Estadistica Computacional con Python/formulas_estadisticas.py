@@ -89,6 +89,7 @@ def ordenamiento_insercion(lista):
 
     return lista_ordenada
 
+
 def busqueda_binaria(lista, comienzo, final, objetivo, ordenar=True):
     lista_ordenada = []
     if ordenar == True:
@@ -209,49 +210,111 @@ def diccionario_probabilidades_z_distribucion_normal_estandar():
     return probabilidad_z
 
 
-def buscar_z_dada_una_probabilidad(probabilidad):
+def buscar_z_dada_una_probabilidad_intermedia(probabilidad):
     '''Busca Z en la tabla de probabilidades de la distribucion normal estandar dada una probabilidad'''
-    probabilidad_dns = round(1-((1-probabilidad)/2),5)
+    probabilidad_dns = round(1-((1-probabilidad)/2), 5)
 
-    lista_probabilidades_dns = [val for val in diccionario_probabilidades_z_distribucion_normal_estandar().values()]
+    lista_probabilidades_dns = [
+        val for val in diccionario_probabilidades_z_distribucion_normal_estandar().values()]
 
-    lista_z = {val: key for key, val in diccionario_probabilidades_z_distribucion_normal_estandar().items()}
+    lista_z = {
+        val: key for key,
+        val in diccionario_probabilidades_z_distribucion_normal_estandar().items()
+    }
 
     if busqueda_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns), probabilidad_dns):
-
-        #ubicacion = ubicacion_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns),probabilidad_dns)+1
-
-        #print(f'ubicacion: {lista_probabilidades_dns[ubicacion]} == probabilidad_dns: {probabilidad_dns}')
-
         z = lista_z[probabilidad_dns]
 
     else:
-        ubicacion1 = ubicacion_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns),probabilidad_dns) - 1
-        
-        ubicacion2 = ubicacion_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns),probabilidad_dns)
-        
-        #print(f'probabilidad dns: {probabilidad_dns} | ubicacion1: {lista_probabilidades_dns[ubicacion1]} | ubicacion2: {lista_probabilidades_dns[ubicacion2]} | probabilidad intermedia: {(lista_probabilidades_dns[ubicacion1] + lista_probabilidades_dns[ubicacion2])/2}')
+        ubicacion1 = ubicacion_binaria(lista_probabilidades_dns, 0, len(
+            lista_probabilidades_dns), probabilidad_dns) - 1
 
-        z = (lista_z[lista_probabilidades_dns[ubicacion1]] + lista_z[lista_probabilidades_dns[ubicacion2]]) / 2
-    
+        ubicacion2 = ubicacion_binaria(lista_probabilidades_dns, 0, len(
+            lista_probabilidades_dns), probabilidad_dns)
+
+        z = (
+            lista_z[lista_probabilidades_dns[ubicacion1]] +
+            lista_z[lista_probabilidades_dns[ubicacion2]]
+        ) / 2
+
+    return round(z, 3)
+
+
+def buscar_z_dada_una_probabilidad_izquierda(probabilidad):
+    '''Busca Z en la tabla de probabilidades de la distribucion normal estandar dada una probabilidad'''
+    probabilidad_dns = round(probabilidad, 5)
+
+    lista_probabilidades_dns = [
+        val for val in diccionario_probabilidades_z_distribucion_normal_estandar().values()]
+
+    lista_z = {
+        val: key for key,
+        val in diccionario_probabilidades_z_distribucion_normal_estandar().items()
+    }
+
+    if busqueda_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns), probabilidad_dns):
+        z = lista_z[probabilidad_dns]
+
+    else:
+        ubicacion1 = ubicacion_binaria(lista_probabilidades_dns, 0, len(
+            lista_probabilidades_dns), probabilidad_dns) - 1
+
+        ubicacion2 = ubicacion_binaria(lista_probabilidades_dns, 0, len(
+            lista_probabilidades_dns), probabilidad_dns)
+
+        z = (
+            lista_z[lista_probabilidades_dns[ubicacion1]] +
+            lista_z[lista_probabilidades_dns[ubicacion2]]
+        ) / 2
+
+    return round(z, 3)
+
+
+def buscar_z_dada_una_probabilidad_derecha(probabilidad):
+    '''Busca Z en la tabla de probabilidades de la distribucion normal estandar dada una probabilidad'''
+    probabilidad_dns = round((1-probabilidad), 5)
+
+    lista_probabilidades_dns = [
+        val for val in diccionario_probabilidades_z_distribucion_normal_estandar().values()]
+
+    lista_z = {
+        val: key for key,
+        val in diccionario_probabilidades_z_distribucion_normal_estandar().items()
+    }
+
+    if busqueda_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns), probabilidad_dns):
+        z = lista_z[probabilidad_dns]
+
+    else:
+        ubicacion1 = ubicacion_binaria(lista_probabilidades_dns, 0, len(
+            lista_probabilidades_dns), probabilidad_dns) - 1
+
+        ubicacion2 = ubicacion_binaria(lista_probabilidades_dns, 0, len(
+            lista_probabilidades_dns), probabilidad_dns)
+
+        z = (
+            lista_z[lista_probabilidades_dns[ubicacion1]] +
+            lista_z[lista_probabilidades_dns[ubicacion2]]
+        ) / 2
+
     return round(z, 3)
 
 
 if '__main__' == __name__:
     largo_lista = int(input('Largo de lista: '))
-    
+
     lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
-    
+
     #lista = [26, 33, 65, 28, 34, 55, 25, 44, 50, 36, 26, 37, 43, 62, 35, 38, 45, 32, 28, 34]
-    
+
     #lista = [i for i in range(largo_lista)]
-    
+
     lista_ordenada = ordenamiento_insercion(lista)
-    
+
     print(f'Lista Original: {lista}\nLista Ordenada: {lista_ordenada}')
-    
+
     probabilidad_a_buscar = float(input('Probabilidad a buscar: '))
-    
+
     print(f'''
 Media: {media(lista_ordenada)}
 Mediana: {mediana(lista_ordenada)}
@@ -270,7 +333,12 @@ x={valores_x_y_distribucion_normal(lista)[0]}
 
 y={[round(i,3) for i in valores_x_y_distribucion_normal(lista)[1]]}
 
-Z de probabilidad para {int(probabilidad_a_buscar*100)}% : {buscar_z_dada_una_probabilidad(probabilidad_a_buscar)}
+Probabilidad intermedia a {float(probabilidad_a_buscar*100)}% : z= {buscar_z_dada_una_probabilidad_intermedia(probabilidad_a_buscar)}
+P(-z>= X <=z) = P({-buscar_z_dada_una_probabilidad_intermedia(probabilidad_a_buscar)} >= {float(probabilidad_a_buscar*100)}% <= {buscar_z_dada_una_probabilidad_intermedia(probabilidad_a_buscar)})
 
-P(-z>= X <=z) = P({-buscar_z_dada_una_probabilidad(probabilidad_a_buscar)} >= {int(probabilidad_a_buscar*100)}% <= {buscar_z_dada_una_probabilidad(probabilidad_a_buscar)})
+Probabilidad izquierda a {float(probabilidad_a_buscar*100)}% : z= {buscar_z_dada_una_probabilidad_izquierda(probabilidad_a_buscar)}
+P(X <=z) = P({float(probabilidad_a_buscar*100)}% <= {buscar_z_dada_una_probabilidad_izquierda(probabilidad_a_buscar)})
+
+Probabilidad derecha a {float(probabilidad_a_buscar*100)}% : z= {buscar_z_dada_una_probabilidad_derecha(probabilidad_a_buscar)}
+P(z >= X) = P({buscar_z_dada_una_probabilidad_derecha(probabilidad_a_buscar)} >= {float(probabilidad_a_buscar*100)}% )
 ''')
