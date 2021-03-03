@@ -120,7 +120,7 @@ def media_datos_agrupados(dict_xi_fa):
     lista_ni_xi = []
 
     for xi, ni in dict_xi_fa.items():
-      lista_ni_xi.append(xi * ni)
+        lista_ni_xi.append(xi * ni)
 
     suma_lista_ni_xi = sum(lista_ni_xi)
     media_datos_agrupados = suma_lista_ni_xi / total_n
@@ -143,40 +143,59 @@ def mediana(lista):
 
 
 def mediana_datos_agrupados(dict_xi_fa):
-    lista_xi_ordenada = ordenamiento_insercion([xi for xi in dict_xi_fa.keys()])
-    
-    #faa = frecuencias absolutas acumuladas (FAA)
-    xi_faa = []
-    faa_list = []
+    lista_xi_ordenada = ordenamiento_insercion(
+        [xi for xi in dict_xi_fa.keys()])
+
+    # faa= frecuencias absolutas acumuladas (FAA)
+    xi_fa_acumulada = []
+    fa_acumulada_list = []
+
     for xi in lista_xi_ordenada:
-      fa_xi = dict_xi_fa[xi]
-      if len(xi_faa) == 0:
-          xi_faa.append((fa_xi, xi))
-          faa_list.append(fa_xi)
-      else:
-          xi_faa.append((fa_xi + xi_faa[-1][0], xi))
-          faa_list.append(fa_xi + faa_list[-1])
-    
-    total_n = xi_faa[-1][0]
-    dict_xi_faa = dict(xi_faa)
+        fa_xi = dict_xi_fa[xi]
+        if len(xi_fa_acumulada) == 0:
+            xi_fa_acumulada.append((fa_xi, xi))
+            fa_acumulada_list.append(fa_xi)
+        else:
+            xi_fa_acumulada.append((fa_xi + xi_fa_acumulada[-1][0], xi))
+            fa_acumulada_list.append(fa_xi + fa_acumulada_list[-1])
+
+    total_n = xi_fa_acumulada[-1][0]
+    dict_xi_fa_acumulada = dict(xi_fa_acumulada)
+
     if total_n % 2 > 0:
         numero_medio = int(round(total_n/2, 0))
-        ubicacion_mediana = faa_list[ubicacion_binaria(faa_list, 0, len(faa_list), numero_medio)+1]
-        mediana = dict_xi_faa[ubicacion_mediana]
+        ubicacion_mediana = fa_acumulada_list[ubicacion_binaria(
+            fa_acumulada_list, 0, len(fa_acumulada_list), numero_medio)+1]
+        mediana = dict_xi_fa_acumulada[ubicacion_mediana]
     else:
         numero_medio1 = int(round(total_n/2, 0)-1)
         numero_medio2 = int(round(total_n/2, 0))
-        numero_medio = media([numero_medio1, numero_medio2])
-        ubicacion_mediana = faa_list[ubicacion_binaria(faa_list, 0, len(faa_list), numero_medio)+1]
-        mediana = dict_xi_faa[ubicacion_mediana]
+        ubicacion_numero_medio1 = fa_acumulada_list[ubicacion_binaria(
+            fa_acumulada_list, 0, len(fa_acumulada_list), numero_medio1)+1]
+        ubicacion_numero_medio2 = fa_acumulada_list[ubicacion_binaria(
+            fa_acumulada_list, 0, len(fa_acumulada_list), numero_medio2)+1]
+        if ubicacion_numero_medio1 == ubicacion_numero_medio2:
+            numero_medio = media([numero_medio1, numero_medio2])
+            ubicacion_mediana = fa_acumulada_list[ubicacion_binaria(
+                fa_acumulada_list, 0, len(fa_acumulada_list), numero_medio)+1]
+            mediana = dict_xi_fa_acumulada[ubicacion_mediana]
+        else:
+            mediana = media([
+                dict_xi_fa_acumulada[ubicacion_numero_medio1], dict_xi_fa_acumulada[ubicacion_numero_medio2]])
 
     return mediana
-      
+
 
 def modas(lista):
     conteo_elementos = Counter(lista)
     maximo = max(conteo_elementos.values())
     moda = [id for id, value in conteo_elementos.items()if value == maximo]
+    return moda
+
+
+def modas_datos_agrupados(dict_xi_fa):
+    maximo = max(dict_xi_fa.values())
+    moda = [id for id, value in dict_xi_fa.items()if value == maximo]
     return moda
 
 
@@ -190,10 +209,28 @@ def varianza_poblacion(lista):
     return varianza
 
 
+def desviacion_estandar_datos_agrupados(dict_xi_fa):
+    media_dict_xi_fa = media_datos_agrupados(dict_xi_fa)
+    total_n = sum(dict_xi_fa.values())
+    xi2_fa = []
+    for xi, fa in dict_xi_fa.items():
+        xi2_fa.append((xi**2)*fa)
+    desviacion_estandar_datos_agrupados = (
+        (sum(xi2_fa)/total_n) - media_dict_xi_fa**2)**.5
+    return desviacion_estandar_datos_agrupados
+
+
 def desviacion_estandar_poblacion(lista):
     varianza_lista = varianza_poblacion(lista)
     sigma = varianza_lista**0.5
     return sigma
+
+
+def varianza_datos_agrupados(dict_xi_fa):
+    desviacion_estandar_datos_agrupados_dict = desviacion_estandar_datos_agrupados(
+        dict_xi_fa)
+    sigma_datos_agrupados = desviacion_estandar_datos_agrupados_dict**2
+    return sigma_datos_agrupados
 
 
 def varianza_muestra(lista):
@@ -369,7 +406,12 @@ P(X <=z) = P({float(probabilidad_a_buscar*100)}% <= {buscar_z_dada_una_probabili
 Probabilidad derecha a {float(probabilidad_a_buscar*100)}% : z= {buscar_z_dada_una_probabilidad_derecha(probabilidad_a_buscar)}
 P(z >= X) = P({buscar_z_dada_una_probabilidad_derecha(probabilidad_a_buscar)} >= {float(probabilidad_a_buscar*100)}% )
 #)'''
-    dict1 = {6:3, 7:16, 8:20, 9:10, 10:1}
+    dict1 = {6: 3, 7: 16, 8: 20, 9: 10, 10: 1}
 
     print(f'media datos agrupados: {media_datos_agrupados(dict1)}')
     print(f' mediana datos agrupados: {mediana_datos_agrupados(dict1)}')
+    print(f'moda datos agrupados: {modas_datos_agrupados(dict1)}')
+    print(
+        f'sigma datos agrupados {desviacion_estandar_datos_agrupados(dict1)}')
+    print(
+        f'varianza datos agrupados: {varianza_datos_agrupados(dict1)}')
