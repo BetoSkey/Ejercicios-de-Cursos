@@ -250,16 +250,23 @@ def desviacion_estandar(datos, muestra=False):
     return desviacion_estandar
 
 
-def lista_valores_z(lista):
-    '''Regresa de cada numero dentro de una lista, el alejamiento de la media en "veces desviacion estandar"'''
-    media_lista = media(lista)
-    desviacion_estandar_poblacion_lista = desviacion_estandar(lista)
-    lista_valor_z = {}
-    for i in range(len(lista)):
-        valor_z = (lista[i] - media_lista) / \
-            desviacion_estandar_poblacion_lista
-        lista_valor_z[lista[i]] = round(valor_z, 2)
-    return lista_valor_z
+def valores_z(datos,media_lista=None, sigma=None):
+    '''Regresa un diccionario de valrores z, 'z' es el alejamiento de la media en "veces desviacion estandar"'''
+    if media_lista == None:
+        media_lista = media(datos)
+        desviacion_estandar_poblacion_lista = desviacion_estandar(datos)
+        valores_z = {}
+        
+        for i in range(len(datos)):
+            valor_z = (datos[i] - media_lista) / \
+                desviacion_estandar_poblacion_lista
+            valores_z[datos[i]] = round(valor_z, 2)
+
+    else:
+        valores_z = round((datos - media_lista) / \
+                sigma, 2)
+
+    return valores_z
 
 
 def valores_x_y_distribucion_normal(lista):
@@ -280,11 +287,11 @@ def probabilidades_z_distribucion_normal_estandar():
     df = pandas.read_csv('fdp.csv')
     z = df['z']
     probabilidad = df['prob']
-    probabilidad_z = dict([(z[i], probabilidad[i]) for i in range(len(z))])
-    return probabilidad_z
+    probabilidades_z = dict([(z[i], probabilidad[i]) for i in range(len(z))])
+    return probabilidades_z
 
 
-def buscar_z_dada_una_probabilidad_intermedia(probabilidad):
+def buscar_z_probabilidad_intermedia(probabilidad):
     '''Busca Z en la tabla de probabilidades de la distribucion normal estandar dada una probabilidad'''
     probabilidad_dns = round(1-((1-probabilidad)/2), 5)
     lista_probabilidades_dns = [
@@ -304,10 +311,10 @@ def buscar_z_dada_una_probabilidad_intermedia(probabilidad):
             lista_z[lista_probabilidades_dns[ubicacion1]] +
             lista_z[lista_probabilidades_dns[ubicacion2]]
         ) / 2
-    return round(z, 3)
+    return z
 
 
-def buscar_z_dada_una_probabilidad_izquierda(probabilidad):
+def buscar_z_probabilidad_izquierda(probabilidad):
     '''Busca Z en la tabla de probabilidades de la distribucion normal estandar dada una probabilidad'''
     probabilidad_dns = round(probabilidad, 5)
     lista_probabilidades_dns = [
@@ -332,10 +339,10 @@ def buscar_z_dada_una_probabilidad_izquierda(probabilidad):
             lista_z[lista_probabilidades_dns[ubicacion2]]
         ) / 2
 
-    return round(z, 3)
+    return z
 
 
-def buscar_z_dada_una_probabilidad_derecha(probabilidad):
+def buscar_z_probabilidad_derecha(probabilidad):
     '''Busca Z en la tabla de probabilidades de la distribucion normal estandar dada una probabilidad'''
     probabilidad_dns = round((1-probabilidad), 5)
 
@@ -470,14 +477,54 @@ class Pruebas_caja_cristal(unittest.TestCase):
             desviacion_estandar(datos, muestra=True), 4)
 
         self.assertEqual(formula_desviacion_estandar, 1.4346)
+    
+    def test_valor_z_muchos_datos(self):
+        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
+        formula_valor_z = valores_z(datos)
 
+        self.assertEqual(formula_valor_z, {55: -1.34, 87: 1.55, 74: 0.37, 70: 0.01, 82: 1.1, 62: -0.71, 59: -0.98})
 
+    def test_valor_z_un_dato(self):
+        datos = 55
+        formula_valor_z = valores_z(datos, media_lista= 69.86, sigma= 11.08)
+
+        self.assertEqual(formula_valor_z, -1.34)
+
+    def test_valores_x_y_distribucion_normal(self):
+        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
+        formula_valores_x_y_distribucion_normal = valores_x_y_distribucion_normal(datos)[1]
+
+        self.assertEqual(formula_valores_x_y_distribucion_normal, [0.014649940215369783, 0.010873903333325743, 0.03358323798357501, 0.028005203898067346, 0.02227796183372684, 0.03601326534529145, 0.01974872533379657])
+
+    def test_probabilidades_z_distribucion_normal_estandar(self):
+        probabilidades_z = probabilidades_z_distribucion_normal_estandar()
+
+        self.assertEqual(probabilidades_z[2.71], 0.9966)
+      
+    def test_buscar_z_probabilidad_intermedia(self):
+        probabilidad = 0.9966
+        formula_buscar_z_probabilidad_intermedia = buscar_z_probabilidad_intermedia(probabilidad)
+
+        self.assertEqual(formula_buscar_z_probabilidad_intermedia, 2.93)
+
+    def test_buscar_z_probabilidad_izquierda(self):
+        probabilidad = 0.9115
+        formula_buscar_z_probabilidad_izquierda = buscar_z_probabilidad_izquierda(probabilidad)
+
+        self.assertEqual(formula_buscar_z_probabilidad_izquierda, 1.35)
+
+    def test_buscar_z_probabilidad_derecha(self):
+        probabilidad = 0.9115
+        formula_buscar_z_probabilidad_derecha = buscar_z_probabilidad_derecha(probabilidad)
+
+        self.assertEqual(formula_buscar_z_probabilidad_derecha, -1.35)
+        
 if '__main__' == __name__:
-    largo_lista = int(input('Largo de lista: '))
+    '''#largo_lista = int(input('Largo de lista: '))
 
-    lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
+    #lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
 
-    #lista = [26, 33, 65, 28, 34, 55, 25, 44, 50, 36, 26, 37, 43, 62, 35, 38, 45, 32, 28, 34]
+    lista = [55, 87, 74, 70, 82, 62, 59]
 
     #lista = [i for i in range(largo_lista)]
 
@@ -485,9 +532,9 @@ if '__main__' == __name__:
 
     print(f'Lista Original: {lista}\nLista Ordenada: {lista_ordenada}')
 
-    probabilidad_a_buscar = float(input('Probabilidad a buscar: '))
+    probabilidad_a_buscar = float(input('Probabilidad a buscar: '))'''
 
-    print(f'''
+    '''print(f#
 Media: {media(lista_ordenada)}
 Mediana: {mediana(lista_ordenada)}
 Modas: {moda(lista)}
@@ -498,24 +545,24 @@ sigma Poblacion: {round(desviacion_estandar(lista),2)}
 Varianza Muestra: {round(varianza(lista, muestra=True),2)}
 sigma Muestra: {round(desviacion_estandar(lista, muestra=True),2)}
 
-Valores z: {lista_valores_z(lista)}
+Valores z: {valores_z(lista)}
 
 Distribucion normal: 
 x={valores_x_y_distribucion_normal(lista)[0]}
 
 y={[round(i,3) for i in valores_x_y_distribucion_normal(lista)[1]]}
 
-Probabilidad intermedia a {float(probabilidad_a_buscar*100)}% : z= {buscar_z_dada_una_probabilidad_intermedia(probabilidad_a_buscar)}
-P(-z>= X <=z) = P({-buscar_z_dada_una_probabilidad_intermedia(probabilidad_a_buscar)} >= {float(probabilidad_a_buscar*100)}% <= {buscar_z_dada_una_probabilidad_intermedia(probabilidad_a_buscar)})
+Probabilidad intermedia a {float(probabilidad_a_buscar*100)}% : z= {buscar_z_probabilidad_intermedia(probabilidad_a_buscar)}
+P(-z>= X <=z) = P({-buscar_z_probabilidad_intermedia(probabilidad_a_buscar)} >= {float(probabilidad_a_buscar*100)}% <= {buscar_z_probabilidad_intermedia(probabilidad_a_buscar)})
 
-Probabilidad izquierda a {float(probabilidad_a_buscar*100)}% : z= {buscar_z_dada_una_probabilidad_izquierda(probabilidad_a_buscar)}
-P(X <=z) = P({float(probabilidad_a_buscar*100)}% <= {buscar_z_dada_una_probabilidad_izquierda(probabilidad_a_buscar)})
+Probabilidad izquierda a {float(probabilidad_a_buscar*100)}% : z= {buscar_z_probabilidad_izquierda(probabilidad_a_buscar)}
+P(X <=z) = P({float(probabilidad_a_buscar*100)}% <= {buscar_z_probabilidad_izquierda(probabilidad_a_buscar)})
 
-Probabilidad derecha a {float(probabilidad_a_buscar*100)}% : z= {buscar_z_dada_una_probabilidad_derecha(probabilidad_a_buscar)}
-P(z >= X) = P({buscar_z_dada_una_probabilidad_derecha(probabilidad_a_buscar)} >= {float(probabilidad_a_buscar*100)}% )
-''')
+Probabilidad derecha a {float(probabilidad_a_buscar*100)}% : z= {buscar_z_probabilidad_derecha(probabilidad_a_buscar)}
+P(z >= X) = P({buscar_z_probabilidad_derecha(probabilidad_a_buscar)} >= {float(probabilidad_a_buscar*100)}% )
+#)'''
 
-    print('--------------------------------------------------------------')
+    '''print('--------------------------------------------------------------')
     dict1 = {6: 3, 7: 16, 8: 20, 9: 10, 10: 1}
 
     print(f'media datos agrupados: {media(dict1)}')
@@ -524,6 +571,6 @@ P(z >= X) = P({buscar_z_dada_una_probabilidad_derecha(probabilidad_a_buscar)} >=
     print(
         f'sigma datos agrupados {desviacion_estandar(dict1)}')
     print(
-        f'varianza datos agrupados: {varianza(dict1)}')
+        f'varianza datos agrupados: {varianza(dict1)}')'''
 
-    # unittest.main()
+    unittest.main()
