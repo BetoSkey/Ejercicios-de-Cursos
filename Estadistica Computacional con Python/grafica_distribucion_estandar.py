@@ -1,15 +1,16 @@
 import random
-from formulas_estadisticas import ordenamiento_insercion, media, desviacion_estandar_poblacion, valores_x_y_distribucion_normal
+from formulas_estadisticas import ordenamiento_insercion, media, desviacion_estandar, valores_x_y_distribucion_normal
 from bokeh.plotting import figure
 from bokeh.io import output_file, show
 from bokeh.models.annotations import Span, BoxAnnotation
 
-def grafica_distribucion_estandar(lista,file="index.html"):
-    
+
+def grafica_distribucion_estandar(lista, file="index.html"):
+
     lista_ordenada = ordenamiento_insercion(lista)
 
     mu = media(lista_ordenada)
-    sigma = desviacion_estandar_poblacion(lista_ordenada)
+    sigma = desviacion_estandar(lista_ordenada)
 
     x, y = valores_x_y_distribucion_normal(lista_ordenada)
 
@@ -47,6 +48,7 @@ def grafica_distribucion_estandar(lista,file="index.html"):
 
     show(f)
 
+
 if '__main__' == __name__:
     largo_lista = int(input('Largo de lista: '))
     lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
@@ -55,7 +57,7 @@ if '__main__' == __name__:
 
     print(f'''
 Media: {media(lista_ordenada)}
-sigma: {round(desviacion_estandar_poblacion(lista),2)}
+sigma: {round(desviacion_estandar(lista),2)}
 
 Distribucion normal: 
 x={valores_x_y_distribucion_normal(lista)[0]}

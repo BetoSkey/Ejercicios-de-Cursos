@@ -110,18 +110,18 @@ def busqueda_binaria(lista, comienzo, final, objetivo, ordenar=True):
 def media(datos):
     '''Puede recibir una lista o un diccionario'''
     if type(datos) is dict:
-      total_n = sum(datos.values())
-      lista_ni_xi = []
+        total_n = sum(datos.values())
+        lista_ni_xi = []
 
-      for xi, ni in datos.items():
-        lista_ni_xi.append(xi * ni)
+        for xi, ni in datos.items():
+            lista_ni_xi.append(xi * ni)
 
-      suma_lista_ni_xi = sum(lista_ni_xi)
-      media = suma_lista_ni_xi / total_n
-      
-    else:    
-      media = sum(datos) / len(datos)
-    
+        suma_lista_ni_xi = sum(lista_ni_xi)
+        media = suma_lista_ni_xi / total_n
+
+    else:
+        media = sum(datos) / len(datos)
+
     return media
 
 
@@ -129,7 +129,7 @@ def mediana(datos):
     '''Puede recibir una lista o un diccionario'''
     if type(datos) is dict:
         lista_xi_ordenada = ordenamiento_insercion(
-        [xi for xi in datos.keys()])
+            [xi for xi in datos.keys()])
 
         # faa= frecuencias absolutas acumuladas (FAA)
         xi_fa_acumulada = []
@@ -167,119 +167,93 @@ def mediana(datos):
             else:
                 mediana = media([
                     dict_xi_fa_acumulada[ubicacion_numero_medio1], dict_xi_fa_acumulada[ubicacion_numero_medio2]])
-    
+
     else:
-      lista_ordenada = ordenamiento_insercion(datos)
+        lista_ordenada = ordenamiento_insercion(datos)
 
-      if len(lista_ordenada) % 2 > 0:
-          mediana = lista_ordenada[int(round(len(lista_ordenada)/2, 0)-1)]
-      else:
-          numero_medio1 = lista_ordenada[int(round(len(lista_ordenada)/2, 0)-1)]
-          numero_medio2 = lista_ordenada[int(round(len(lista_ordenada)/2, 0))]
+        if len(lista_ordenada) % 2 > 0:
+            mediana = lista_ordenada[int(round(len(lista_ordenada)/2, 0)-1)]
+        else:
+            numero_medio1 = lista_ordenada[int(
+                round(len(lista_ordenada)/2, 0)-1)]
+            numero_medio2 = lista_ordenada[int(
+                round(len(lista_ordenada)/2, 0))]
 
-          mediana = media([numero_medio1, numero_medio2])
+            mediana = media([numero_medio1, numero_medio2])
 
     return mediana
 
 
 def moda(datos):
     if type(datos) is dict:
-      maximo = max(datos.values())
-      moda = [id for id, value in datos.items()if value == maximo]
-    
+        maximo = max(datos.values())
+        moda = [id for id, value in datos.items()if value == maximo]
+
     else:
-      conteo_elementos = Counter(datos)
-      maximo = max(conteo_elementos.values())
-      moda = [id for id, value in conteo_elementos.items()if value == maximo]
+        conteo_elementos = Counter(datos)
+        maximo = max(conteo_elementos.values())
+        moda = [id for id, value in conteo_elementos.items()if value == maximo]
+
+    if len(moda) == 1:
+        moda = moda[0]
+
     return moda
 
 
 def varianza(datos, muestra=False):
     if muestra == False:
-      if type(datos) is dict:
-        media_dict_xi_fa = media(datos)
-        total_n = sum(datos.values())
-        xi2_fa = []
-        for xi, fa in datos.items():
-            xi2_fa.append((xi**2)*fa)
-        varianza = (
-            (sum(xi2_fa)/total_n) - media_dict_xi_fa**2)
+        if type(datos) is dict:
+            media_dict_xi_fa = media(datos)
+            total_n = sum(datos.values())
+            xi2_fa = []
+            for xi, fa in datos.items():
+                xi2_fa.append((xi**2)*fa)
+            varianza = (
+                (sum(xi2_fa)/total_n) - media_dict_xi_fa**2)
 
-      else:
-        media_lista = media(datos)
-        diferencias_vs_media = []
-        for i in range(len(datos)):
-            diferencia = (datos[i] - media_lista)**2
-            diferencias_vs_media.append(diferencia)
-        
-        varianza = media(diferencias_vs_media)
-    
+        else:
+            media_lista = media(datos)
+            diferencias_vs_media = []
+            for i in range(len(datos)):
+                diferencia = (datos[i] - media_lista)**2
+                diferencias_vs_media.append(diferencia)
+
+            varianza = media(diferencias_vs_media)
+
     else:
-      if type(datos) is dict:
-        media_dict_xi_fa = media(datos)
-        total_n = sum(datos.values())-1
-        xi2_fa = []
-        for xi, fa in datos.items():
-            xi2_fa.append((xi**2)*fa)
-        varianza = (
-            (sum(xi2_fa)/total_n) - media_dict_xi_fa**2)
+        if type(datos) is dict:
+            media_dict_xi_fa = media(datos)
+            total_n = sum(datos.values())-1
+            xi2_fa = []
+            for xi, fa in datos.items():
+                xi2_fa.append((xi**2)*fa)
+            varianza = (
+                (sum(xi2_fa)/total_n) - media_dict_xi_fa**2)
 
-      else:
-        media_lista = media(datos)
-        diferencias_vs_media = []
-        for i in range(len(datos)):
-            diferencia = (datos[i] - media_lista)**2
-            diferencias_vs_media.append(diferencia)
-        
-        varianza = sum(diferencias_vs_media) / (len(diferencias_vs_media)-1)
+        else:
+            media_lista = media(datos)
+            diferencias_vs_media = []
+            for i in range(len(datos)):
+                diferencia = (datos[i] - media_lista)**2
+                diferencias_vs_media.append(diferencia)
+
+            varianza = sum(diferencias_vs_media) / \
+                (len(diferencias_vs_media)-1)
 
     return varianza
 
 
-def desviacion_estandar_datos_agrupados(datos):
-    media_dict_xi_fa = media(datos)
-    total_n = sum(datos.values())
-    xi2_fa = []
-    for xi, fa in datos.items():
-        xi2_fa.append((xi**2)*fa)
-    desviacion_estandar_datos_agrupados = (
-        (sum(xi2_fa)/total_n) - media_dict_xi_fa**2)**.5
-    return desviacion_estandar_datos_agrupados
+def desviacion_estandar(datos, muestra=False):
+    formula_varianza = varianza(datos, muestra=muestra)
+    desviacion_estandar = formula_varianza ** 0.5
 
-
-def desviacion_estandar_poblacion(lista):
-    varianza_lista = varianza(lista)
-    sigma = varianza_lista**0.5
-    return sigma
-
-
-def varianza_datos_agrupados(datos):
-    desviacion_estandar_datos_agrupados_dict = desviacion_estandar_datos_agrupados(
-        datos)
-    sigma_datos_agrupados = desviacion_estandar_datos_agrupados_dict**2
-    return sigma_datos_agrupados
-
-
-def varianza_muestra(lista):
-    media_lista = media(lista)
-    diferencias_vs_media = []
-    for i in range(len(lista)):
-        diferencia = (lista[i] - media_lista)**2
-        diferencias_vs_media.append(diferencia)
-    varianza = media(diferencias_vs_media,muestra=True)
-    return varianza
-
-
-def desviacion_estandar_muestra(lista):
-    varianza_lista = varianza_muestra(lista)
-    sigma = varianza_lista**0.5
-    return sigma
+    return desviacion_estandar
 
 
 def lista_valores_z(lista):
     '''Regresa de cada numero dentro de una lista, el alejamiento de la media en "veces desviacion estandar"'''
     media_lista = media(lista)
-    desviacion_estandar_poblacion_lista = desviacion_estandar_poblacion(lista)
+    desviacion_estandar_poblacion_lista = desviacion_estandar(lista)
     lista_valor_z = {}
     for i in range(len(lista)):
         valor_z = (lista[i] - media_lista) / \
@@ -291,7 +265,7 @@ def lista_valores_z(lista):
 def valores_x_y_distribucion_normal(lista):
     '''Regresa listas de "x" y "y" a partir de una lista, para graficar su distribucion normal'''
     media_lista = media(lista)
-    sigma_lista = desviacion_estandar_poblacion(lista)
+    sigma_lista = desviacion_estandar(lista)
     valores_x = lista
     valores_y = []
     for i in lista:
@@ -301,7 +275,7 @@ def valores_x_y_distribucion_normal(lista):
     return valores_x, valores_y
 
 
-def diccionario_probabilidades_z_distribucion_normal_estandar():
+def probabilidades_z_distribucion_normal_estandar():
     '''Regresa las probabilidades de z en la distribucion normal estandar'''
     df = pandas.read_csv('fdp.csv')
     z = df['z']
@@ -314,10 +288,10 @@ def buscar_z_dada_una_probabilidad_intermedia(probabilidad):
     '''Busca Z en la tabla de probabilidades de la distribucion normal estandar dada una probabilidad'''
     probabilidad_dns = round(1-((1-probabilidad)/2), 5)
     lista_probabilidades_dns = [
-        val for val in diccionario_probabilidades_z_distribucion_normal_estandar().values()]
+        val for val in probabilidades_z_distribucion_normal_estandar().values()]
     lista_z = {
         val: key for key,
-        val in diccionario_probabilidades_z_distribucion_normal_estandar().items()
+        val in probabilidades_z_distribucion_normal_estandar().items()
     }
     if busqueda_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns), probabilidad_dns):
         z = lista_z[probabilidad_dns]
@@ -337,10 +311,10 @@ def buscar_z_dada_una_probabilidad_izquierda(probabilidad):
     '''Busca Z en la tabla de probabilidades de la distribucion normal estandar dada una probabilidad'''
     probabilidad_dns = round(probabilidad, 5)
     lista_probabilidades_dns = [
-        val for val in diccionario_probabilidades_z_distribucion_normal_estandar().values()]
+        val for val in probabilidades_z_distribucion_normal_estandar().values()]
     lista_z = {
         val: key for key,
-        val in diccionario_probabilidades_z_distribucion_normal_estandar().items()
+        val in probabilidades_z_distribucion_normal_estandar().items()
     }
 
     if busqueda_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns), probabilidad_dns):
@@ -366,11 +340,11 @@ def buscar_z_dada_una_probabilidad_derecha(probabilidad):
     probabilidad_dns = round((1-probabilidad), 5)
 
     lista_probabilidades_dns = [
-        val for val in diccionario_probabilidades_z_distribucion_normal_estandar().values()]
+        val for val in probabilidades_z_distribucion_normal_estandar().values()]
 
     lista_z = {
         val: key for key,
-        val in diccionario_probabilidades_z_distribucion_normal_estandar().items()
+        val in probabilidades_z_distribucion_normal_estandar().items()
     }
 
     if busqueda_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns), probabilidad_dns):
@@ -392,74 +366,114 @@ def buscar_z_dada_una_probabilidad_derecha(probabilidad):
 
 
 class Pruebas_caja_cristal(unittest.TestCase):
-  
-  LISTA_PARA_PRUEBAS = [55, 87, 74, 70, 82, 62, 59]
-  DICT_PARA_PRUEBAS = dict([(6, 3), (7, 16), (8, 20), (9, 10), (10,1)])
 
-  def test_media(self):
-      datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
-      formula_media = round(media(datos),2)
-      
-      self.assertEqual(formula_media, 69.86)
-  
-  def test_media_datos_agrupados(self):
-      datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
-      formula_media = media(datos)
-     
-      self.assertEqual(formula_media, 7.8)
-  
-  def test_mediana(self):
-      datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
-      formula_mediana = mediana(datos)
-      
-      self.assertEqual(formula_mediana, 70)
-  
-  def test_mediana_datos_agrupados(self):
-      datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
-      formula_mediana = mediana(datos)
-      
-      self.assertEqual(formula_mediana, 8)
+    LISTA_PARA_PRUEBAS = [55, 87, 74, 70, 82, 62, 59]
+    DICT_PARA_PRUEBAS = dict([(6, 3), (7, 16), (8, 20), (9, 10), (10, 1)])
 
-  def test_moda(self):
-      datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
-      datos.append(70)
-      formula_moda = moda(datos)
+    def test_media(self):
+        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
+        formula_media = round(media(datos), 2)
 
-      self.assertEqual(formula_moda, [70])
-      datos.remove(70)
-  
-  def test_moda_datos_agrupados(self):
-      datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
-      formula_moda = moda(datos)
+        self.assertEqual(formula_media, 69.86)
 
-      self.assertEqual(formula_moda, [8])
-  
-  def test_varianza(self):
-      datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
-      formula_varianza = round(varianza(datos),2)
+    def test_media_datos_agrupados(self):
+        datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
+        formula_media = media(datos)
 
-      self.assertEqual(formula_varianza, 122.69)
-  
-  def test_varianza_muestral(self):
-      datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
-      formula_varianza = round(varianza(datos, muestra=True), 2)
+        self.assertEqual(formula_media, 7.8)
 
-      self.assertEqual(formula_varianza, 143.14)
-  
-  def test_varianza_datos_agrupados(self):
-      datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
-      formula_varianza = round(varianza(datos),3)
+    def test_mediana(self):
+        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
+        formula_mediana = mediana(datos)
 
-      self.assertEqual(formula_varianza, 0.8)
-  
-  def test_varianza_muestral_datos_agrupados(self):
-      datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
-      formula_varianza = round(varianza(datos,muestra=True), 3)
+        self.assertEqual(formula_mediana, 70)
 
-      self.assertEqual(formula_varianza, 2.058)
+    def test_mediana_datos_agrupados(self):
+        datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
+        formula_mediana = mediana(datos)
+
+        self.assertEqual(formula_mediana, 8)
+
+    def test_muchas_modas(self):
+        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
+        datos.append(70)
+        datos.append(82)
+        formula_moda = moda(datos)
+        try:
+            self.assertEqual(formula_moda, [82, 70])
+        finally:
+            datos.remove(70)
+            datos.remove(82)
+
+    def test_moda(self):
+        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
+        datos.append(70)
+        formula_moda = moda(datos)
+
+        try:
+            self.assertEqual(formula_moda, 70)
+        finally:
+            datos.remove(70)
+
+    def test_moda_datos_agrupados(self):
+        datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
+        formula_moda = moda(datos)
+
+        self.assertEqual(formula_moda, 8)
+
+    def test_varianza(self):
+        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
+        formula_varianza = round(varianza(datos), 2)
+
+        self.assertEqual(formula_varianza, 122.69)
+
+    def test_varianza_muestral(self):
+        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
+        formula_varianza = round(varianza(datos, muestra=True), 2)
+
+        self.assertEqual(formula_varianza, 143.14)
+
+    def test_varianza_datos_agrupados(self):
+        datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
+        formula_varianza = round(varianza(datos), 3)
+
+        self.assertEqual(formula_varianza, 0.8)
+
+    def test_varianza_muestral_datos_agrupados(self):
+        datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
+        formula_varianza = round(varianza(datos, muestra=True), 3)
+
+        self.assertEqual(formula_varianza, 2.058)
+
+    def test_desviacion_estandar(self):
+        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
+        formula_desviacion_estandar = round(desviacion_estandar(datos), 2)
+
+        self.assertEqual(formula_desviacion_estandar, 11.08)
+
+    def test_desviacion_estandar_datos_agrupados(self):
+        datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
+        formula_desviacion_estandar = round(desviacion_estandar(datos), 4)
+
+        self.assertEqual(formula_desviacion_estandar, 0.8944)
+
+    def test_desviacion_estandar_muestral(self):
+        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
+        formula_desviacion_estandar = round(
+            desviacion_estandar(datos, muestra=True), 4)
+
+        self.assertEqual(formula_desviacion_estandar, 11.9642)
+
+    def test_desviacion_estandar_muestral_datos_agrupados(self):
+        datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
+        formula_desviacion_estandar = round(
+            desviacion_estandar(datos, muestra=True), 4)
+
+        self.assertEqual(formula_desviacion_estandar, 1.4346)
+
 
 if '__main__' == __name__:
-    '''largo_lista = int(input('Largo de lista: '))
+    largo_lista = int(input('Largo de lista: '))
 
     lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
 
@@ -471,20 +485,18 @@ if '__main__' == __name__:
 
     print(f'Lista Original: {lista}\nLista Ordenada: {lista_ordenada}')
 
-    probabilidad_a_buscar = float(input('Probabilidad a buscar: '))'''
+    probabilidad_a_buscar = float(input('Probabilidad a buscar: '))
 
-    '''print(f#
+    print(f'''
 Media: {media(lista_ordenada)}
-Media muestra: {media(lista_ordenada, muestra=True)}
-Media muestra original: media_muestra(lista_ordenada)
 Mediana: {mediana(lista_ordenada)}
 Modas: {moda(lista)}
 
 Varianza Poblacion: {round(varianza(lista),2)}
-sigma Poblacion: {round(desviacion_estandar_poblacion(lista),2)}
+sigma Poblacion: {round(desviacion_estandar(lista),2)}
 
-Varianza Muestra: {round(varianza_muestra(lista),2)}
-sigma Muestra: {round(desviacion_estandar_muestra(lista),2)}
+Varianza Muestra: {round(varianza(lista, muestra=True),2)}
+sigma Muestra: {round(desviacion_estandar(lista, muestra=True),2)}
 
 Valores z: {lista_valores_z(lista)}
 
@@ -501,18 +513,17 @@ P(X <=z) = P({float(probabilidad_a_buscar*100)}% <= {buscar_z_dada_una_probabili
 
 Probabilidad derecha a {float(probabilidad_a_buscar*100)}% : z= {buscar_z_dada_una_probabilidad_derecha(probabilidad_a_buscar)}
 P(z >= X) = P({buscar_z_dada_una_probabilidad_derecha(probabilidad_a_buscar)} >= {float(probabilidad_a_buscar*100)}% )
-#)'''
+''')
 
-    '''print('--------------------------------------------------------------')
+    print('--------------------------------------------------------------')
     dict1 = {6: 3, 7: 16, 8: 20, 9: 10, 10: 1}
 
     print(f'media datos agrupados: {media(dict1)}')
-    print(f'mediana datos agrupados: {mediana_datos_agrupados(dict1)}')
+    print(f'mediana datos agrupados: {mediana(dict1)}')
     print(f'moda datos agrupados: {moda(dict1)}')
     print(
-        f'sigma datos agrupados {desviacion_estandar_datos_agrupados(dict1)}')
+        f'sigma datos agrupados {desviacion_estandar(dict1)}')
     print(
-        f'varianza datos agrupados: {varianza_datos_agrupados(dict1)}')'''
-    
-    unittest.main()
-    
+        f'varianza datos agrupados: {varianza(dict1)}')
+
+    # unittest.main()
