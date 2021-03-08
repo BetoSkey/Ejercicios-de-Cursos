@@ -7,22 +7,20 @@ import unittest
 
 class Analisis_estadistico:
     '''Analiza estadisticamente datos de una lista o un diccionario
-
-    **kwargs: titulo
     '''
 
-    def __init__(self, datos, titulo):
-        self.datos = datos
+    def __init__(self, titulo, datos):
         self.titulo = titulo
+        self.datos = datos
 
     def __str__(self):
         return f'''
     -----------------------------------------------------------------------------
     {self.titulo}
         Medidas de tendencia central:
-            Media: {round(self.media(self.datos), 3)}
-            Mediana: {self.mediana(self.datos)}
-            Moda: {self.moda(self.datos)}
+            Media: {round(self.media(), 3)}
+            Mediana: {self.mediana()}
+            Moda: {self.moda()}
         
         Medidas de dispercion:
             Varianza: {round(self.varianza(self.datos), 3)}
@@ -129,7 +127,9 @@ class Analisis_estadistico:
         else:
             return self.busqueda_binaria(lista_ordenada, comienzo, medio - 1, objetivo)
 
-    def media(self, datos):
+    def media(self, datos=None):
+        if datos == None:
+            datos = self.datos
         '''Puede recibir una lista o un diccionario'''
         if type(datos) is dict:
             total_n = sum(datos.values())
@@ -146,8 +146,9 @@ class Analisis_estadistico:
 
         return media
 
-    def mediana(self, datos):
+    def mediana(self):
         '''Puede recibir una lista o un diccionario'''
+        datos = self.datos
         if type(datos) is dict:
             lista_xi_ordenada = self.ordenamiento_insercion(
                 [xi for xi in datos.keys()])
@@ -206,7 +207,9 @@ class Analisis_estadistico:
 
         return mediana
 
-    def moda(self, datos):
+    def moda(self):
+        datos = self.datos
+
         if type(datos) is dict:
             maximo = max(datos.values())
             moda = [id for id, value in datos.items()if value == maximo]
@@ -222,7 +225,9 @@ class Analisis_estadistico:
 
         return moda
 
-    def varianza(self, datos, muestra=False):
+    def varianza(self, muestra=False):
+        datos = self.datos
+
         if muestra == False:
             if type(datos) is dict:
                 media_dict_xi_fa = self.media(datos)
@@ -264,18 +269,20 @@ class Analisis_estadistico:
 
         return varianza
 
-    def desviacion_estandar(self, datos, muestra=False):
-        formula_varianza = self.varianza(datos, muestra=muestra)
+    def desviacion_estandar(self, muestra=False):
+        formula_varianza = self.varianza(muestra=muestra)
         desviacion_estandar = formula_varianza ** 0.5
 
         return desviacion_estandar
 
-    def valores_z(self, datos, media_lista=None, sigma=None):
-        '''Regresa un diccionario de valrores z, 'z' es el alejamiento de la media en "veces desviacion estandar"'''
-        if media_lista == None:
-            media_lista = self.media(datos)
-            desviacion_estandar_poblacion_lista = self.desviacion_estandar(
-                datos)
+    def valores_z(self, valor_a_convertir=None, media_lista=None, sigma=None):
+        '''Regresa un diccionario de valrores z, 'z' es el alejamiento de la media en "veces desviacion estandar",
+        la formula tambien puede convertir un valor dando la media de lista y sigma.'''
+        datos = self.datos
+
+        if valor_a_convertir == None:
+            media_lista = self.media()
+            desviacion_estandar_poblacion_lista = self.desviacion_estandar()
             valores_z = {}
 
             for i in range(len(datos)):
@@ -284,18 +291,21 @@ class Analisis_estadistico:
                 valores_z[datos[i]] = round(valor_z, 2)
 
         else:
-            valores_z = round((datos - media_lista) /
-                              sigma, 2)
+            valores_z = round(
+                (valor_a_convertir - media_lista) /
+                sigma, 2
+            )
 
         return valores_z
 
-    def valores_x_y_distribucion_normal(self, lista):
+    def valores_x_y_distribucion_normal(self):
         '''Regresa listas de "x" y "y" a partir de una lista, para graficar su distribucion normal'''
-        media_lista = self.media(lista)
-        sigma_lista = self.desviacion_estandar(lista)
-        valores_x = lista
+        datos = self.datos
+        media_lista = self.media()
+        sigma_lista = self.desviacion_estandar()
+        valores_x = datos
         valores_y = []
-        for i in lista:
+        for i in datos:
             y = (1/(sigma_lista*math.sqrt(2*math.pi))) * \
                 math.exp(-1/2*((i-media_lista)/(sigma_lista))**2)
             valores_y.append(y)
@@ -306,8 +316,10 @@ class Analisis_estadistico:
         df = pandas.read_csv('fdp.csv')
         z = df['z']
         probabilidad = df['prob']
-        probabilidades_z = dict([(z[i], probabilidad[i])
-                                 for i in range(len(z))])
+        probabilidades_z = dict(
+            [(z[i], probabilidad[i])
+                for i in range(len(z))]
+        )
         return probabilidades_z
 
     def buscar_z_probabilidad_intermedia(self, probabilidad):
@@ -395,131 +407,120 @@ class Pruebas_caja_cristal(unittest.TestCase):
     DICT_PARA_PRUEBAS = dict([(6, 3), (7, 16), (8, 20), (9, 10), (10, 1)])
 
     def test_media(self):
-        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
-        formula_media = round(analisis_lista.media(datos), 2)
+        formula_media = round(analisis_lista.media(), 2)
 
         self.assertEqual(formula_media, 69.86)
 
     def test_media_datos_agrupados(self):
-        datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
-        formula_media = analisis_dict.media(datos)
+        formula_media = analisis_dict.media()
 
         self.assertEqual(formula_media, 7.8)
 
     def test_mediana(self):
-        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
-        formula_mediana = analisis_lista.mediana(datos)
+        formula_mediana = analisis_lista.mediana()
 
         self.assertEqual(formula_mediana, 70)
 
     def test_mediana_datos_agrupados(self):
-        datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
-        formula_mediana = analisis_dict.mediana(datos)
+        formula_mediana = analisis_dict.mediana()
 
         self.assertEqual(formula_mediana, 8)
 
     def test_muchas_modas(self):
-        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
-        datos.append(70)
-        datos.append(82)
-        formula_moda = analisis_lista.moda(datos)
+        analisis_lista.datos.append(70)
+        analisis_lista.datos.append(82)
+        formula_moda = analisis_lista.moda()
         try:
             self.assertEqual(formula_moda, [82, 70])
+        except:
+            self.assertEqual(formula_moda, [70, 82])
         finally:
-            datos.remove(70)
-            datos.remove(82)
+            analisis_lista.datos.remove(70)
+            analisis_lista.datos.remove(82)
 
     def test_moda(self):
-        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
-        datos.append(70)
-        formula_moda = analisis_lista.moda(datos)
+        analisis_lista.datos.append(70)
+        formula_moda = analisis_lista.moda()
 
         try:
             self.assertEqual(formula_moda, 70)
         finally:
-            datos.remove(70)
+            analisis_lista.datos.remove(70)
 
     def test_moda_datos_agrupados(self):
-        datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
-        formula_moda = analisis_dict.moda(datos)
+        formula_moda = analisis_dict.moda()
 
         self.assertEqual(formula_moda, 8)
 
     def test_varianza(self):
-        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
-        formula_varianza = round(analisis_lista.varianza(datos), 2)
+        formula_varianza = round(analisis_lista.varianza(), 2)
 
         self.assertEqual(formula_varianza, 122.69)
 
     def test_varianza_muestral(self):
-        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
         formula_varianza = round(
-            analisis_lista.varianza(datos, muestra=True), 2)
+            analisis_lista.varianza(muestra=True), 2)
 
         self.assertEqual(formula_varianza, 143.14)
 
     def test_varianza_datos_agrupados(self):
-        datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
-        formula_varianza = round(analisis_dict.varianza(datos), 3)
+        formula_varianza = round(analisis_dict.varianza(), 3)
 
         self.assertEqual(formula_varianza, 0.8)
 
     def test_varianza_muestral_datos_agrupados(self):
-        datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
         formula_varianza = round(
-            analisis_dict.varianza(datos, muestra=True), 3)
+            analisis_dict.varianza(muestra=True), 3)
 
         self.assertEqual(formula_varianza, 2.058)
 
     def test_desviacion_estandar(self):
-        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
         formula_desviacion_estandar = round(
-            analisis_lista.desviacion_estandar(datos), 2)
+            analisis_lista.desviacion_estandar(), 2)
 
         self.assertEqual(formula_desviacion_estandar, 11.08)
 
     def test_desviacion_estandar_datos_agrupados(self):
-        datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
         formula_desviacion_estandar = round(
-            analisis_dict.desviacion_estandar(datos), 4)
+            analisis_dict.desviacion_estandar(), 4)
 
         self.assertEqual(formula_desviacion_estandar, 0.8944)
 
     def test_desviacion_estandar_muestral(self):
-        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
         formula_desviacion_estandar = round(
-            analisis_lista.desviacion_estandar(datos, muestra=True), 4)
+            analisis_lista.desviacion_estandar(muestra=True), 4)
 
         self.assertEqual(formula_desviacion_estandar, 11.9642)
 
     def test_desviacion_estandar_muestral_datos_agrupados(self):
-        datos = Pruebas_caja_cristal.DICT_PARA_PRUEBAS
         formula_desviacion_estandar = round(
-            analisis_dict.desviacion_estandar(datos, muestra=True), 4)
+            analisis_dict.desviacion_estandar(muestra=True), 4)
 
         self.assertEqual(formula_desviacion_estandar, 1.4346)
 
     def test_valor_z_muchos_datos(self):
-        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
-        formula_valor_z = analisis_lista.valores_z(datos)
+        formula_valor_z = analisis_lista.valores_z()
 
-        self.assertEqual(formula_valor_z, {
-                         55: -1.34, 87: 1.55, 74: 0.37, 70: 0.01, 82: 1.1, 62: -0.71, 59: -0.98})
+        self.assertEqual(
+            formula_valor_z, {
+                55: -1.34, 87: 1.55, 74: 0.37, 70: 0.01, 82: 1.1, 62: -0.71, 59: -0.98}
+        )
 
     def test_valor_z_un_dato(self):
-        datos = 55
+        valor_a_convertir = 55
         formula_valor_z = analisis_lista.valores_z(
-            datos, media_lista=69.86, sigma=11.08)
+            valor_a_convertir=valor_a_convertir, media_lista=69.86, sigma=11.08)
 
         self.assertEqual(formula_valor_z, -1.34)
 
     def test_valores_x_y_distribucion_normal(self):
-        datos = Pruebas_caja_cristal.LISTA_PARA_PRUEBAS
-        formula_valores_x_y_distribucion_normal = analisis_lista.valores_x_y_distribucion_normal(datos)[
+        formula_valores_x_y_distribucion_normal = analisis_lista.valores_x_y_distribucion_normal()[
             1]
 
-        self.assertEqual(formula_valores_x_y_distribucion_normal, [
-                         0.014649940215369783, 0.010873903333325743, 0.03358323798357501, 0.028005203898067346, 0.02227796183372684, 0.03601326534529145, 0.01974872533379657])
+        self.assertEqual(
+            formula_valores_x_y_distribucion_normal, [
+                0.014649940215369783, 0.010873903333325743, 0.03358323798357501, 0.028005203898067346, 0.02227796183372684, 0.03601326534529145, 0.01974872533379657]
+        )
 
     def test_probabilidades_z_distribucion_normal_estandar(self):
         probabilidades_z = analisis_lista.probabilidades_z_distribucion_normal_estandar()
@@ -549,67 +550,14 @@ class Pruebas_caja_cristal(unittest.TestCase):
 
 
 if '__main__' == __name__:
-    '''#largo_lista = int(input('Largo de lista: '))
-
-    #lista = [random.randint(1, largo_lista) for i in range(largo_lista)]
-
-    lista = [55, 87, 74, 70, 82, 62, 59]
-
-    #lista = [i for i in range(largo_lista)]
-
-    lista_ordenada = self.ordenamiento_insercion(lista)
-
-    print(f'Lista Original: {lista}\nLista Ordenada: {lista_ordenada}')
-
-    probabilidad_a_buscar = float(input('Probabilidad a buscar: '))'''
-
-    '''print(f#
-Media: {media(lista_ordenada)}
-Mediana: {mediana(lista_ordenada)}
-Modas: {moda(lista)}
-
-Varianza Poblacion: {round(varianza(lista),2)}
-sigma Poblacion: {round(desviacion_estandar(lista),2)}
-
-Varianza Muestra: {round(varianza(lista, muestra=True),2)}
-sigma Muestra: {round(desviacion_estandar(lista, muestra=True),2)}
-
-Valores z: {valores_z(lista)}
-
-Distribucion normal: 
-x={valores_x_y_distribucion_normal(lista)[0]}
-
-y={[round(i,3) for i in valores_x_y_distribucion_normal(lista)[1]]}
-
-Probabilidad intermedia a {float(probabilidad_a_buscar*100)}% : z= {buscar_z_probabilidad_intermedia(probabilidad_a_buscar)}
-P(-z>= X <=z) = P({-buscar_z_probabilidad_intermedia(probabilidad_a_buscar)} >= {float(probabilidad_a_buscar*100)}% <= {buscar_z_probabilidad_intermedia(probabilidad_a_buscar)})
-
-Probabilidad izquierda a {float(probabilidad_a_buscar*100)}% : z= {buscar_z_probabilidad_izquierda(probabilidad_a_buscar)}
-P(X <=z) = P({float(probabilidad_a_buscar*100)}% <= {buscar_z_probabilidad_izquierda(probabilidad_a_buscar)})
-
-Probabilidad derecha a {float(probabilidad_a_buscar*100)}% : z= {buscar_z_probabilidad_derecha(probabilidad_a_buscar)}
-P(z >= X) = P({buscar_z_probabilidad_derecha(probabilidad_a_buscar)} >= {float(probabilidad_a_buscar*100)}% )
-#)'''
-
-    '''print('--------------------------------------------------------------')
-    dict1 = {6: 3, 7: 16, 8: 20, 9: 10, 10: 1}
-
-    print(f'media datos agrupados: {media(dict1)}')
-    print(f'mediana datos agrupados: {mediana(dict1)}')
-    print(f'moda datos agrupados: {moda(dict1)}')
-    print(
-        f'sigma datos agrupados {desviacion_estandar(dict1)}')
-    print(
-        f'varianza datos agrupados: {varianza(dict1)}')'''
 
     analisis_lista = Analisis_estadistico(
-        [55, 87, 74, 70, 82, 62, 59], 'Analisis 1')
+        datos=[55, 87, 74, 70, 82, 62, 59], titulo='Analisis 1')
 
-    analisis_dict = Analisis_estadistico(
-        dict([(6, 3), (7, 16), (8, 20), (9, 10), (10, 1)]), 'Analisis 2')
+    analisis_dict = Analisis_estadistico(datos=dict(
+        [(6, 3), (7, 16), (8, 20), (9, 10), (10, 1)]), titulo='Analisis 2')
 
     print(analisis_lista)
-
     print(analisis_dict)
 
     unittest.main()
