@@ -1,4 +1,9 @@
-class Ubicacion_binaria:
+import unittest
+
+
+class Busqueda_binaria:
+    def __init__(self, lista):
+        self.lista = lista
 
     def __ubicacion_binaria__(self, lista, comienzo, final, objetivo, ubicacion_meta=0):
 
@@ -49,13 +54,8 @@ class Ubicacion_binaria:
         else:  # Si el objetivo es menor que la mitad
             return self.__ubicacion_binaria__(lista, comienzo, medio - 1, objetivo, ubicacion_meta)
 
-
-class Ordenamiento_insercion(Ubicacion_binaria):
-    def __init__(self, lista):
-        self.lista = lista
-        self.lista_ordenada = self.__ordenamiento_insercion__(self.lista)
-
-    def __ordenamiento_insercion__(self, lista):
+    def ordenamiento_insercion(self):
+        lista = self.lista
         lista_ordenada = [lista[0]]
         lista_desordenada = lista[1:]
         n_lista_ordenada = len(lista_ordenada)-1
@@ -90,10 +90,39 @@ class Ordenamiento_insercion(Ubicacion_binaria):
 
         return lista_ordenada
 
+    def busqueda_binaria(self, objetivo, comienzo=0, final=None):
+        if final == None:
+            final = len(self.lista)
+
+        lista_ordenada = self.ordenamiento_insercion()
+
+        if comienzo > final:
+            return False
+        medio = (comienzo + final) // 2
+        if lista_ordenada[medio] == objetivo:
+            return medio
+        elif lista_ordenada[medio] < objetivo:
+            return self.busqueda_binaria(objetivo, comienzo=medio + 1, final=final)
+        else:
+            return self.busqueda_binaria(objetivo, comienzo=comienzo, final=medio - 1)
+
+
+class Pruebas_caja_cristal(unittest.TestCase):
+
+    def test_ordenar_lista(self):
+        formula_ordenar_lista = busqueda1.ordenamiento_insercion()
+
+        self.assertEqual(formula_ordenar_lista, [55, 59, 62, 70, 74, 82, 87])
+
+    def test_buscar_ubicacion(self):
+        formula_buscar_ubicacion = busqueda1.busqueda_binaria(87)
+
+        self.assertEqual(formula_buscar_ubicacion, 6)
+
 
 if '__main__' == __name__:
 
     lista1 = [55, 87, 74, 70, 82, 62, 59]
-    lista_ordenada = Ordenamiento_insercion(lista1
-                                            ).lista_ordenada
-    print(lista1.lista_ordenada)
+    busqueda1 = Busqueda_binaria(lista1)
+
+    unittest.main()

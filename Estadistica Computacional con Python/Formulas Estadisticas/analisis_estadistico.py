@@ -403,9 +403,6 @@ class Analisis_estadistico:
 
 class Pruebas_caja_cristal(unittest.TestCase):
 
-    LISTA_PARA_PRUEBAS = [55, 87, 74, 70, 82, 62, 59]
-    DICT_PARA_PRUEBAS = dict([(6, 3), (7, 16), (8, 20), (9, 10), (10, 1)])
-
     def test_media(self):
         formula_media = round(analisis_lista.media(), 2)
 
