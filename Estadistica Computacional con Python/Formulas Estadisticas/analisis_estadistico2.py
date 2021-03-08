@@ -6,7 +6,7 @@ import unittest
 from busqueda_binaria import Busqueda_binaria
 
 
-class Analisis_estadistico:
+class Analisis_estadistico(Busqueda_binaria):
     '''Analiza estadisticamente datos de una lista o un diccionario
     '''
 
@@ -29,104 +29,11 @@ class Analisis_estadistico:
     -----------------------------------------------------------------------------
     '''
 
-    def ubicacion_binaria(self, lista, comienzo, final, objetivo, ubicacion_meta=0):
+    #def ubicacion_binaria(self, lista, comienzo, final, objetivo, ubicacion_meta=0):
 
-        if final-comienzo == 1:  # Si la lista se acoto a dos ubicaciones
-            if objetivo > lista[final]:
+    #def ordenamiento_insercion(self, lista):
 
-                if final + 1 > len(lista)-1:
-                    ubicacion_meta = len(lista)-1
-                else:
-                    ubicacion_meta = final
-
-                return ubicacion_meta
-            elif objetivo < lista[comienzo]:
-                ubicacion_meta = comienzo
-
-                return ubicacion_meta
-
-        if comienzo == final:  # Si la lista llego al final de su acote y solo nos indica una ubicacion
-
-            # Si el objetivo no se encontro y es mayor que el acotamiento final
-            if objetivo > lista[final]:
-                # Si la ubicacion meta es mas grande que la lista completa
-                if final + 1 > len(lista)-1:
-                    ubicacion_meta = len(lista)-1
-
-                else:
-                    ubicacion_meta = final + 1
-
-            # Si estamos al principio de la lista o el objetivo es igual que el acotamiento final
-            elif comienzo == 0 or objetivo == lista[final]:
-                pass
-
-            else:
-                ubicacion_meta += 1
-
-            return ubicacion_meta
-
-        # Aqui empieza a acotar la busqueda
-        medio = (comienzo + final) // 2  # Se acota la lista a la mitad
-
-        if objetivo == lista[medio]:  # Si el objetivo se encontro en la mitad
-            return medio
-
-        elif objetivo > lista[medio]:  # Si el objetivo es mayor que la mitad
-            ubicacion_meta = medio
-            return self.ubicacion_binaria(lista, medio + 1, final, objetivo, ubicacion_meta)
-
-        else:  # Si el objetivo es menor que la mitad
-            return self.ubicacion_binaria(lista, comienzo, medio - 1, objetivo, ubicacion_meta)
-
-    def ordenamiento_insercion(self, lista):
-        lista_ordenada = [lista[0]]
-        lista_desordenada = lista[1:]
-        n_lista_ordenada = len(lista_ordenada)-1
-        n_lista_desordenada = len(lista_desordenada)-1
-
-        # Por cada ubicacion de la lista desordenada
-        for ubicacion_en_lista_desordenada in range(n_lista_desordenada+1):
-
-            # Encuentra la ubicacion en la lista ordenada
-            ubicacion = self.ubicacion_binaria(
-                lista_ordenada, 0, n_lista_ordenada, lista_desordenada[ubicacion_en_lista_desordenada])
-
-            # Si el numero desordenado es mayor que el de la ubicacion encontrada
-            if lista_desordenada[ubicacion_en_lista_desordenada] > lista_ordenada[ubicacion]:
-
-                # Si la ubicacion encontrada es igual que el final de la lista, se agrega al final
-                if ubicacion == n_lista_ordenada:
-                    lista_ordenada.append(
-                        lista_desordenada[ubicacion_en_lista_desordenada])
-
-                # Si el numero no esta al final de la lista, se inserta en la siguiente ubicacion encontrada
-                else:
-                    lista_ordenada.insert(
-                        ubicacion + 1, lista_desordenada[ubicacion_en_lista_desordenada])
-                n_lista_ordenada += 1
-
-            # Si el numero desordenado es menor o igual que el de la ubicacion encontrada
-            else:
-                lista_ordenada.insert(
-                    ubicacion, lista_desordenada[ubicacion_en_lista_desordenada])
-                n_lista_ordenada += 1
-
-        return lista_ordenada
-
-    def busqueda_binaria(self, lista, comienzo, final, objetivo, ordenar=True):
-        lista_ordenada = []
-        if ordenar == True:
-            lista_ordenada = self.ordenamiento_insercion(lista)
-
-        if comienzo > final:
-            return False
-        medio = (comienzo + final) // 2
-        if lista_ordenada[medio] == objetivo:
-            return True
-        elif lista_ordenada[medio] < objetivo:
-            return self.busqueda_binaria(lista_ordenada, medio + 1, final, objetivo)
-        else:
-            return self.busqueda_binaria(lista_ordenada, comienzo, medio - 1, objetivo)
+    #def busqueda_binaria(self, lista, comienzo, final, objetivo, ordenar=True):
 
     def media(self, datos=None):
         if datos == None:
@@ -152,7 +59,7 @@ class Analisis_estadistico:
         datos = self.datos
         if type(datos) is dict:
             lista_xi_ordenada = self.ordenamiento_insercion(
-                [xi for xi in datos.keys()])
+                                lista=[xi for xi in datos.keys()])
 
             # faa= frecuencias absolutas acumuladas (FAA)
             xi_fa_acumulada = []
@@ -174,26 +81,26 @@ class Analisis_estadistico:
             if total_n % 2 > 0:
                 numero_medio = int(round(total_n/2, 0))
                 ubicacion_mediana = fa_acumulada_list[self.ubicacion_binaria(
-                    fa_acumulada_list, 0, len(fa_acumulada_list), numero_medio)+1]
+                    lista=fa_acumulada_list, comienzo=0, final=len(fa_acumulada_list), objetivo=numero_medio)+1]
                 mediana = dict_xi_fa_acumulada[ubicacion_mediana]
             else:
                 numero_medio1 = int(round(total_n/2, 0)-1)
                 numero_medio2 = int(round(total_n/2, 0))
                 ubicacion_numero_medio1 = fa_acumulada_list[self.ubicacion_binaria(
-                    fa_acumulada_list, 0, len(fa_acumulada_list), numero_medio1)+1]
+                    lista=fa_acumulada_list, comienzo=0, final=len(fa_acumulada_list), objetivo=numero_medio1)+1]
                 ubicacion_numero_medio2 = fa_acumulada_list[self.ubicacion_binaria(
-                    fa_acumulada_list, 0, len(fa_acumulada_list), numero_medio2)+1]
+                    lista=fa_acumulada_list, comienzo=0, final=len(fa_acumulada_list), objetivo=numero_medio2)+1]
                 if ubicacion_numero_medio1 == ubicacion_numero_medio2:
                     numero_medio = self.media([numero_medio1, numero_medio2])
                     ubicacion_mediana = fa_acumulada_list[self.ubicacion_binaria(
-                        fa_acumulada_list, 0, len(fa_acumulada_list), numero_medio)+1]
+                        lista=fa_acumulada_list, comienzo=0, final=len(fa_acumulada_list), objetivo=numero_medio)+1]
                     mediana = dict_xi_fa_acumulada[ubicacion_mediana]
                 else:
                     mediana = self.media([
                         dict_xi_fa_acumulada[ubicacion_numero_medio1], dict_xi_fa_acumulada[ubicacion_numero_medio2]])
 
         else:
-            lista_ordenada = self.ordenamiento_insercion(datos)
+            lista_ordenada = self.ordenamiento_insercion(lista=datos)
 
             if len(lista_ordenada) % 2 > 0:
                 mediana = lista_ordenada[int(
@@ -335,10 +242,10 @@ class Analisis_estadistico:
         if self.busqueda_binaria(lista_probabilidades_dns, 0, len(lista_probabilidades_dns), probabilidad_dns):
             z = lista_z[probabilidad_dns]
         else:
-            ubicacion1 = self.ubicacion_binaria(lista_probabilidades_dns, 0, len(
-                lista_probabilidades_dns), probabilidad_dns) - 1
-            ubicacion2 = self.ubicacion_binaria(lista_probabilidades_dns, 0, len(
-                lista_probabilidades_dns), probabilidad_dns)
+            ubicacion1 = self.ubicacion_binaria(lista=lista_probabilidades_dns, comienzo=0, final=len(
+                lista_probabilidades_dns), objetivo=probabilidad_dns) - 1
+            ubicacion2 = self.ubicacion_binaria(lista=lista_probabilidades_dns, comienzo=0, final=len(
+                lista_probabilidades_dns), objetivo=probabilidad_dns)
             z = (
                 lista_z[lista_probabilidades_dns[ubicacion1]] +
                 lista_z[lista_probabilidades_dns[ubicacion2]]
@@ -359,11 +266,11 @@ class Analisis_estadistico:
             z = lista_z[probabilidad_dns]
 
         else:
-            ubicacion1 = self.ubicacion_binaria(lista_probabilidades_dns, 0, len(
-                lista_probabilidades_dns), probabilidad_dns) - 1
+            ubicacion1 = self.ubicacion_binaria(lista=lista_probabilidades_dns, comienzo=0, final=len(
+                lista_probabilidades_dns), objetivo=probabilidad_dns) - 1
 
-            ubicacion2 = self.ubicacion_binaria(lista_probabilidades_dns, 0, len(
-                lista_probabilidades_dns), probabilidad_dns)
+            ubicacion2 = self.ubicacion_binaria(lista=lista_probabilidades_dns, comienzo=0, final=len(
+                lista_probabilidades_dns), objetivo=probabilidad_dns)
 
             z = (
                 lista_z[lista_probabilidades_dns[ubicacion1]] +
@@ -388,11 +295,11 @@ class Analisis_estadistico:
             z = lista_z[probabilidad_dns]
 
         else:
-            ubicacion1 = self.ubicacion_binaria(lista_probabilidades_dns, 0, len(
-                lista_probabilidades_dns), probabilidad_dns) - 1
+            ubicacion1 = self.ubicacion_binaria(lista=lista_probabilidades_dns, comienzo=0, final=len(
+                lista_probabilidades_dns), objetivo=probabilidad_dns) - 1
 
-            ubicacion2 = self.ubicacion_binaria(lista_probabilidades_dns, 0, len(
-                lista_probabilidades_dns), probabilidad_dns)
+            ubicacion2 = self.ubicacion_binaria(lista=lista_probabilidades_dns, comienzo=0, final=len(
+                lista_probabilidades_dns), objetivo=probabilidad_dns)
 
             z = (
                 lista_z[lista_probabilidades_dns[ubicacion1]] +

@@ -5,8 +5,12 @@ class Busqueda_binaria:
     def __init__(self, lista):
         self.lista = lista
 
-    def __ubicacion_binaria__(self, lista, comienzo, final, objetivo, ubicacion_meta=0):
-
+    def ubicacion_binaria(self, objetivo, lista=None, comienzo=0, final=None, ubicacion_meta=0):
+        '''Ubicacion binaria solo funciona si la lista esta ordenada'''
+        if final == None:
+          lista = self.ordenamiento_insercion()
+          final = len(lista)
+          
         if final-comienzo == 1:  # Si la lista se acoto a dos ubicaciones
             if objetivo > lista[final]:
 
@@ -49,13 +53,14 @@ class Busqueda_binaria:
 
         elif objetivo > lista[medio]:  # Si el objetivo es mayor que la mitad
             ubicacion_meta = medio
-            return self.__ubicacion_binaria__(lista, medio + 1, final, objetivo, ubicacion_meta)
+            return self.ubicacion_binaria(lista=lista, comienzo=medio + 1, final=final, objetivo=objetivo, ubicacion_meta=ubicacion_meta)
 
         else:  # Si el objetivo es menor que la mitad
-            return self.__ubicacion_binaria__(lista, comienzo, medio - 1, objetivo, ubicacion_meta)
+            return self.ubicacion_binaria(lista=lista, comienzo=comienzo, final=medio - 1, objetivo=objetivo, ubicacion_meta=ubicacion_meta)
 
-    def ordenamiento_insercion(self):
-        lista = self.lista
+    def ordenamiento_insercion(self, lista=None):
+        if lista == None:
+          lista = self.lista
         lista_ordenada = [lista[0]]
         lista_desordenada = lista[1:]
         n_lista_ordenada = len(lista_ordenada)-1
@@ -65,8 +70,8 @@ class Busqueda_binaria:
         for ubicacion_en_lista_desordenada in range(n_lista_desordenada+1):
 
             # Encuentra la ubicacion en la lista ordenada
-            ubicacion = self.__ubicacion_binaria__(
-                lista_ordenada, 0, n_lista_ordenada, lista_desordenada[ubicacion_en_lista_desordenada])
+            ubicacion = self.ubicacion_binaria(
+                lista=lista_ordenada, comienzo=0, final=n_lista_ordenada, objetivo=lista_desordenada[ubicacion_en_lista_desordenada])
 
             # Si el numero desordenado es mayor que el de la ubicacion encontrada
             if lista_desordenada[ubicacion_en_lista_desordenada] > lista_ordenada[ubicacion]:
@@ -90,8 +95,9 @@ class Busqueda_binaria:
 
         return lista_ordenada
 
-    def busqueda_binaria(self, objetivo, comienzo=0, final=None):
+    def busqueda_binaria(self, objetivo, lista=None, comienzo=0, final=None):
         if final == None:
+            
             final = len(self.lista)
 
         lista_ordenada = self.ordenamiento_insercion()
@@ -108,6 +114,11 @@ class Busqueda_binaria:
 
 
 class Pruebas_caja_cristal(unittest.TestCase):
+
+    def test_ubicacion_binaria(self):
+        formula_ubicacion_binaria = busqueda1.busqueda_binaria(62)
+
+        self.assertEqual(formula_ubicacion_binaria, 2)
 
     def test_ordenar_lista(self):
         formula_ordenar_lista = busqueda1.ordenamiento_insercion()
