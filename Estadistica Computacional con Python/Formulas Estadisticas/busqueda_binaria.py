@@ -2,42 +2,42 @@ import unittest
 
 
 class Busqueda_binaria:
-    def __init__(self, lista):
-        self.lista = lista
+    def __init__(self, datos):
+        self.datos = datos
 
-    def ubicacion_binaria(self, objetivo, lista=None, comienzo=0, final=None, ubicacion_meta=0):
-        '''Ubicacion binaria solo funciona si la lista esta ordenada'''
+    def ubicacion_binaria(self, objetivo, datos=None, comienzo=0, final=None, ubicacion_meta=0):
+        '''Ubicacion binaria solo funciona si la datos esta ordenada'''
         if final == None:
-          lista = self.ordenamiento_insercion()
-          final = len(lista)
-          
-        if final-comienzo == 1:  # Si la lista se acoto a dos ubicaciones
-            if objetivo > lista[final]:
+            datos = self.ordenamiento_insercion()
+            final = len(datos)
 
-                if final + 1 > len(lista)-1:
-                    ubicacion_meta = len(lista)-1
+        if final-comienzo == 1:  # Si la datos se acoto a dos ubicaciones
+            if objetivo > datos[final]:
+
+                if final + 1 > len(datos)-1:
+                    ubicacion_meta = len(datos)-1
                 else:
                     ubicacion_meta = final
 
                 return ubicacion_meta
-            elif objetivo < lista[comienzo]:
+            elif objetivo < datos[comienzo]:
                 ubicacion_meta = comienzo
 
                 return ubicacion_meta
 
-        if comienzo == final:  # Si la lista llego al final de su acote y solo nos indica una ubicacion
+        if comienzo == final:  # Si la datos llego al final de su acote y solo nos indica una ubicacion
 
             # Si el objetivo no se encontro y es mayor que el acotamiento final
-            if objetivo > lista[final]:
-                # Si la ubicacion meta es mas grande que la lista completa
-                if final + 1 > len(lista)-1:
-                    ubicacion_meta = len(lista)-1
+            if objetivo > datos[final]:
+                # Si la ubicacion meta es mas grande que la datos completa
+                if final + 1 > len(datos)-1:
+                    ubicacion_meta = len(datos)-1
 
                 else:
                     ubicacion_meta = final + 1
 
-            # Si estamos al principio de la lista o el objetivo es igual que el acotamiento final
-            elif comienzo == 0 or objetivo == lista[final]:
+            # Si estamos al principio de la datos o el objetivo es igual que el acotamiento final
+            elif comienzo == 0 or objetivo == datos[final]:
                 pass
 
             else:
@@ -46,42 +46,41 @@ class Busqueda_binaria:
             return ubicacion_meta
 
         # Aqui empieza a acotar la busqueda
-        medio = (comienzo + final) // 2  # Se acota la lista a la mitad
+        medio = (comienzo + final) // 2  # Se acota la datos a la mitad
 
-        if objetivo == lista[medio]:  # Si el objetivo se encontro en la mitad
+        if objetivo == datos[medio]:  # Si el objetivo se encontro en la mitad
             return medio
 
-        elif objetivo > lista[medio]:  # Si el objetivo es mayor que la mitad
+        elif objetivo > datos[medio]:  # Si el objetivo es mayor que la mitad
             ubicacion_meta = medio
-            return self.ubicacion_binaria(lista=lista, comienzo=medio + 1, final=final, objetivo=objetivo, ubicacion_meta=ubicacion_meta)
+            return self.ubicacion_binaria(datos=datos, comienzo=medio + 1, final=final, objetivo=objetivo, ubicacion_meta=ubicacion_meta)
 
         else:  # Si el objetivo es menor que la mitad
-            return self.ubicacion_binaria(lista=lista, comienzo=comienzo, final=medio - 1, objetivo=objetivo, ubicacion_meta=ubicacion_meta)
+            return self.ubicacion_binaria(datos=datos, comienzo=comienzo, final=medio - 1, objetivo=objetivo, ubicacion_meta=ubicacion_meta)
 
-    def ordenamiento_insercion(self, lista=None):
-        if lista == None:
-          lista = self.lista
-        lista_ordenada = [lista[0]]
-        lista_desordenada = lista[1:]
+    def ordenamiento_insercion(self):
+        datos = self.datos
+        lista_ordenada = [datos[0]]
+        lista_desordenada = datos[1:]
         n_lista_ordenada = len(lista_ordenada)-1
         n_lista_desordenada = len(lista_desordenada)-1
 
-        # Por cada ubicacion de la lista desordenada
+        # Por cada ubicacion de la datos desordenada
         for ubicacion_en_lista_desordenada in range(n_lista_desordenada+1):
 
-            # Encuentra la ubicacion en la lista ordenada
+            # Encuentra la ubicacion en la datos ordenada
             ubicacion = self.ubicacion_binaria(
-                lista=lista_ordenada, comienzo=0, final=n_lista_ordenada, objetivo=lista_desordenada[ubicacion_en_lista_desordenada])
+                datos=lista_ordenada, comienzo=0, final=n_lista_ordenada, objetivo=lista_desordenada[ubicacion_en_lista_desordenada])
 
             # Si el numero desordenado es mayor que el de la ubicacion encontrada
             if lista_desordenada[ubicacion_en_lista_desordenada] > lista_ordenada[ubicacion]:
 
-                # Si la ubicacion encontrada es igual que el final de la lista, se agrega al final
+                # Si la ubicacion encontrada es igual que el final de la datos, se agrega al final
                 if ubicacion == n_lista_ordenada:
                     lista_ordenada.append(
                         lista_desordenada[ubicacion_en_lista_desordenada])
 
-                # Si el numero no esta al final de la lista, se inserta en la siguiente ubicacion encontrada
+                # Si el numero no esta al final de la datos, se inserta en la siguiente ubicacion encontrada
                 else:
                     lista_ordenada.insert(
                         ubicacion + 1, lista_desordenada[ubicacion_en_lista_desordenada])
@@ -95,10 +94,9 @@ class Busqueda_binaria:
 
         return lista_ordenada
 
-    def busqueda_binaria(self, objetivo, lista=None, comienzo=0, final=None):
+    def busqueda_binaria(self, objetivo, comienzo=0, final=None):
         if final == None:
-            
-            final = len(self.lista)
+            final = len(self.datos)
 
         lista_ordenada = self.ordenamiento_insercion()
 
