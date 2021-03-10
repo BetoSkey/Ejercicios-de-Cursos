@@ -1,5 +1,5 @@
 import unittest
-
+from datos_estadisticos import Datos_estadisticos
 
 class Busqueda_binaria:
     def __init__(self, datos):

@@ -4,7 +4,7 @@ import math
 import pandas
 import unittest
 
-class Estadistica_inferencial(Analisis_estadistico,Busqueda_binaria):
+class Analisis_inferencial(Analisis_estadistico,Busqueda_binaria):
 
     def __init__(self, datos, titulo=None):
         super().__init__(datos, titulo)
@@ -191,10 +191,10 @@ class Pruebas_caja_cristal(unittest.TestCase):
 
 if '__main__' == __name__:
 
-    analisis_lista = Estadistica_inferencial(
+    analisis_lista = Analisis_inferencial(
         datos=[55, 87, 74, 70, 82, 62, 59], titulo='Analisis 1')
 
-    analisis_dict = Estadistica_inferencial(datos=dict(
+    analisis_dict = Analisis_inferencial(datos=dict(
         [(6, 3), (7, 16), (8, 20), (9, 10), (10, 1)]), titulo='Analisis 2')
 
     print(analisis_lista)

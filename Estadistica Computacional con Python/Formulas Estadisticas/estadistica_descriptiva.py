@@ -3,7 +3,7 @@ from busqueda_binaria2 import Busqueda_binaria
 from collections import Counter
 import unittest
 
-class Estadistica_descriptiva(Analisis_estadistico, Busqueda_binaria):
+class Analisis_descriptivo(Analisis_estadistico, Busqueda_binaria):
 
     def __init__(self,datos, titulo=None):
         super().__init__(datos, titulo)
@@ -80,13 +80,13 @@ class Estadistica_descriptiva(Analisis_estadistico, Busqueda_binaria):
                 ubicacion_numero_medio2 = fa_acumulada_list[Busqueda_binaria(
                     fa_acumulada_list).ubicacion_binaria(numero_medio2)+1]
                 if ubicacion_numero_medio1 == ubicacion_numero_medio2:
-                    numero_medio = Estadistica_descriptiva(
+                    numero_medio = Analisis_descriptivo(
                         [numero_medio1, numero_medio2]).media()
                     ubicacion_mediana = fa_acumulada_list[Busqueda_binaria(
                         fa_acumulada_list).ubicacion_binaria(numero_medio)+1]
                     mediana = dict_xi_fa_acumulada[ubicacion_mediana]
                 else:
-                    mediana = Estadistica_descriptiva([
+                    mediana = Analisis_descriptivo([
                         dict_xi_fa_acumulada[ubicacion_numero_medio1], dict_xi_fa_acumulada[ubicacion_numero_medio2]]).media()
 
         else:
@@ -101,7 +101,7 @@ class Estadistica_descriptiva(Analisis_estadistico, Busqueda_binaria):
                 numero_medio2 = lista_ordenada[int(
                     round(len(lista_ordenada)/2, 0))]
 
-                mediana = Estadistica_descriptiva(
+                mediana = Analisis_descriptivo(
                     [numero_medio1, numero_medio2]).media()
 
         return mediana
@@ -144,7 +144,7 @@ class Estadistica_descriptiva(Analisis_estadistico, Busqueda_binaria):
                     diferencia = (datos[i] - media_lista)**2
                     diferencias_vs_media.append(diferencia)
 
-                varianza = Estadistica_descriptiva(diferencias_vs_media).media()
+                varianza = Analisis_descriptivo(diferencias_vs_media).media()
 
         else:
             if type(datos) is dict:
@@ -280,10 +280,10 @@ class Pruebas_caja_cristal(unittest.TestCase):
 
 if '__main__' == __name__:
 
-    analisis_lista = Estadistica_descriptiva(
+    analisis_lista = Analisis_descriptivo(
         datos=[55, 87, 74, 70, 82, 62, 59], titulo='Analisis 1')
 
-    analisis_dict = Estadistica_descriptiva(datos=dict(
+    analisis_dict = Analisis_descriptivo(datos=dict(
         [(6, 3), (7, 16), (8, 20), (9, 10), (10, 1)]), titulo='Analisis 2')
 
     print(analisis_lista)
