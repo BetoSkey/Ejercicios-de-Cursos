@@ -3,15 +3,17 @@ from busqueda_binaria2 import Busqueda_binaria
 from collections import Counter
 import unittest
 
+
 class Analisis_descriptivo(Analisis_estadistico, Busqueda_binaria):
 
-    def __init__(self,datos, titulo=None):
-        super().__init__(datos, titulo)
-    
+    def __init__(self, datos):
+        super().__init__(datos)
+        datos = self.datos.datos
+
     def __str__(self):
         return f'''
     -----------------------------------------------------------------------------
-    {self.titulo}
+    {self.datos.titulo}
         Medidas de tendencia central:
             Media: {round(self.media(), 3)}
             Mediana: {self.mediana()}
@@ -174,6 +176,7 @@ class Analisis_descriptivo(Analisis_estadistico, Busqueda_binaria):
 
         return desviacion_estandar
 
+
 class Pruebas_caja_cristal(unittest.TestCase):
 
     def test_media(self):
@@ -275,16 +278,15 @@ class Pruebas_caja_cristal(unittest.TestCase):
             formula_valor_z, {
                 55: -1.34, 87: 1.55, 74: 0.37, 70: 0.01, 82: 1.1, 62: -0.71, 59: -0.98}
         )
-  
 
 
 if '__main__' == __name__:
 
     analisis_lista = Analisis_descriptivo(
-        datos=[55, 87, 74, 70, 82, 62, 59], titulo='Analisis 1')
+        datos=[55, 87, 74, 70, 82, 62, 59])
 
     analisis_dict = Analisis_descriptivo(datos=dict(
-        [(6, 3), (7, 16), (8, 20), (9, 10), (10, 1)]), titulo='Analisis 2')
+        [(6, 3), (7, 16), (8, 20), (9, 10), (10, 1)]))
 
     print(analisis_lista)
     print(analisis_dict)

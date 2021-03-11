@@ -2,19 +2,21 @@ from datos_estadisticos import Datos_estadisticos
 import unittest
 
 
-
-class Analisis_estadistico(Datos_estadisticos):
-    '''Analiza estadisticamente datos de una datos o un diccionario
+class Analisis_estadistico:
+    '''Recibe un objeto "Datos_estadisticos"
     '''
 
-    def __init__(self, datos, titulo=None):
-        super().__init__()
-        self.titulo = titulo
+    def __init__(self, datos):
+        self.datos = datos
 
-    
+    def __str__(self):
+        return f'''
+Datos: {self.datos.datos}
+'''
 
 
 if '__main__' == __name__:
 
-    analisis1=Analisis_estadistico([1,2,3,4])
+    datos1 = Datos_estadisticos(datos=[1, 2, 3, 4])
+    analisis1 = Analisis_estadistico(datos1)
     print(analisis1)
