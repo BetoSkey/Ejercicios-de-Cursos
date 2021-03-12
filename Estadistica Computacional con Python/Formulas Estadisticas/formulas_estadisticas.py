@@ -4,185 +4,193 @@ from collections import Counter
 import unittest
 from busqueda_binaria import Busqueda_binaria
 
+
 def media(datos):
-      '''Puede recibir una datos o un diccionario'''
+    '''Puede recibir una datos o un diccionario'''
 
-      if type(datos) is dict:
-          total_n = sum(datos.values())
-          lista_ni_xi = []
+    if type(datos) is dict:
+        total_n = sum(datos.values())
+        lista_ni_xi = []
 
-          for xi, ni in datos.items():
-              lista_ni_xi.append(xi * ni)
+        for xi, ni in datos.items():
+            lista_ni_xi.append(xi * ni)
 
-          suma_lista_ni_xi = sum(lista_ni_xi)
-          media = suma_lista_ni_xi / total_n
+        suma_lista_ni_xi = sum(lista_ni_xi)
+        media = suma_lista_ni_xi / total_n
 
-      else:
-          media = sum(datos) / len(datos)
+    else:
+        media = sum(datos) / len(datos)
 
-      return media
+    return media
+
 
 def mediana(datos):
-        '''Puede recibir una datos o un diccionario'''
-        if type(datos) is dict:
-            lista_xi_ordenada = Busqueda_binaria(
-                [xi for xi in datos.keys()]).ordenamiento_insercion()
+    '''Puede recibir una datos o un diccionario'''
+    if type(datos) is dict:
+        lista_xi_ordenada = Busqueda_binaria(
+            [xi for xi in datos.keys()]).ordenamiento_insercion()
 
-            # faa= frecuencias absolutas acumuladas (FAA)
-            xi_fa_acumulada = []
-            fa_acumulada_list = []
+        # faa= frecuencias absolutas acumuladas (FAA)
+        xi_fa_acumulada = []
+        fa_acumulada_list = []
 
-            for xi in lista_xi_ordenada:
-                fa_xi = datos[xi]
-                if len(xi_fa_acumulada) == 0:
-                    xi_fa_acumulada.append((fa_xi, xi))
-                    fa_acumulada_list.append(fa_xi)
-                else:
-                    xi_fa_acumulada.append(
-                        (fa_xi + xi_fa_acumulada[-1][0], xi))
-                    fa_acumulada_list.append(fa_xi + fa_acumulada_list[-1])
+        for xi in lista_xi_ordenada:
+            fa_xi = datos[xi]
+            if len(xi_fa_acumulada) == 0:
+                xi_fa_acumulada.append((fa_xi, xi))
+                fa_acumulada_list.append(fa_xi)
+            else:
+                xi_fa_acumulada.append(
+                    (fa_xi + xi_fa_acumulada[-1][0], xi))
+                fa_acumulada_list.append(fa_xi + fa_acumulada_list[-1])
 
-            total_n = xi_fa_acumulada[-1][0]
-            dict_xi_fa_acumulada = dict(xi_fa_acumulada)
+        total_n = xi_fa_acumulada[-1][0]
+        dict_xi_fa_acumulada = dict(xi_fa_acumulada)
 
-            if total_n % 2 > 0:
-                numero_medio = int(round(total_n/2, 0))
+        if total_n % 2 > 0:
+            numero_medio = int(round(total_n/2, 0))
+            ubicacion_mediana = fa_acumulada_list[Busqueda_binaria(
+                fa_acumulada_list).ubicacion_binaria(numero_medio)+1]
+            mediana = dict_xi_fa_acumulada[ubicacion_mediana]
+        else:
+            numero_medio1 = int(round(total_n/2, 0)-1)
+            numero_medio2 = int(round(total_n/2, 0))
+            ubicacion_numero_medio1 = fa_acumulada_list[Busqueda_binaria(
+                fa_acumulada_list).ubicacion_binaria(numero_medio1)+1]
+            ubicacion_numero_medio2 = fa_acumulada_list[Busqueda_binaria(
+                fa_acumulada_list).ubicacion_binaria(numero_medio2)+1]
+            if ubicacion_numero_medio1 == ubicacion_numero_medio2:
+                numero_medio = media([numero_medio1, numero_medio2])
                 ubicacion_mediana = fa_acumulada_list[Busqueda_binaria(
                     fa_acumulada_list).ubicacion_binaria(numero_medio)+1]
                 mediana = dict_xi_fa_acumulada[ubicacion_mediana]
             else:
-                numero_medio1 = int(round(total_n/2, 0)-1)
-                numero_medio2 = int(round(total_n/2, 0))
-                ubicacion_numero_medio1 = fa_acumulada_list[Busqueda_binaria(
-                    fa_acumulada_list).ubicacion_binaria(numero_medio1)+1]
-                ubicacion_numero_medio2 = fa_acumulada_list[Busqueda_binaria(
-                    fa_acumulada_list).ubicacion_binaria(numero_medio2)+1]
-                if ubicacion_numero_medio1 == ubicacion_numero_medio2:
-                    numero_medio = media([numero_medio1, numero_medio2])
-                    ubicacion_mediana = fa_acumulada_list[Busqueda_binaria(
-                        fa_acumulada_list).ubicacion_binaria(numero_medio)+1]
-                    mediana = dict_xi_fa_acumulada[ubicacion_mediana]
-                else:
-                    mediana = media([
-                        dict_xi_fa_acumulada[ubicacion_numero_medio1], dict_xi_fa_acumulada[ubicacion_numero_medio2]])
+                mediana = media([
+                    dict_xi_fa_acumulada[ubicacion_numero_medio1], dict_xi_fa_acumulada[ubicacion_numero_medio2]])
 
+    else:
+        lista_ordenada = Busqueda_binaria(datos).ordenamiento_insercion()
+
+        if len(lista_ordenada) % 2 > 0:
+            mediana = lista_ordenada[int(
+                round(len(lista_ordenada)/2, 0)-1)]
         else:
-            lista_ordenada = Busqueda_binaria(datos).ordenamiento_insercion()
+            numero_medio1 = lista_ordenada[int(
+                round(len(lista_ordenada)/2, 0)-1)]
+            numero_medio2 = lista_ordenada[int(
+                round(len(lista_ordenada)/2, 0))]
 
-            if len(lista_ordenada) % 2 > 0:
-                mediana = lista_ordenada[int(
-                    round(len(lista_ordenada)/2, 0)-1)]
-            else:
-                numero_medio1 = lista_ordenada[int(
-                    round(len(lista_ordenada)/2, 0)-1)]
-                numero_medio2 = lista_ordenada[int(
-                    round(len(lista_ordenada)/2, 0))]
+            mediana = media([numero_medio1, numero_medio2])
 
-                mediana = media([numero_medio1, numero_medio2])
+    return mediana
 
-        return mediana
 
 def moda(datos):
 
-        if type(datos) is dict:
-            maximo = max(datos.values())
-            moda = [id for id, value in datos.items()if value == maximo]
+    if type(datos) is dict:
+        maximo = max(datos.values())
+        moda = [id for id, value in datos.items()if value == maximo]
 
-        else:
-            conteo_elementos = Counter(datos)
-            maximo = max(conteo_elementos.values())
-            moda = [id for id, value in conteo_elementos.items()
-                    if value == maximo]
+    else:
+        conteo_elementos = Counter(datos)
+        maximo = max(conteo_elementos.values())
+        moda = [id for id, value in conteo_elementos.items()
+                if value == maximo]
 
-        if len(moda) == 1:
-            moda = moda[0]
+    if len(moda) == 1:
+        moda = moda[0]
 
-        return moda
+    return moda
+
 
 def varianza(datos, muestra=False):
 
-        if muestra == False:
-            if type(datos) is dict:
-                media_dict_xi_fa = media(datos)
-                total_n = sum(datos.values())
-                xi2_fa = []
-                for xi, fa in datos.items():
-                    xi2_fa.append((xi**2)*fa)
-                varianza = (
-                    (sum(xi2_fa)/total_n) - media_dict_xi_fa**2)
-
-            else:
-                media_lista = media(datos)
-                diferencias_vs_media = []
-                for i in range(len(datos)):
-                    diferencia = (datos[i] - media_lista)**2
-                    diferencias_vs_media.append(diferencia)
-
-                varianza = media(diferencias_vs_media)
+    if muestra == False:
+        if type(datos) is dict:
+            media_dict_xi_fa = media(datos)
+            total_n = sum(datos.values())
+            xi2_fa = []
+            for xi, fa in datos.items():
+                xi2_fa.append((xi**2)*fa)
+            varianza = (
+                (sum(xi2_fa)/total_n) - media_dict_xi_fa**2)
 
         else:
-            if type(datos) is dict:
-                media_dict_xi_fa = media(datos)
-                total_n = sum(datos.values())-1
-                xi2_fa = []
-                for xi, fa in datos.items():
-                    xi2_fa.append((xi**2)*fa)
-                varianza = (
-                    (sum(xi2_fa)/total_n) - media_dict_xi_fa**2)
+            media_lista = media(datos)
+            diferencias_vs_media = []
+            for i in range(len(datos)):
+                diferencia = (datos[i] - media_lista)**2
+                diferencias_vs_media.append(diferencia)
 
-            else:
-                media_lista = media(datos)
-                diferencias_vs_media = []
-                for i in range(len(datos)):
-                    diferencia = (datos[i] - media_lista)**2
-                    diferencias_vs_media.append(diferencia)
+            varianza = media(diferencias_vs_media)
 
-                varianza = sum(diferencias_vs_media) / \
-                    (len(diferencias_vs_media)-1)
+    else:
+        if type(datos) is dict:
+            media_dict_xi_fa = media(datos)
+            total_n = sum(datos.values())-1
+            xi2_fa = []
+            for xi, fa in datos.items():
+                xi2_fa.append((xi**2)*fa)
+            varianza = (
+                (sum(xi2_fa)/total_n) - media_dict_xi_fa**2)
 
-        return varianza
+        else:
+            media_lista = media(datos)
+            diferencias_vs_media = []
+            for i in range(len(datos)):
+                diferencia = (datos[i] - media_lista)**2
+                diferencias_vs_media.append(diferencia)
+
+            varianza = sum(diferencias_vs_media) / \
+                (len(diferencias_vs_media)-1)
+
+    return varianza
+
 
 def desviacion_estandar(datos, muestra=False):
-        formula_varianza = varianza(datos, muestra=muestra)
-        desviacion_estandar = formula_varianza ** 0.5
+    formula_varianza = varianza(datos, muestra=muestra)
+    desviacion_estandar = formula_varianza ** 0.5
 
-        return desviacion_estandar
+    return desviacion_estandar
+
 
 def valores_z(datos, valor_a_convertir=None, media_lista=None, sigma=None):
-        '''Regresa un diccionario de valrores z, 'z' es el alejamiento de la media en "veces desviacion estandar",
-        la formula tambien puede convertir un valor dando la media de datos y sigma.'''
+    '''Regresa un diccionario de valrores z, 'z' es el alejamiento de la media en "veces desviacion estandar",
+    la formula tambien puede convertir un valor dando la media de datos y sigma.'''
 
-        if valor_a_convertir == None:
-            media_lista = media(datos)
-            desviacion_estandar_poblacion_lista = desviacion_estandar(datos)
-            valores_z = {}
+    if valor_a_convertir == None:
+        media_lista = media(datos)
+        desviacion_estandar_poblacion_lista = desviacion_estandar(datos)
+        valores_z = {}
 
-            for i in range(len(datos)):
-                valor_z = (datos[i] - media_lista) / \
-                    desviacion_estandar_poblacion_lista
-                valores_z[datos[i]] = round(valor_z, 2)
+        for i in range(len(datos)):
+            valor_z = (datos[i] - media_lista) / \
+                desviacion_estandar_poblacion_lista
+            valores_z[datos[i]] = round(valor_z, 2)
 
-        else:
-            valores_z = round(
-                (valor_a_convertir - media_lista) /
-                sigma, 2
-            )
+    else:
+        valores_z = round(
+            (valor_a_convertir - media_lista) /
+            sigma, 2
+        )
 
-        return valores_z
+    return valores_z
+
 
 def valores_x_y_distribucion_normal(datos):
-        '''Regresa listas de "x" y "y" a partir de una datos, para graficar su distribucion normal'''
-        media_lista = media(datos)
-        sigma_lista = desviacion_estandar(datos)
-        valores_x = datos
-        valores_y = []
+    '''Regresa listas de "x" y "y" a partir de una datos, para graficar su distribucion normal'''
+    media_lista = media(datos)
+    sigma_lista = desviacion_estandar(datos)
+    valores_x = datos
+    valores_y = []
 
-        for i in datos:
-            y = (1/(sigma_lista*math.sqrt(2*math.pi))) * \
-                math.exp(-1/2*((i-media_lista)/(sigma_lista))**2)
-            valores_y.append(y)
+    for i in datos:
+        y = (1/(sigma_lista*math.sqrt(2*math.pi))) * \
+            math.exp(-1/2*((i-media_lista)/(sigma_lista))**2)
+        valores_y.append(y)
 
-        return valores_x, valores_y
+    return valores_x, valores_y
+
 
 def probabilidades_z_distribucion_normal_estandar():
     '''Regresa las probabilidades de z en la distribucion normal estandar'''
@@ -194,6 +202,7 @@ def probabilidades_z_distribucion_normal_estandar():
             for i in range(len(z))]
     )
     return probabilidades_z
+
 
 def buscar_z_probabilidad_intermedia(probabilidad):
     '''Busca Z en la tabla de probabilidades de la distribucion normal estandar dada una probabilidad'''
@@ -216,6 +225,7 @@ def buscar_z_probabilidad_intermedia(probabilidad):
             lista_z[lista_probabilidades_dns[ubicacion2]]
         ) / 2
     return z
+
 
 def buscar_z_probabilidad_izquierda(probabilidad):
     '''Busca Z en la tabla de probabilidades de la distribucion normal estandar dada una probabilidad'''
@@ -243,6 +253,7 @@ def buscar_z_probabilidad_izquierda(probabilidad):
         ) / 2
 
     return z
+
 
 def buscar_z_probabilidad_derecha(probabilidad):
     '''Busca Z en la tabla de probabilidades de la distribucion normal estandar dada una probabilidad'''
@@ -272,6 +283,7 @@ def buscar_z_probabilidad_derecha(probabilidad):
         ) / 2
 
     return round(z, 3)
+
 
 class Pruebas_caja_cristal(unittest.TestCase):
 
@@ -373,7 +385,7 @@ class Pruebas_caja_cristal(unittest.TestCase):
     def test_valor_z_un_dato(self):
         valor_a_convertir = 55
         formula_valor_z = valores_z(analisis_lista,
-            valor_a_convertir=valor_a_convertir, media_lista=69.86, sigma=11.08)
+                                    valor_a_convertir=valor_a_convertir, media_lista=69.86, sigma=11.08)
 
         self.assertEqual(formula_valor_z, -1.34)
 
@@ -412,14 +424,12 @@ class Pruebas_caja_cristal(unittest.TestCase):
 
         self.assertEqual(formula_buscar_z_probabilidad_derecha, -1.35)
 
+
 if '__main__' == __name__:
 
     analisis_lista = [55, 87, 74, 70, 82, 62, 59]
 
     analisis_dict = dict(
         [(6, 3), (7, 16), (8, 20), (9, 10), (10, 1)])
-
-    print(analisis_lista)
-    print(analisis_dict)
 
     unittest.main()

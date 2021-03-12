@@ -2,28 +2,37 @@ import pandas
 
 
 class Datos_estadisticos:
-    '''**kwargs (fecha_registro, titulo, descripcion, datos, archivo)'''
+    '''
+    **kwargs (fecha_registro, titulo, descripcion, datos, archivo)
+
+    --muestra:
+        este parametro permite calcular su estadistica basada en una muestra
+
+    Recibe lista, diccionario o el url de un  archivo en el parametro "datos"
+
+    En caso de recibir el url de un archivo, lo convierte a diccionario "dict(columna1: columna2)"
+    '''
 
     def __init__(self, datos, muestra=True, **kwargs):
         accepted_kwargs = [
             'fecha_registro', 'titulo', 'descripcion', 'fecha_inicial_datos',
-            'fecha_final_datos', 'archivo', 'x', 'y']
+            'fecha_final_datos', 'archivo']
         self.datos = datos
         self.muestra = muestra
         self.attributes = kwargs
 
         if type(self.datos) == str:
-                self.__setattr__('archivo', pandas.read_csv(self.datos))
-                self.__setattr__(
-                    'dict_datos', self.archivo.to_dict(orient='list'))
-                columna1 = [i for i in enumerate(
-                    self.dict_datos.values())][0][1]
-                columna2 = [i for i in enumerate(
-                    self.dict_datos.values())][1][1]
-                self.__setattr__('datos',  dict(zip(columna1, columna2)))
-        
+            self.__setattr__('archivo', pandas.read_csv(self.datos))
+            self.__setattr__(
+                'dict_datos', self.archivo.to_dict(orient='list'))
+            columna1 = [i for i in enumerate(
+                self.dict_datos.values())][0][1]
+            columna2 = [i for i in enumerate(
+                self.dict_datos.values())][1][1]
+            self.__setattr__('datos',  dict(zip(columna1, columna2)))
+
         for kwarg in self.attributes.keys():
-          
+
             if kwarg in accepted_kwargs:
                 self.__setattr__(kwarg, kwargs[kwarg])
 
