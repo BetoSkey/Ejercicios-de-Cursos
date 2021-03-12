@@ -6,7 +6,7 @@ from busqueda_binaria import Busqueda_binaria
 
 
 def media(datos):
-    '''Puede recibir una datos o un diccionario'''
+    '''Puede recibir un datos o un diccionario'''
 
     if type(datos) is dict:
         total_n = sum(datos.values())
@@ -152,6 +152,20 @@ def desviacion_estandar(datos, muestra=False):
     desviacion_estandar = formula_varianza ** 0.5
 
     return desviacion_estandar
+
+
+def calcular_cuartiles(datos):
+    datos_binarios = Busqueda_binaria(datos)
+    datos_ordenados = datos_binarios.ordenamiento_insercion()
+    n = len(datos)
+    par = True if n % 2 == 0 else False
+    k = [1, 2, 3]
+    ubicacion_cuartiles = {}
+    
+    for i in k:
+        ubicacion_cuartiles['Q'+str(i+1)] = ((i * (n + 1))/4)-1
+
+    return ubicacion_cuartiles
 
 
 def valores_z(datos, valor_a_convertir=None, media_lista=None, sigma=None):
@@ -374,6 +388,12 @@ class Pruebas_caja_cristal(unittest.TestCase):
 
         self.assertEqual(formula_desviacion_estandar, 1.4346)
 
+    def test_calcular_cuartiles(self):
+        formula_calcular_cuartiles = calcular_cuartiles(analisis_lista)
+
+
+        self.assertEqual(formula_calcular_cuartiles, 3)
+
     def test_valor_z_muchos_datos(self):
         formula_valor_z = valores_z(analisis_lista)
 
@@ -427,9 +447,13 @@ class Pruebas_caja_cristal(unittest.TestCase):
 
 if '__main__' == __name__:
 
-    analisis_lista = [55, 87, 74, 70, 82, 62, 59]
+    #analisis_lista = [55, 87, 74, 70, 82, 62, 59]
+    analisis_lista = [55, 87, 74, 70, 59, 80]
 
     analisis_dict = dict(
         [(6, 3), (7, 16), (8, 20), (9, 10), (10, 1)])
 
-    unittest.main()
+    #unittest.main()
+
+    cuartiles = calcular_cuartiles(analisis_lista)
+    print(cuartiles)
