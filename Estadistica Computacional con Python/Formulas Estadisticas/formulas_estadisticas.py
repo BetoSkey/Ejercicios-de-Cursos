@@ -155,15 +155,29 @@ def desviacion_estandar(datos, muestra=False):
 
 
 def calcular_cuartiles(datos):
+    k = 4
     datos_binarios = Busqueda_binaria(datos)
     datos_ordenados = datos_binarios.ordenamiento_insercion()
     n = len(datos)
-    par = True if n % 2 == 0 else False
-    k = [1, 2, 3]
     ubicacion_cuartiles = {}
-    
-    for i in k:
-        ubicacion_cuartiles['Q'+str(i+1)] = ((i * (n + 1))/4)-1
+
+    for i in range(k-1):
+        i += 1
+        # Revision para saber si los decimales son (>,< o =) 0.5
+        revision = (((i * (n + 1))/k)-1) - \
+            int(((i * (n + 1))/k)-1)
+
+        if revision == 0 or revision == 0.5:
+            ubicacion_cuartiles['Q'+str(i)] = ((i * (n + 1))/k)-1
+
+        elif revision > 0.5:
+            ubicacion_cuartiles['Q'+str(i)] = round(((i * (n + 1))/k)-1)
+
+        elif revision < 0.5:
+            ubicacion_cuartiles['Q'+str(i)] = round(((i * (n + 1))/k))
+
+        elif revision == 0.5:
+            ubicacion_cuartiles['Q'+str(i)] = 'error'
 
     return ubicacion_cuartiles
 
@@ -391,8 +405,9 @@ class Pruebas_caja_cristal(unittest.TestCase):
     def test_calcular_cuartiles(self):
         formula_calcular_cuartiles = calcular_cuartiles(analisis_lista)
 
-
-        self.assertEqual(formula_calcular_cuartiles, 3)
+        self.assertEqual(
+            formula_calcular_cuartiles, {
+                'Q1': 1.0, 'Q2': 3.0, 'Q3': 5.0})
 
     def test_valor_z_muchos_datos(self):
         formula_valor_z = valores_z(analisis_lista)
@@ -447,13 +462,8 @@ class Pruebas_caja_cristal(unittest.TestCase):
 
 if '__main__' == __name__:
 
-    #analisis_lista = [55, 87, 74, 70, 82, 62, 59]
-    analisis_lista = [55, 87, 74, 70, 59, 80]
-
+    analisis_lista = [55, 87, 74, 70, 82, 62, 59]
     analisis_dict = dict(
         [(6, 3), (7, 16), (8, 20), (9, 10), (10, 1)])
 
-    #unittest.main()
-
-    cuartiles = calcular_cuartiles(analisis_lista)
-    print(cuartiles)
+    unittest.main()
