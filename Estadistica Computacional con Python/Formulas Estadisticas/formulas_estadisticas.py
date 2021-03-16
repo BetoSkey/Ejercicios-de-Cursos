@@ -154,32 +154,47 @@ def desviacion_estandar(datos, muestra=False):
     return desviacion_estandar
 
 
-def calcular_cuartiles(datos):
-    k = 4
-    datos_binarios = Busqueda_binaria(datos)
-    datos_ordenados = datos_binarios.ordenamiento_insercion()
+def medidas_posicion(datos, k=4):
+    '''Ubica las posiciones para la agrupacion de los datos en cuartiles (k=4), deciles (k=10) y percentiles (k=100)
+
+    Entrada: lista de datos no agrupados (pueden no estar ordenados)
+    
+    Regresa un diccionario {Posicion: (ubicacion, valor)}'''
+
     n = len(datos)
-    ubicacion_cuartiles = {}
+    if k != 4 and k != 10 and k != 100:
+        raise NameError('"k" solo puede ser 4, 10 o 100')
 
-    for i in range(k-1):
-        i += 1
-        # Revision para saber si los decimales son (>,< o =) 0.5
-        revision = (((i * (n + 1))/k)-1) - \
-            int(((i * (n + 1))/k)-1)
+    tipo = 'Q' if k == 4 else 'D' if k == 10 else 'P' if k == 100 else 'error'
+   
+    analisis_binario = Busqueda_binaria(datos)
+    datos_ordenados = analisis_binario.ordenamiento_insercion()
 
-        if revision == 0 or revision == 0.5:
-            ubicacion_cuartiles['Q'+str(i)] = ((i * (n + 1))/k)-1
+    ubicaciones_k = []
+    valor_ubicaciones_k = {}
 
-        elif revision > 0.5:
-            ubicacion_cuartiles['Q'+str(i)] = round(((i * (n + 1))/k)-1)
+    for q in range(k-1):
+        ubicaciones_k.append(
+            ((tipo + str(q + 1)), round((((q+1) * (n + 1)) / k) - 1, 3)))
 
-        elif revision < 0.5:
-            ubicacion_cuartiles['Q'+str(i)] = round(((i * (n + 1))/k))
+    for i in ubicaciones_k:
 
-        elif revision == 0.5:
-            ubicacion_cuartiles['Q'+str(i)] = 'error'
+        medida_de_posicion = i[0]
+        ubicacion = i[1]
+        ubicacion_entero = int(ubicacion)
+        ubicacion_decimal = ubicacion - int(ubicacion)
+        valor_ubicacion_entero = datos_ordenados[ubicacion_entero]
+        valor_ubicacion_entero_siguiente = valor_ubicacion_entero if ubicacion_entero == len(datos)-1 else datos_ordenados[ubicacion_entero + 1]
 
-    return ubicacion_cuartiles
+
+        if ubicacion_decimal == 0:
+            valor_ubicaciones_k[medida_de_posicion] = (ubicacion, round(valor_ubicacion_entero, 2))
+
+        else:
+            valor_ubicaciones_k[medida_de_posicion] = (ubicacion, round(((valor_ubicacion_entero_siguiente - valor_ubicacion_entero) * ubicacion_decimal) + valor_ubicacion_entero, 2))
+
+    
+    return valor_ubicaciones_k
 
 
 def valores_z(datos, valor_a_convertir=None, media_lista=None, sigma=None):
@@ -402,12 +417,11 @@ class Pruebas_caja_cristal(unittest.TestCase):
 
         self.assertEqual(formula_desviacion_estandar, 1.4346)
 
-    def test_calcular_cuartiles(self):
-        formula_calcular_cuartiles = calcular_cuartiles(analisis_lista)
+    def test_medidas_posicion(self):
+        formula_medidas_posicion = medidas_posicion(analisis_lista)
 
         self.assertEqual(
-            formula_calcular_cuartiles, {
-                'Q1': 1.0, 'Q2': 3.0, 'Q3': 5.0})
+            formula_medidas_posicion, {'Q1': (1.0, 59), 'Q2': (3.0, 70), 'Q3': (5.0, 82)})
 
     def test_valor_z_muchos_datos(self):
         formula_valor_z = valores_z(analisis_lista)
