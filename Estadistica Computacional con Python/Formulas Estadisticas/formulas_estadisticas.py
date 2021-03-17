@@ -158,7 +158,7 @@ def medidas_posicion(datos, k=4):
     '''Ubica las posiciones para la agrupacion de los datos en cuartiles (k=4), deciles (k=10) y percentiles (k=100)
 
     Entrada: lista de datos no agrupados (pueden no estar ordenados)
-    
+
     Regresa un diccionario {Posicion: (ubicacion, valor)}'''
 
     n = len(datos)
@@ -166,7 +166,7 @@ def medidas_posicion(datos, k=4):
         raise NameError('"k" solo puede ser 4, 10 o 100')
 
     tipo = 'Q' if k == 4 else 'D' if k == 10 else 'P' if k == 100 else 'error'
-   
+
     analisis_binario = Busqueda_binaria(datos)
     datos_ordenados = analisis_binario.ordenamiento_insercion()
 
@@ -184,17 +184,48 @@ def medidas_posicion(datos, k=4):
         ubicacion_entero = int(ubicacion)
         ubicacion_decimal = ubicacion - int(ubicacion)
         valor_ubicacion_entero = datos_ordenados[ubicacion_entero]
-        valor_ubicacion_entero_siguiente = valor_ubicacion_entero if ubicacion_entero == len(datos)-1 else datos_ordenados[ubicacion_entero + 1]
-
+        valor_ubicacion_entero_siguiente = valor_ubicacion_entero if ubicacion_entero == len(
+            datos)-1 else datos_ordenados[ubicacion_entero + 1]
 
         if ubicacion_decimal == 0:
-            valor_ubicaciones_k[medida_de_posicion] = (ubicacion, round(valor_ubicacion_entero, 2))
+            valor_ubicaciones_k[medida_de_posicion] = (
+                ubicacion, round(valor_ubicacion_entero, 2))
 
         else:
-            valor_ubicaciones_k[medida_de_posicion] = (ubicacion, round(((valor_ubicacion_entero_siguiente - valor_ubicacion_entero) * ubicacion_decimal) + valor_ubicacion_entero, 2))
+            valor_ubicaciones_k[medida_de_posicion] = (ubicacion, round(
+                ((valor_ubicacion_entero_siguiente - valor_ubicacion_entero) * ubicacion_decimal) + valor_ubicacion_entero, 2))
 
-    
     return valor_ubicaciones_k
+
+
+class Diagrama_caja_bigotes:
+
+    def __init__(self, datos):
+        self.datos = datos
+
+        self.cuartiles = medidas_posicion(self.datos, k=4)
+        self.q1 = self.cuartiles['Q1'][1]
+        self.q2 = self.cuartiles['Q2'][1]
+        self.q3 = self.cuartiles['Q3'][1]
+
+        self.rango_intercuartilico = self.q3 - self.q1
+
+        self.barrera_superior = self.q3 + (1.5 * self.rango_intercuartilico)
+        self.barrera_inferior = self.q1 - (1.5 * self.rango_intercuartilico)
+
+        self.datos_atipicos = [
+            i for i in datos if i <
+            self.barrera_inferior or i > self.barrera_superior
+        ]
+
+    def __str__(self):
+        return f'''
+            cuartiles = Q1:{self.q1}, Q2:{self.q2}, Q3:{self.q3}
+            rango intercuartilico: {self.rango_intercuartilico}
+            barrera superior: {self.barrera_superior}
+            barrera inferior: {self.barrera_inferior}
+            datos atipicos: {self.datos_atipicos}
+            '''
 
 
 def valores_z(datos, valor_a_convertir=None, media_lista=None, sigma=None):
@@ -423,6 +454,11 @@ class Pruebas_caja_cristal(unittest.TestCase):
         self.assertEqual(
             formula_medidas_posicion, {'Q1': (1.0, 59), 'Q2': (3.0, 70), 'Q3': (5.0, 82)})
 
+    def test_rango_intercuartilico(self):
+        formula_rango_intercuartilico = rango_intercuartilico(analisis_lista)
+
+        self.assertEqual(formula_rango_intercuartilico, 18)
+
     def test_valor_z_muchos_datos(self):
         formula_valor_z = valores_z(analisis_lista)
 
@@ -480,4 +516,11 @@ if '__main__' == __name__:
     analisis_dict = dict(
         [(6, 3), (7, 16), (8, 20), (9, 10), (10, 1)])
 
-    unittest.main()
+    # unittest.main()
+
+    lista1 = [
+        90, 94, 53, 68, 79, 84, 87, 72, 70, 69, 65, 89, 85, 83, 72
+    ]
+
+    print(medidas_posicion(lista1, k=4))
+    print(Diagrama_caja_bigotes(lista1))
