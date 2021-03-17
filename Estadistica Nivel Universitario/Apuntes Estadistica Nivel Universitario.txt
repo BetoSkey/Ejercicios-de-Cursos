@@ -17,3 +17,12 @@ ESTADISTICA DESCRIPTIVA.
             * desviacion estandar
             * varianza
     
+    Asimetria:
+      Asimetria negativa:
+        media < mediana < moda
+      Asimetria positiva:
+        moda < mediana < media
+    
+    Simetria:
+        media = mediana = moda
+    
