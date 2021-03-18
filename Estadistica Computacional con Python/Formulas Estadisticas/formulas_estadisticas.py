@@ -162,7 +162,7 @@ def coeficiente_variacion(datos):
 
     * Si el coeficiente es ***<= 0.80*** el conjunto de datos es ***homogeneo***, por lo tanto
         la ***media es representativa*** del conjunto de datos.
-    
+
 
     * Si el coeficiente es ***> 0.80*** el conjunto de datos es ***heterogeneo***, por lo tanto
         la ***media "no" es representativa*** del conjunto de datos.
@@ -173,6 +173,24 @@ def coeficiente_variacion(datos):
     cv = s / media_datos
 
     return cv
+
+
+def distribucion_datos_en_intervalos(datos, rango_intervalos, primer_numero):
+    analisis_binario = Busqueda_binaria(datos)
+    datos_ordenados = analisis_binario.ordenamiento_insercion()
+    maximo_rango = math.ceil(max(datos) / rango_intervalos) * rango_intervalos
+    minimo_rango = math.floor(min(datos) / rango_intervalos) * rango_intervalos
+
+    # cantidad_intervalos = int(max / rango_intervalos) + \
+    #    (n % rango_intervalos > 0)
+
+    #intervalos = [[primer_numero, primer_numero + rango_intervalos]]
+
+    # for intervalo in range(cantidad_intervalos - 1):
+    #    intervalos.append(
+    #        [intervalos[-1][1], (intervalos[-1][1]) + rango_intervalos])
+
+    return (minimo_rango, maximo_rango)
 
 
 def medidas_posicion(datos, k=4):
@@ -222,7 +240,7 @@ def medidas_posicion(datos, k=4):
 def asimetria(datos):
     '''
     Utiliza la medida de Yule Bowley
-    
+
     Regresa: Negativa (<0), Simetrica (=0), Positiva (>0)
     '''
     cuartiles = medidas_posicion(datos, k=4)
@@ -249,9 +267,11 @@ class Diagrama_caja_bigotes:
     * barrera_inferior
     * datos_atipicos
     '''
+
     def __init__(self, datos):
         self.datos = datos
-        self.datos_ordenados = Busqueda_binaria(self.datos).ordenamiento_insercion()
+        self.datos_ordenados = Busqueda_binaria(
+            self.datos).ordenamiento_insercion()
         self.cuartiles = medidas_posicion(self.datos, k=4)
         self.q1 = self.cuartiles['Q1'][1]
         self.q2 = self.cuartiles['Q2'][1]
@@ -269,13 +289,13 @@ class Diagrama_caja_bigotes:
 
     def __str__(self):
         return f'''
-Datos ordenados: {self.datos_ordenados}
+    Datos ordenados: {self.datos_ordenados}
 
-Cuartiles = Q1:{self.q1}, Q2:{self.q2}, Q3:{self.q3}
-Rango intercuartilico: {self.rango_intercuartilico}
-Barrera superior: {self.barrera_superior}
-Barrera inferior: {self.barrera_inferior}
-Datos atipicos: {self.datos_atipicos}
+    Cuartiles = Q1:{self.q1}, Q2:{self.q2}, Q3:{self.q3}
+    Rango intercuartilico: {self.rango_intercuartilico}
+    Barrera superior: {self.barrera_superior}
+    Barrera inferior: {self.barrera_inferior}
+    Datos atipicos: {self.datos_atipicos}
             '''
 
 
@@ -504,7 +524,6 @@ class Pruebas_caja_cristal(unittest.TestCase):
 
         self.assertEqual(round(formula_coeficiente_variacion, 3), 0.159)
 
-
     def test_medidas_posicion(self):
         formula_medidas_posicion = medidas_posicion(analisis_lista)
 
@@ -512,7 +531,8 @@ class Pruebas_caja_cristal(unittest.TestCase):
             formula_medidas_posicion, {'Q1': (1.0, 59), 'Q2': (3.0, 70), 'Q3': (5.0, 82)})
 
     def test_rango_intercuartilico(self):
-        formula_rango_intercuartilico = Diagrama_caja_bigotes(analisis_lista).rango_intercuartilico
+        formula_rango_intercuartilico = Diagrama_caja_bigotes(
+            analisis_lista).rango_intercuartilico
 
         self.assertEqual(formula_rango_intercuartilico, 23)
 
@@ -520,7 +540,6 @@ class Pruebas_caja_cristal(unittest.TestCase):
         formula_asimetria = asimetria(analisis_lista)
 
         self.assertEqual(formula_asimetria, 'Asimetrica positiva')
-
 
     def test_valor_z_muchos_datos(self):
         formula_valor_z = valores_z(analisis_lista)
@@ -582,10 +601,11 @@ if '__main__' == __name__:
     unittest.main()'''
 
     lista1 = [
-        60,66,77,70,66,68,57,70,66,52,75,65,69,71,58,66,67,74,61,63,69,80,59,66,70,67,78,75,64,71,81,62,64,69,68,72,83,56,65,74,67,54,65,65,69,61,67,73,57,62,67,68,63,67,71,68,76,61,62,63,76,61,67,67,64,72,64,73,79,58,67,71,68,59,69,70,66,62,63,66
+        60, 66, 77, 70, 66, 68, 57, 70, 66, 52, 75, 65, 69, 71, 58, 66, 67, 74, 61, 63, 69, 80, 59, 66, 70, 67, 78, 75, 64, 71, 81, 62, 64, 69, 68, 72, 83, 56, 65, 74, 67, 54, 65, 65, 69, 61, 67, 73, 57, 62, 67, 68, 63, 67, 71, 68, 76, 61, 62, 63, 76, 61, 67, 67, 64, 72, 64, 73, 79, 58, 67, 71, 68, 59, 69, 70, 66, 62, 63, 66
     ]
 
     #print(medidas_posicion(lista1, k=16))
-    print(medidas_posicion(lista1, k=100))
-    print(Diagrama_caja_bigotes(lista1))
-    print(asimetria(lista1))
+    #print(medidas_posicion(lista1, k=100))
+    # print(Diagrama_caja_bigotes(lista1))
+    # print(asimetria(lista1))
+    print(distribucion_datos_en_intervalos(lista1, 5, 50))
