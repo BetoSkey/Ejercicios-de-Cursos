@@ -3,7 +3,7 @@ import pandas
 from collections import Counter
 import unittest
 from busqueda_binaria import Busqueda_binaria
-
+from formulas_especiales import ceiling_to_a_number, floor_to_a_number
 
 def media(datos):
     '''Puede recibir un datos o un diccionario'''
@@ -175,23 +175,37 @@ def coeficiente_variacion(datos):
     return cv
 
 
-def distribucion_datos_en_intervalos(datos, rango_intervalos, primer_numero):
-    analisis_binario = Busqueda_binaria(datos)
-    datos_ordenados = analisis_binario.ordenamiento_insercion()
-    maximo_rango = math.ceil(max(datos) / rango_intervalos) * rango_intervalos
-    minimo_rango = math.floor(min(datos) / rango_intervalos) * rango_intervalos
+def creacion_intervalos(datos, rango_intervalos):
+    '''
+    Crea intervalos de los datos proporcionados de acuerdo al rango requerido para los
+    intervalos.
 
-    # cantidad_intervalos = int(max / rango_intervalos) + \
-    #    (n % rango_intervalos > 0)
+    *** solo acepta listas***
+    '''
+    maximo_numero_en_rangos = ceiling_to_a_number(max(datos), rango_intervalos)
+    minimo_numero_en_rangos = floor_to_a_number(min(datos), rango_intervalos)
 
-    #intervalos = [[primer_numero, primer_numero + rango_intervalos]]
+    distancia_minimo_numero_vs_maximo_numero_en_rangos = maximo_numero_en_rangos - minimo_numero_en_rangos
 
-    # for intervalo in range(cantidad_intervalos - 1):
-    #    intervalos.append(
-    #        [intervalos[-1][1], (intervalos[-1][1]) + rango_intervalos])
+    cantidad_intervalos = int(distancia_minimo_numero_vs_maximo_numero_en_rangos / rango_intervalos)
 
-    return (minimo_rango, maximo_rango)
+    intervalos = [[minimo_numero_en_rangos, minimo_numero_en_rangos + rango_intervalos]]
 
+    
+    for intervalo in range(cantidad_intervalos -1):
+        intervalos.append([intervalos[-1][1], (intervalos[-1][1]) + rango_intervalos])
+
+
+    return intervalos
+
+
+def calculo_frecuencias_absolutas(datos, rango_intervalos):
+
+    intervalos = creacion_intervalos(datos, rango_intervalos)
+
+    fa = sum([1 for i in range(intervalos[0][0],intervalos[0][1])])
+
+    return fa
 
 def medidas_posicion(datos, k=4):
     '''Ubica las posiciones para la agrupacion de los datos en cuartiles (k=4), deciles (k=10) y percentiles (k=100)
@@ -608,4 +622,5 @@ if '__main__' == __name__:
     #print(medidas_posicion(lista1, k=100))
     # print(Diagrama_caja_bigotes(lista1))
     # print(asimetria(lista1))
-    print(distribucion_datos_en_intervalos(lista1, 5, 50))
+    print(creacion_intervalos(lista1, 5))
+    print(calculo_frecuencias_absolutas(lista1,5))
