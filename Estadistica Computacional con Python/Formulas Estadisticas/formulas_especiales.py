@@ -1,3 +1,8 @@
+# importar de un directorio paralelo
+# *** se tiene que crear un archivo __init__.py en blanco dentro del directorio buscado para que lo considere como un paquete a importar.
+import sys
+sys.path.append('../Estadistica Computacional con Python/Formulas Estadisticas/')
+
 from math import ceil, floor
 import unittest
 

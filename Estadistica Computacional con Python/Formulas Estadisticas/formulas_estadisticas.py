@@ -5,7 +5,7 @@ import unittest
 from busqueda_binaria import Busqueda_binaria
 from formulas_especiales import ceiling_to_a_number, floor_to_a_number
 
-
+# FORMULAS ESTADISTICA DESCRIPTIVA
 def media(datos):
     '''Puede recibir un datos o un diccionario'''
 
@@ -206,23 +206,37 @@ def creacion_intervalos(datos, rango_intervalos):
 
 def calculo_frecuencias_absolutas(datos, rango_intervalos):
     '''
-    Crea intervalos y regresa sus frecuencias absolutas
-    '''
-    intervalos = creacion_intervalos(datos, rango_intervalos)
+    Crea intervalos y regresa sus frecuencias absolutas y frecuencias relativas.
 
+    *** El ultimo numero de cada intervalo no es considerado hasta su siguiente intervalo,
+    el ultimo intervalo considera el ultimo numero dentro del intervalo***
+    '''
+    
+    intervalos = creacion_intervalos(datos, rango_intervalos)
+    ultimo_intervalo = intervalos[len(intervalos)-1]
     contar_datos = Counter(datos)
 
+    faa = 0
     fa = []
 
     for intervalo in intervalos:
         conteo = 0
+        
+        if intervalo == ultimo_intervalo:
+            for key, value in contar_datos.items():
 
-        for key, value in contar_datos.items():
+              if key in range(intervalo[0], intervalo[1]+1):
+                  conteo += value
+                  
+        else:
+        
+            for key, value in contar_datos.items():
 
-            if key in range(intervalo[0], intervalo[1]):
-                conteo += value
+                if key in range(intervalo[0], intervalo[1]):
+                    conteo += value
+        faa += conteo
 
-        fa.append((intervalo, conteo))
+        fa.append((intervalo, conteo, faa))
 
     return fa
 
@@ -262,11 +276,11 @@ def medidas_posicion(datos, k=4):
 
         if ubicacion_decimal == 0:
             valor_ubicaciones_k[medida_de_posicion] = (
-                ubicacion, round(valor_ubicacion_entero, 2))
+                ubicacion, round(valor_ubicacion_entero, 3))
 
         else:
             valor_ubicaciones_k[medida_de_posicion] = (ubicacion, round(
-                ((valor_ubicacion_entero_siguiente - valor_ubicacion_entero) * ubicacion_decimal) + valor_ubicacion_entero, 2))
+                ((valor_ubicacion_entero_siguiente - valor_ubicacion_entero) * ubicacion_decimal) + valor_ubicacion_entero, 3))
 
     return valor_ubicaciones_k
 
@@ -289,6 +303,7 @@ def asimetria(datos):
     return asimetria
 
 
+# FORMULAS PARA GRAFICAR
 class Diagrama_caja_bigotes:
     '''
     Obtiene informacion para grafica de caja y bigotes:
@@ -296,6 +311,8 @@ class Diagrama_caja_bigotes:
     * q1 
     * q2
     * q3
+    * bigote_inferior
+    * bigote_superior
     * rango_intercuartilico
     * barrera_superior
     * barrera_inferior
@@ -306,15 +323,39 @@ class Diagrama_caja_bigotes:
         self.datos = datos
         self.datos_ordenados = Busqueda_binaria(
             self.datos).ordenamiento_insercion()
+
+        self.n = len(self.datos)
+
         self.cuartiles = medidas_posicion(self.datos, k=4)
+
         self.q1 = self.cuartiles['Q1'][1]
         self.q2 = self.cuartiles['Q2'][1]
         self.q3 = self.cuartiles['Q3'][1]
 
         self.rango_intercuartilico = self.q3 - self.q1
 
-        self.barrera_superior = self.q3 + (1.5 * self.rango_intercuartilico)
         self.barrera_inferior = self.q1 - (1.5 * self.rango_intercuartilico)
+        self.barrera_superior = self.q3 + (1.5 * self.rango_intercuartilico)
+
+        
+        
+        ubicacion_barrera_inferior = 0
+        ubicacion_barrera_superior = 1
+    
+        
+        while True:
+            self.bigote_inferior = self.datos_ordenados[ubicacion_barrera_inferior]
+            if self.bigote_inferior < self.barrera_inferior:
+                ubicacion_barrera_inferior += 1
+            else:
+                break
+        
+        while True:
+            self.bigote_superior = self.datos_ordenados[self.n-ubicacion_barrera_superior]
+            if self.bigote_superior > self.barrera_superior:
+                ubicacion_barrera_superior += 1 
+            else:
+                break
 
         self.datos_atipicos = [
             i for i in datos if i <
@@ -326,13 +367,34 @@ class Diagrama_caja_bigotes:
     Datos ordenados: {self.datos_ordenados}
 
     Cuartiles = Q1:{self.q1}, Q2:{self.q2}, Q3:{self.q3}
+    Bigote inferior = {self.bigote_inferior}
+    bigote superior = {self.bigote_superior}
+
     Rango intercuartilico: {self.rango_intercuartilico}
-    Barrera superior: {self.barrera_superior}
+
     Barrera inferior: {self.barrera_inferior}
+    Barrera superior: {self.barrera_superior}
+
     Datos atipicos: {self.datos_atipicos}
             '''
 
 
+def valores_x_y_distribucion_normal(datos):
+    '''Regresa listas de "x" y "y" a partir de una datos, para graficar su distribucion normal'''
+    media_lista = media(datos)
+    sigma_lista = desviacion_estandar(datos)
+    valores_x = datos
+    valores_y = []
+
+    for i in datos:
+        y = (1/(sigma_lista*math.sqrt(2*math.pi))) * \
+            math.exp(-1/2*((i-media_lista)/(sigma_lista))**2)
+        valores_y.append(y)
+
+    return valores_x, valores_y
+
+
+# FORMULAS ESTADISTICA INFERENCIAL
 def valores_z(datos, valor_a_convertir=None, media_lista=None, sigma=None):
     '''Regresa un diccionario de valrores z, 'z' es el alejamiento de la media en "veces desviacion estandar",
     la formula tambien puede convertir un valor dando la media de datos y sigma.'''
@@ -354,21 +416,6 @@ def valores_z(datos, valor_a_convertir=None, media_lista=None, sigma=None):
         )
 
     return valores_z
-
-
-def valores_x_y_distribucion_normal(datos):
-    '''Regresa listas de "x" y "y" a partir de una datos, para graficar su distribucion normal'''
-    media_lista = media(datos)
-    sigma_lista = desviacion_estandar(datos)
-    valores_x = datos
-    valores_y = []
-
-    for i in datos:
-        y = (1/(sigma_lista*math.sqrt(2*math.pi))) * \
-            math.exp(-1/2*((i-media_lista)/(sigma_lista))**2)
-        valores_y.append(y)
-
-    return valores_x, valores_y
 
 
 def probabilidades_z_distribucion_normal_estandar():
@@ -642,6 +689,9 @@ class Pruebas_caja_cristal(unittest.TestCase):
         self.assertEqual(formula_buscar_z_probabilidad_derecha, -1.35)
 
 
+
+
+# INFORMACION PARA PRUEBAS
 if '__main__' == __name__:
 
     analisis_lista = [55, 87, 74, 70, 82, 62, 59]
