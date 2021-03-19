@@ -5,6 +5,7 @@ import unittest
 from busqueda_binaria import Busqueda_binaria
 from formulas_especiales import ceiling_to_a_number, floor_to_a_number
 
+
 def media(datos):
     '''Puede recibir un datos o un diccionario'''
 
@@ -185,27 +186,46 @@ def creacion_intervalos(datos, rango_intervalos):
     maximo_numero_en_rangos = ceiling_to_a_number(max(datos), rango_intervalos)
     minimo_numero_en_rangos = floor_to_a_number(min(datos), rango_intervalos)
 
-    distancia_minimo_numero_vs_maximo_numero_en_rangos = maximo_numero_en_rangos - minimo_numero_en_rangos
+    distancia_minimo_numero_vs_maximo_numero_en_rangos = maximo_numero_en_rangos - \
+        minimo_numero_en_rangos
 
-    cantidad_intervalos = int(distancia_minimo_numero_vs_maximo_numero_en_rangos / rango_intervalos)
+    cantidad_intervalos = int(
+        distancia_minimo_numero_vs_maximo_numero_en_rangos / rango_intervalos)
 
-    intervalos = [[minimo_numero_en_rangos, minimo_numero_en_rangos + rango_intervalos]]
+    intervalos = [[
+        minimo_numero_en_rangos,
+        minimo_numero_en_rangos + rango_intervalos
+    ]]
 
-    
-    for intervalo in range(cantidad_intervalos -1):
-        intervalos.append([intervalos[-1][1], (intervalos[-1][1]) + rango_intervalos])
-
+    for intervalo in range(cantidad_intervalos - 1):
+        intervalos.append(
+            [intervalos[-1][1], (intervalos[-1][1]) + rango_intervalos])
 
     return intervalos
 
 
 def calculo_frecuencias_absolutas(datos, rango_intervalos):
-
+    '''
+    Crea intervalos y regresa sus frecuencias absolutas
+    '''
     intervalos = creacion_intervalos(datos, rango_intervalos)
 
-    fa = sum([1 for i in range(intervalos[0][0],intervalos[0][1])])
+    contar_datos = Counter(datos)
+
+    fa = []
+
+    for intervalo in intervalos:
+        conteo = 0
+
+        for key, value in contar_datos.items():
+
+            if key in range(intervalo[0], intervalo[1]):
+                conteo += value
+
+        fa.append((intervalo, conteo))
 
     return fa
+
 
 def medidas_posicion(datos, k=4):
     '''Ubica las posiciones para la agrupacion de los datos en cuartiles (k=4), deciles (k=10) y percentiles (k=100)
@@ -538,6 +558,22 @@ class Pruebas_caja_cristal(unittest.TestCase):
 
         self.assertEqual(round(formula_coeficiente_variacion, 3), 0.159)
 
+    def test_creacion_intervalos(self):
+        formula_creacion_intervalos = creacion_intervalos(analisis_lista2, 5)
+
+        self.assertEqual(formula_creacion_intervalos, [
+            [50, 55], [55, 60], [60, 65], [65, 70], [70, 75], [75, 80], [80, 85]
+        ])
+
+    def test_calculo_frecuencias_absolutas(self):
+        formula_calculo_frecuencias_absolutas = calculo_frecuencias_absolutas(
+            analisis_lista2, 5)
+
+        self.assertEqual(formula_calculo_frecuencias_absolutas, [
+            ([50, 55], 2), ([55, 60], 7), ([60, 65], 17), ([65, 70], 30),
+            ([70, 75], 14), ([75, 80], 7), ([80, 85], 3)
+        ])
+
     def test_medidas_posicion(self):
         formula_medidas_posicion = medidas_posicion(analisis_lista)
 
@@ -608,19 +644,18 @@ class Pruebas_caja_cristal(unittest.TestCase):
 
 if '__main__' == __name__:
 
-    '''analisis_lista = [55, 87, 74, 70, 82, 62, 59]
+    analisis_lista = [55, 87, 74, 70, 82, 62, 59]
+
     analisis_dict = dict(
-        [(6, 3), (7, 16), (8, 20), (9, 10), (10, 1)])
+        [(6, 3), (7, 16), (8, 20), (9, 10), (10, 1)]
+    )
 
-    unittest.main()'''
-
-    lista1 = [
-        60, 66, 77, 70, 66, 68, 57, 70, 66, 52, 75, 65, 69, 71, 58, 66, 67, 74, 61, 63, 69, 80, 59, 66, 70, 67, 78, 75, 64, 71, 81, 62, 64, 69, 68, 72, 83, 56, 65, 74, 67, 54, 65, 65, 69, 61, 67, 73, 57, 62, 67, 68, 63, 67, 71, 68, 76, 61, 62, 63, 76, 61, 67, 67, 64, 72, 64, 73, 79, 58, 67, 71, 68, 59, 69, 70, 66, 62, 63, 66
+    analisis_lista2 = [
+        60, 66, 77, 70, 66, 68, 57, 70, 66, 52, 75, 65, 69, 71, 58, 66, 67, 74, 
+        61, 63, 69, 80, 59, 66, 70, 67, 78, 75, 64, 71, 81, 62, 64, 69, 68, 72, 
+        83, 56, 65, 74, 67, 54, 65, 65, 69, 61, 67, 73, 57, 62, 67, 68, 63, 67, 
+        71, 68, 76, 61, 62, 63, 76, 61, 67, 67, 64, 72, 64, 73, 79, 58, 67, 71, 
+        68, 59, 69, 70, 66, 62, 63, 66
     ]
 
-    #print(medidas_posicion(lista1, k=16))
-    #print(medidas_posicion(lista1, k=100))
-    # print(Diagrama_caja_bigotes(lista1))
-    # print(asimetria(lista1))
-    print(creacion_intervalos(lista1, 5))
-    print(calculo_frecuencias_absolutas(lista1,5))
+    unittest.main()
