@@ -7,17 +7,37 @@ from formulas_especiales import ceiling_to_a_number, floor_to_a_number
 
 # FORMULAS ESTADISTICA DESCRIPTIVA
 def media(datos):
-    '''Puede recibir un datos o un diccionario'''
+    '''
+    Puede recibir:
+    
+    * lista (valores) = [1, 2, 3, 4]
+    
+    * diccionario_simple (valores: frecuencias absolutas) = {1:3, 2:1, 3:4}
+    
+    * diccionario_intervalos ((intervalos):frecuencias absolutas) = {(1,10):3, (10,20):4, (20,30):7}
+    '''
 
     if type(datos) is dict:
-        total_n = sum(datos.values())
-        lista_ni_xi = []
 
-        for xi, ni in datos.items():
-            lista_ni_xi.append(xi * ni)
+        if type(list(datos)[0]) is tuple:
 
-        suma_lista_ni_xi = sum(lista_ni_xi)
-        media = suma_lista_ni_xi / total_n
+            sumatoria_ni = 0
+            sumatoria_xi_ni = 0
+            for intervalo, ni in datos.items():
+                sumatoria_ni += ni
+                marca_de_clase = (intervalo[0] + intervalo[1]) / 2
+                sumatoria_xi_ni += marca_de_clase * ni
+            media = sumatoria_xi_ni / sumatoria_ni
+
+        else:
+            total_n = sum(datos.values())
+            lista_ni_xi = []
+
+            for xi, ni in datos.items():
+                lista_ni_xi.append(xi * ni)
+
+            suma_lista_ni_xi = sum(lista_ni_xi)
+            media = suma_lista_ni_xi / total_n
 
     else:
         media = sum(datos) / len(datos)
@@ -26,48 +46,101 @@ def media(datos):
 
 
 def mediana(datos):
-    '''Puede recibir una datos o un diccionario'''
+    '''Puede recibir:
+    
+    * lista.- [1, 2, 3...]
+    
+    * diccionario numeros y frecuencas absolutas.- {1:4, 2:10, 3:30...}
+    
+    * diccionario intervalos y frecuencias absolutas.- {(1,5):3, (5,10):10, (10,15):20...}
+    '''
     if type(datos) is dict:
-        lista_xi_ordenada = Busqueda_binaria(
-            [xi for xi in datos.keys()]).ordenamiento_insercion()
-
-        # faa= frecuencias absolutas acumuladas (FAA)
-        xi_fa_acumulada = []
-        fa_acumulada_list = []
-
-        for xi in lista_xi_ordenada:
-            fa_xi = datos[xi]
-            if len(xi_fa_acumulada) == 0:
-                xi_fa_acumulada.append((fa_xi, xi))
-                fa_acumulada_list.append(fa_xi)
-            else:
-                xi_fa_acumulada.append(
-                    (fa_xi + xi_fa_acumulada[-1][0], xi))
-                fa_acumulada_list.append(fa_xi + fa_acumulada_list[-1])
-
-        total_n = xi_fa_acumulada[-1][0]
-        dict_xi_fa_acumulada = dict(xi_fa_acumulada)
-
-        if total_n % 2 > 0:
-            numero_medio = int(round(total_n/2, 0))
-            ubicacion_mediana = fa_acumulada_list[Busqueda_binaria(
-                fa_acumulada_list).ubicacion_binaria(numero_medio)+1]
-            mediana = dict_xi_fa_acumulada[ubicacion_mediana]
+        if type(list(datos)[0]) is tuple:
+            # Creacion de tabla con marcas de clase y frecuencias absolutas acumuladas
+            lista_intervalos = [(intervalo,fa) for intervalo, fa in datos.items()]
+            tabla_datos = []
+            sumatoria_fa = 0
+            
+            for intervalo in lista_intervalos:
+                
+                rango_intervalo = intervalo[0]
+                li_intervalo = intervalo[0][0]
+                ls_intervalo = intervalo[0][1]
+                fa_intervalo = intervalo[1]
+                marca_clase = (li_intervalo + ls_intervalo) / 2
+                
+                sumatoria_fa += fa_intervalo
+                faa_intervalo = sumatoria_fa
+                
+                tabla_datos.append((rango_intervalo, marca_clase ,fa_intervalo, faa_intervalo))
+                
+            mitad_faa = sumatoria_fa / 2
+            
+            # Encontrar intervalo de mitad de datos
+            index_clase_mediana = 0
+            while True:
+                if tabla_datos[index_clase_mediana][3] < mitad_faa:
+                    index_clase_mediana +=1
+                else:
+                    clase_mediana = tabla_datos[index_clase_mediana]
+                    break
+            
+            li_clase_mediana = clase_mediana[0][0]
+            ls_clase_mediana = clase_mediana[0][1]
+            fa_clase_mediana = clase_mediana[2]
+            faa_clase_anterior_mediana = 0 if index_clase_mediana == 0 else tabla_datos[(index_clase_mediana-1)][3]
+            tamano_intervalo_clase_mediana = ls_clase_mediana - li_clase_mediana
+            
+            mediana = li_clase_mediana + (((mitad_faa - faa_clase_anterior_mediana) / fa_clase_mediana) * tamano_intervalo_clase_mediana)
+        
         else:
-            numero_medio1 = int(round(total_n/2, 0)-1)
-            numero_medio2 = int(round(total_n/2, 0))
-            ubicacion_numero_medio1 = fa_acumulada_list[Busqueda_binaria(
-                fa_acumulada_list).ubicacion_binaria(numero_medio1)+1]
-            ubicacion_numero_medio2 = fa_acumulada_list[Busqueda_binaria(
-                fa_acumulada_list).ubicacion_binaria(numero_medio2)+1]
-            if ubicacion_numero_medio1 == ubicacion_numero_medio2:
-                numero_medio = media([numero_medio1, numero_medio2])
+            lista_xi_ordenada = Busqueda_binaria(
+                [xi for xi in datos.keys()]).ordenamiento_insercion()
+
+            # faa= frecuencias absolutas acumuladas (FAA)
+            xi_fa_acumulada = []
+            fa_acumulada_list = []
+
+            for xi in lista_xi_ordenada:
+                fa_xi = datos[xi]
+                if len(xi_fa_acumulada) == 0:
+                    xi_fa_acumulada.append((fa_xi, xi))
+                    fa_acumulada_list.append(fa_xi)
+                else:
+                    xi_fa_acumulada.append(
+                        (fa_xi + xi_fa_acumulada[-1][0], xi))
+                    fa_acumulada_list.append(fa_xi + fa_acumulada_list[-1])
+
+            total_n = xi_fa_acumulada[-1][0]
+            dict_xi_fa_acumulada = dict(xi_fa_acumulada)
+            
+            if total_n % 2 > 0:
+                
+                numero_medio = int(round(total_n/2, 0))
                 ubicacion_mediana = fa_acumulada_list[Busqueda_binaria(
                     fa_acumulada_list).ubicacion_binaria(numero_medio)+1]
                 mediana = dict_xi_fa_acumulada[ubicacion_mediana]
             else:
-                mediana = media([
-                    dict_xi_fa_acumulada[ubicacion_numero_medio1], dict_xi_fa_acumulada[ubicacion_numero_medio2]])
+                
+                numero_medio1 = int(round(total_n/2, 0)-1)
+                
+                numero_medio2 = int(round(total_n/2, 0))
+                
+                ubicacion_numero_medio1 = fa_acumulada_list[Busqueda_binaria(
+                    fa_acumulada_list).ubicacion_binaria(numero_medio1)+1]
+                
+                
+                ubicacion_numero_medio2 = fa_acumulada_list[Busqueda_binaria(
+                    fa_acumulada_list).ubicacion_binaria(numero_medio2)+1]
+                
+                if ubicacion_numero_medio1 == ubicacion_numero_medio2:
+                    numero_medio = media([numero_medio1, numero_medio2])
+                    ubicacion_mediana = fa_acumulada_list[Busqueda_binaria(
+                        fa_acumulada_list).ubicacion_binaria(numero_medio)+1]
+                    mediana = dict_xi_fa_acumulada[ubicacion_mediana]
+                else:
+                    mediana = media([
+                        dict_xi_fa_acumulada[ubicacion_numero_medio1], dict_xi_fa_acumulada[ubicacion_numero_medio2]])
 
     else:
         lista_ordenada = Busqueda_binaria(datos).ordenamiento_insercion()
@@ -87,27 +160,104 @@ def mediana(datos):
 
 
 def moda(datos):
-
+    '''Puede recibir:
+    
+    * lista.- [1, 2, 3...]
+    
+    * diccionario numeros y frecuencas absolutas.- {1:4, 2:10, 3:30...}
+    
+    * diccionario intervalos y frecuencias absolutas.- {(1,5):3, (5,10):10, (10,15):20...}
+    '''
+    # Si los datos son un diccionario
     if type(datos) is dict:
-        maximo = max(datos.values())
-        moda = [id for id, value in datos.items()if value == maximo]
+        
+        # Si los datos son un diccionario con intervalos
+        if type(list(datos)[0]) is tuple:
+            # Creacion de tabla con marcas de clase y frecuencias absolutas acumuladas
+            lista_intervalos = [(intervalo,fa) for intervalo, fa in datos.items()]
+            tabla_datos = []
+            tabla_fa = []
+            sumatoria_fa = 0
+            
+            for intervalo in lista_intervalos:
+                
+                index_intervalo = lista_intervalos.index(intervalo)
+                rango_intervalo = intervalo[0]
+                li_intervalo = intervalo[0][0]
+                ls_intervalo = intervalo[0][1]
+                fa_intervalo = intervalo[1]
+                marca_clase = (li_intervalo + ls_intervalo) / 2
+                
+                sumatoria_fa += fa_intervalo
+                faa_intervalo = sumatoria_fa
+                
+                tabla_datos.append((rango_intervalo, marca_clase ,fa_intervalo, faa_intervalo))
+                
+                tabla_fa.append((index_intervalo, fa_intervalo))
 
+            max_fa = max(dict(tabla_fa).values())
+            index_intervalo_modal = [index for index, values in dict(tabla_fa).items() if values == max_fa][0]
+            intervalo_modal =   tabla_datos[index_intervalo_modal]  
+            li_intervalo_modal = intervalo_modal[0][0]
+            ls_intervalo_modal = intervalo_modal[0][1]
+            fa_intervalo_modal = intervalo_modal[2]
+            fa_intervalo_modal_anteror = 0 if index_intervalo_modal == 0 else tabla_datos[(index_intervalo_modal-1)][2]
+            fa_intervalo_modal_siguiente = tabla_datos[(index_intervalo_modal+1)][2]
+            tamano_intervalo_modal = ls_intervalo_modal - li_intervalo_modal
+            
+            moda = li_intervalo_modal + (((fa_intervalo_modal - fa_intervalo_modal_anteror) / ((fa_intervalo_modal - fa_intervalo_modal_anteror) + (fa_intervalo_modal - fa_intervalo_modal_siguiente))) * tamano_intervalo_modal)
+                
+            
+        # Si los datos son un diccionario de numeros y frecuencias absolutas
+        else:        
+            maximo = max(datos.values())
+            moda = [id for id, value in datos.items()if value == maximo]
+
+    # Si los datos son una lista
     else:
         conteo_elementos = Counter(datos)
         maximo = max(conteo_elementos.values())
         moda = [id for id, value in conteo_elementos.items()
                 if value == maximo]
-
-    if len(moda) == 1:
-        moda = moda[0]
-
-    return moda
+    # Se analiza si las modas encontradas son mas de 1 regresa una lista o solo 1 regresa un valor
+    try:
+        if len(moda) == 1:
+            moda = moda[0]
+    finally:
+        return moda
 
 
 def varianza(datos, muestra=False):
-
+    '''Puede recibir:
+    
+    * lista.- [1, 2, 3...]
+    
+    * diccionario numeros y frecuencas absolutas.- {1:4, 2:10, 3:30...}
+    
+    * diccionario intervalos y frecuencias absolutas.- {(1,5):3, (5,10):10, (10,15):20...}
+    '''
+    
     if muestra == False:
         if type(datos) is dict:
+            
+            # Si es diccionario de datos agrupados con intervalos
+            if type(list(datos)[0]) is tuple:
+
+                # Creacion de tabla con marcas de clase y frecuencias absolutas
+                lista_intervalos = [(intervalo,fa) for intervalo, fa in datos.items()]
+                tabla_datos = []
+                
+                for intervalo in lista_intervalos:
+                    
+                    rango_intervalo = intervalo[0]
+                    li_intervalo = intervalo[0][0]
+                    ls_intervalo = intervalo[0][1]
+                    fa_intervalo = intervalo[1]
+                    marca_clase = (li_intervalo + ls_intervalo) / 2
+                    
+                    tabla_datos.append((marca_clase ,fa_intervalo))
+                datos = dict(tabla_datos)
+                
             media_dict_xi_fa = media(datos)
             total_n = sum(datos.values())
             xi2_fa = []
@@ -210,8 +360,10 @@ def calculo_frecuencias_absolutas(datos, rango_intervalos):
 
     *** El ultimo numero de cada intervalo no es considerado hasta su siguiente intervalo,
     el ultimo intervalo considera el ultimo numero dentro del intervalo***
-    '''
     
+    *** Regresa una lista [[intervalo], fa, faa]***
+    '''
+
     intervalos = creacion_intervalos(datos, rango_intervalos)
     ultimo_intervalo = intervalos[len(intervalos)-1]
     contar_datos = Counter(datos)
@@ -221,15 +373,15 @@ def calculo_frecuencias_absolutas(datos, rango_intervalos):
 
     for intervalo in intervalos:
         conteo = 0
-        
+
         if intervalo == ultimo_intervalo:
             for key, value in contar_datos.items():
 
-              if key in range(intervalo[0], intervalo[1]+1):
-                  conteo += value
-                  
+                if key in range(intervalo[0], intervalo[1]+1):
+                    conteo += value
+
         else:
-        
+
             for key, value in contar_datos.items():
 
                 if key in range(intervalo[0], intervalo[1]):
@@ -285,9 +437,11 @@ def medidas_posicion(datos, k=4):
     return valor_ubicaciones_k
 
 
-def asimetria(datos):
+def asimetria_bowley(datos):
     '''
     Utiliza la medida de Yule Bowley
+    
+    Acepta: listade datos no agrupados, pueden estar desordenados
 
     Regresa: Negativa (<0), Simetrica (=0), Positiva (>0)
     '''
@@ -298,9 +452,31 @@ def asimetria(datos):
 
     medida_yule_bowley = ((q1 + q3) - (2 * q2)) / (q3 - q1)
 
-    asimetria = 'Asimetrica negativa' if medida_yule_bowley < 0 else 'Asimetrica positiva' if medida_yule_bowley > 0 else 'Simetrica'
+    asimetria_bowley = 'Asimetrica negativa' if medida_yule_bowley < 0 else 'Asimetrica positiva' if medida_yule_bowley > 0 else 'Simetrica'
 
-    return asimetria
+    return asimetria_bowley
+
+
+def asimetria_pearson(datos):
+    '''Puede recibir:
+    
+    * lista.- [1, 2, 3...]
+    
+    * diccionario numeros y frecuencas absolutas.- {1:4, 2:10, 3:30...}
+    
+    * diccionario intervalos y frecuencias absolutas.- {(1,5):3, (5,10):10, (10,15):20...}
+    
+    *** Resultados de asimetria: 
+    (< 0 : asimetrica negativa 'hacia izquierda'), (= 0 : simetrica), (> 0 : asimetrica positiva 'hacia derecha')***
+    '''
+    
+    media_datos = media(datos)
+    mediana_datos = mediana(datos)
+    desviacion_estandar_datos = desviacion_estandar(datos)
+    
+    asimetria_pearson = (3*(media_datos - mediana_datos)) / desviacion_estandar_datos
+    
+    return asimetria_pearson
 
 
 # FORMULAS PARA GRAFICAR
@@ -337,23 +513,21 @@ class Diagrama_caja_bigotes:
         self.barrera_inferior = self.q1 - (1.5 * self.rango_intercuartilico)
         self.barrera_superior = self.q3 + (1.5 * self.rango_intercuartilico)
 
-        
-        
         ubicacion_barrera_inferior = 0
         ubicacion_barrera_superior = 1
-    
-        
+
         while True:
             self.bigote_inferior = self.datos_ordenados[ubicacion_barrera_inferior]
             if self.bigote_inferior < self.barrera_inferior:
                 ubicacion_barrera_inferior += 1
             else:
                 break
-        
+
         while True:
-            self.bigote_superior = self.datos_ordenados[self.n-ubicacion_barrera_superior]
+            self.bigote_superior = self.datos_ordenados[self.n -
+                                                        ubicacion_barrera_superior]
             if self.bigote_superior > self.barrera_superior:
-                ubicacion_barrera_superior += 1 
+                ubicacion_barrera_superior += 1
             else:
                 break
 
@@ -617,8 +791,9 @@ class Pruebas_caja_cristal(unittest.TestCase):
             analisis_lista2, 5)
 
         self.assertEqual(formula_calculo_frecuencias_absolutas, [
-            ([50, 55], 2), ([55, 60], 7), ([60, 65], 17), ([65, 70], 30),
-            ([70, 75], 14), ([75, 80], 7), ([80, 85], 3)
+            ([50, 55], 2, 2), ([55, 60], 7, 9), ([
+                60, 65], 17, 26), ([65, 70], 30, 56),
+            ([70, 75], 14, 70), ([75, 80], 7, 77), ([80, 85], 3, 80)
         ])
 
     def test_medidas_posicion(self):
@@ -634,7 +809,7 @@ class Pruebas_caja_cristal(unittest.TestCase):
         self.assertEqual(formula_rango_intercuartilico, 23)
 
     def test_asimetria(self):
-        formula_asimetria = asimetria(analisis_lista)
+        formula_asimetria = asimetria_bowley(analisis_lista)
 
         self.assertEqual(formula_asimetria, 'Asimetrica positiva')
 
@@ -689,8 +864,6 @@ class Pruebas_caja_cristal(unittest.TestCase):
         self.assertEqual(formula_buscar_z_probabilidad_derecha, -1.35)
 
 
-
-
 # INFORMACION PARA PRUEBAS
 if '__main__' == __name__:
 
@@ -701,10 +874,10 @@ if '__main__' == __name__:
     )
 
     analisis_lista2 = [
-        60, 66, 77, 70, 66, 68, 57, 70, 66, 52, 75, 65, 69, 71, 58, 66, 67, 74, 
-        61, 63, 69, 80, 59, 66, 70, 67, 78, 75, 64, 71, 81, 62, 64, 69, 68, 72, 
-        83, 56, 65, 74, 67, 54, 65, 65, 69, 61, 67, 73, 57, 62, 67, 68, 63, 67, 
-        71, 68, 76, 61, 62, 63, 76, 61, 67, 67, 64, 72, 64, 73, 79, 58, 67, 71, 
+        60, 66, 77, 70, 66, 68, 57, 70, 66, 52, 75, 65, 69, 71, 58, 66, 67, 74,
+        61, 63, 69, 80, 59, 66, 70, 67, 78, 75, 64, 71, 81, 62, 64, 69, 68, 72,
+        83, 56, 65, 74, 67, 54, 65, 65, 69, 61, 67, 73, 57, 62, 67, 68, 63, 67,
+        71, 68, 76, 61, 62, 63, 76, 61, 67, 67, 64, 72, 64, 73, 79, 58, 67, 71,
         68, 59, 69, 70, 66, 62, 63, 66
     ]
 
