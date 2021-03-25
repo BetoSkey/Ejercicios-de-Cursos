@@ -3,7 +3,7 @@ sys.path.append(
     '../Estadistica Computacional con Python/Formulas Estadisticas/')
 from formulas_estadisticas import calculo_frecuencias_absolutas, media, mediana, moda, \
     medidas_posicion, Diagrama_caja_bigotes, varianza, desviacion_estandar, \
-    coeficiente_variacion, asimetria_pearson, calculo_frecuencias_absolutas, Busqueda_binaria
+    coeficiente_variacion, asimetria_pearson, calculo_frecuencias_absolutas, Metodo_binario
 
 
 
@@ -115,7 +115,7 @@ if '__main__' == __name__:
     
     print('''
     _______________________________________________________________
-    Ejercicio 3: numero de ordenadores de 200 familias de una ciudad española en 2016
+    Ejercicio 3: numero de ordenadores de 200 familias de una ciudad espanola en 2016
     
     ''')
     ordenadores_familia = {0:8, 1:102, 2:85, 3:5}

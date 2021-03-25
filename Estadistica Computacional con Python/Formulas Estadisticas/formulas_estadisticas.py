@@ -2,7 +2,7 @@ import math
 import pandas
 from collections import Counter
 import unittest
-from busqueda_binaria import Busqueda_binaria
+from busqueda_binaria import Metodo_binario
 from formulas_especiales import ceiling_to_a_number, floor_to_a_number
 
 # FORMULAS ESTADISTICA DESCRIPTIVA
@@ -94,8 +94,8 @@ def mediana(datos):
             mediana = li_clase_mediana + (((mitad_faa - faa_clase_anterior_mediana) / fa_clase_mediana) * tamano_intervalo_clase_mediana)
         
         else:
-            lista_xi_ordenada = Busqueda_binaria(
-                [xi for xi in datos.keys()]).ordenamiento_insercion()
+            lista_xi_ordenada = Metodo_binario(
+                [xi for xi in datos.keys()]).ordenar()
             
             # faa= frecuencias absolutas acumuladas (FAA)
             xi_fa_acumulada = []
@@ -118,32 +118,32 @@ def mediana(datos):
             if total_n % 2 > 0:
                 
                 numero_medio = int(round(total_n/2, 0))
-                ubicacion_mediana = fa_acumulada_list[Busqueda_binaria(
-                    fa_acumulada_list).ubicacion_binaria(numero_medio)+1]
+                ubicacion_mediana = fa_acumulada_list[Metodo_binario(
+                    fa_acumulada_list).ubicacion(numero_medio)+1]
                 
                 mediana = dict_xi_fa_acumulada[ubicacion_mediana]
             else:
                 
-                fa_acumulada_list_binaria = Busqueda_binaria(fa_acumulada_list)
+                fa_acumulada_list_binaria = Metodo_binario(fa_acumulada_list)
                 
                 numero_medio1 = int(round(total_n/2, 0)-1)
                 
                 numero_medio2 = int(round(total_n/2, 0))
                 
-                ubicacion_numero_medio1 = fa_acumulada_list[fa_acumulada_list_binaria.ubicacion_binaria(numero_medio1)]
+                ubicacion_numero_medio1 = fa_acumulada_list[fa_acumulada_list_binaria.ubicacion(numero_medio1)]
                 
-                ubicacion_numero_medio2 = fa_acumulada_list[fa_acumulada_list_binaria.ubicacion_binaria(numero_medio2)]
+                ubicacion_numero_medio2 = fa_acumulada_list[fa_acumulada_list_binaria.ubicacion(numero_medio2)]
                 
                 if ubicacion_numero_medio1 == ubicacion_numero_medio2:
                     numero_medio = media([numero_medio1, numero_medio2])
-                    ubicacion_mediana = fa_acumulada_list[fa_acumulada_list_binaria.ubicacion_binaria(numero_medio)]
+                    ubicacion_mediana = fa_acumulada_list[fa_acumulada_list_binaria.ubicacion(numero_medio)]
                     mediana = dict_xi_fa_acumulada[ubicacion_mediana]
                 else:
                     mediana = media([
                         dict_xi_fa_acumulada[ubicacion_numero_medio1], dict_xi_fa_acumulada[ubicacion_numero_medio2]])
 
     else:
-        lista_ordenada = Busqueda_binaria(datos).ordenamiento_insercion()
+        lista_ordenada = Metodo_binario(datos).ordenar()
 
         if len(lista_ordenada) % 2 > 0:
             mediana = lista_ordenada[int(
@@ -406,8 +406,8 @@ def medidas_posicion(datos, k=4):
 
     tipo = 'Q' if k == 4 else 'D' if k == 10 else 'P' if k == 100 else 'error'
 
-    analisis_binario = Busqueda_binaria(datos)
-    datos_ordenados = analisis_binario.ordenamiento_insercion()
+    analisis_binario = Metodo_binario(datos)
+    datos_ordenados = analisis_binario.ordenar()
 
     ubicaciones_k = []
     valor_ubicaciones_k = {}
@@ -497,8 +497,8 @@ class Diagrama_caja_bigotes:
 
     def __init__(self, datos):
         self.datos = datos
-        self.datos_ordenados = Busqueda_binaria(
-            self.datos).ordenamiento_insercion()
+        self.datos_ordenados = Metodo_binario(
+            self.datos).ordenar()
 
         self.n = len(self.datos)
 
@@ -613,13 +613,13 @@ def buscar_z_probabilidad_intermedia(probabilidad):
         val: key for key,
         val in probabilidades_z_distribucion_normal_estandar().items()
     }
-    if Busqueda_binaria(lista_probabilidades_dns).busqueda_binaria(probabilidad_dns):
+    if Metodo_binario(lista_probabilidades_dns).buscar(probabilidad_dns):
         z = lista_z[probabilidad_dns]
     else:
-        ubicacion1 = Busqueda_binaria(
-            lista_probabilidades_dns).ubicacion_binaria(probabilidad_dns) - 1
-        ubicacion2 = Busqueda_binaria(
-            lista_probabilidades_dns).ubicacion_binaria(probabilidad_dns)
+        ubicacion1 = Metodo_binario(
+            lista_probabilidades_dns).ubicacion(probabilidad_dns) - 1
+        ubicacion2 = Metodo_binario(
+            lista_probabilidades_dns).ubicacion(probabilidad_dns)
         z = (
             lista_z[lista_probabilidades_dns[ubicacion1]] +
             lista_z[lista_probabilidades_dns[ubicacion2]]
@@ -637,15 +637,15 @@ def buscar_z_probabilidad_izquierda(probabilidad):
         val in probabilidades_z_distribucion_normal_estandar().items()
     }
 
-    if Busqueda_binaria(lista_probabilidades_dns).busqueda_binaria(probabilidad_dns):
+    if Metodo_binario(lista_probabilidades_dns).buscar(probabilidad_dns):
         z = lista_z[probabilidad_dns]
 
     else:
-        ubicacion1 = Busqueda_binaria(
-            lista_probabilidades_dns).ubicacion_binaria(probabilidad_dns) - 1
+        ubicacion1 = Metodo_binario(
+            lista_probabilidades_dns).ubicacion(probabilidad_dns) - 1
 
-        ubicacion2 = Busqueda_binaria(
-            lista_probabilidades_dns).ubicacion_binaria(probabilidad_dns)
+        ubicacion2 = Metodo_binario(
+            lista_probabilidades_dns).ubicacion(probabilidad_dns)
 
         z = (
             lista_z[lista_probabilidades_dns[ubicacion1]] +
@@ -667,15 +667,15 @@ def buscar_z_probabilidad_derecha(probabilidad):
         val in probabilidades_z_distribucion_normal_estandar().items()
     }
 
-    if Busqueda_binaria(lista_probabilidades_dns).busqueda_binaria(probabilidad_dns):
+    if Metodo_binario(lista_probabilidades_dns).buscar(probabilidad_dns):
         z = lista_z[probabilidad_dns]
 
     else:
-        ubicacion1 = Busqueda_binaria(
-            lista_probabilidades_dns).ubicacion_binaria(probabilidad_dns) - 1
+        ubicacion1 = Metodo_binario(
+            lista_probabilidades_dns).ubicacion(probabilidad_dns) - 1
 
-        ubicacion2 = Busqueda_binaria(
-            lista_probabilidades_dns).ubicacion_binaria(probabilidad_dns)
+        ubicacion2 = Metodo_binario(
+            lista_probabilidades_dns).ubicacion(probabilidad_dns)
 
         z = (
             lista_z[lista_probabilidades_dns[ubicacion1]] +
