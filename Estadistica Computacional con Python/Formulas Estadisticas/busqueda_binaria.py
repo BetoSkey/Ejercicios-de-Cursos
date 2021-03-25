@@ -5,8 +5,24 @@ class Busqueda_binaria:
     def __init__(self, datos):
         self.datos = datos
 
+    def __verificacion_ubicacion__(self, objetivo, datos, ubicacion_a_verificar):
+        '''Verifica si el numero encontrado es =, < o > que el numero en la ubicacion'''
+        
+        # si el numero buscado es mayor al de la ubicacion encontrada pero 
+        # la ubicacion encontrada es el ultimo dato de la lista
+        if objetivo > datos[ubicacion_a_verificar] and ubicacion_a_verificar == len(datos)-1:
+            return ubicacion_a_verificar
+        
+        # si el objetivo es mayor que que la ubicacion encontrada
+        elif objetivo > datos[ubicacion_a_verificar]:
+            return ubicacion_a_verificar +1
+        
+        # si el objetivo es menoro igual que la ubicacion encontrada
+        else:
+            return ubicacion_a_verificar
+    
     def ubicacion_binaria(self, objetivo, datos=None, comienzo=0, final=None, ubicacion_meta=0):
-        '''Ubicacion binaria solo funciona si la datos esta ordenada'''
+        '''Ubicacion binaria solo funciona si la lista de datos esta ordenada'''
         if final == None:
             datos = self.ordenamiento_insercion()
             final = len(datos)
@@ -18,12 +34,13 @@ class Busqueda_binaria:
                     ubicacion_meta = len(datos)-1
                 else:
                     ubicacion_meta = final
-
-                return ubicacion_meta
+                
+                return self.__verificacion_ubicacion__(objetivo, datos, ubicacion_meta)
+            
             elif objetivo < datos[comienzo]:
                 ubicacion_meta = comienzo
-
-                return ubicacion_meta
+                
+                return self.__verificacion_ubicacion__(objetivo, datos, ubicacion_meta)
 
         if comienzo == final:  # Si la datos llego al final de su acote y solo nos indica una ubicacion
 
@@ -34,6 +51,7 @@ class Busqueda_binaria:
                     ubicacion_meta = len(datos)-1
 
                 else:
+                    
                     ubicacion_meta = final + 1
 
             # Si estamos al principio de la datos o el objetivo es igual que el acotamiento final
@@ -43,7 +61,7 @@ class Busqueda_binaria:
             else:
                 ubicacion_meta += 1
 
-            return ubicacion_meta
+            return self.__verificacion_ubicacion__(objetivo, datos, ubicacion_meta)
 
         # Aqui empieza a acotar la busqueda
         medio = (comienzo + final) // 2  # Se acota la datos a la mitad
@@ -127,11 +145,22 @@ class Pruebas_caja_cristal(unittest.TestCase):
         formula_buscar_ubicacion = busqueda1.busqueda_binaria(87)
 
         self.assertEqual(formula_buscar_ubicacion, 6)
+    
+    def test_ubicacion_binaria2(self):
+        formula_ubicacion_binaria = busqueda_lista2_ordenada.ubicacion_binaria(24)
+        
+        self.assertEqual(formula_ubicacion_binaria, 2)
 
 
 if '__main__' == __name__:
 
     lista1 = [55, 87, 74, 70, 82, 62, 59]
     busqueda1 = Busqueda_binaria(lista1)
-
+    
+    lista2 = [39, 50, 3, 19, 49]
+    busqueda2 = Busqueda_binaria(lista2)
+    lista2_ordenada = busqueda2.ordenamiento_insercion()
+    busqueda_lista2_ordenada = Busqueda_binaria(lista2_ordenada)
+    
+    
     unittest.main()

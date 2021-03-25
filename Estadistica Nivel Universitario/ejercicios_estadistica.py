@@ -89,7 +89,7 @@ Datos Boxplot: {diagrama_caja_bigotes_iva}
     
     print(f'Frecuencias absolutas: {calculo_frecuencias_absolutas_evaluaciones_clientes}')
     print(f'Desviacion estandar: {desviacion_estandar_clientes}')
-    print(f'Cuartil 1: {int(cyb_q1)}, cuartil 2: {int(cyb_q2)}, cuartil 3: {int(cyb_q3)}')
+    print(f'Cuartil 1: {int(cyb_q1)}, cuartil 2: {int(cyb_q2)}, cuartil 3: {int(cyb_q3)}')'''
     
     ordenadores_familia = {0:8, 1:102, 2:85, 3:5}
     
@@ -101,20 +101,4 @@ Datos Boxplot: {diagrama_caja_bigotes_iva}
     asimetria_pearson_ordenadores = asimetria_pearson(ordenadores_familia)
     
     print(ordenadores_familia)
-    print(f'Media: {media_ordenadores}, mediana: {mediana_ordenadores}, moda: {moda_ordenadores}, stdev: {desviacion_estandar_ordenadores}, cv: {coeficiente_variacion_ordenadores}, pearson: {asimetria_pearson_ordenadores}')'''
-    
-    #lista = [8, 110, 195, 200]
-    #lista = [3, 19, 39, 49, 50]
-    lista = [39, 50, 3, 19, 49]
-
-    lista_binaria = Busqueda_binaria(lista)
-    numero1 = 24
-    numero2 = 25
-    
-    #ubicacion_numero2 = lista_binaria.ubicacion_binaria(numero2)
-    #print(ubicacion_numero2)
-    
-    lista_ordenada = lista_binaria.ordenamiento_insercion()
-    print(lista_ordenada)
-    
-    # Basicamente lo que no esta funcionando es la ubicacion binaria, sin embargo el ordenamiento de insercion si funciona bien aparentemente
+    print(f'Media: {media_ordenadores}, mediana: {mediana_ordenadores}, moda: {moda_ordenadores}, stdev: {desviacion_estandar_ordenadores}, cv: {coeficiente_variacion_ordenadores}, pearson: {asimetria_pearson_ordenadores}')

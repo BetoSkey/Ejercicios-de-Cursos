@@ -96,7 +96,7 @@ def mediana(datos):
         else:
             lista_xi_ordenada = Busqueda_binaria(
                 [xi for xi in datos.keys()]).ordenamiento_insercion()
-
+            
             # faa= frecuencias absolutas acumuladas (FAA)
             xi_fa_acumulada = []
             fa_acumulada_list = []
@@ -110,33 +110,33 @@ def mediana(datos):
                     xi_fa_acumulada.append(
                         (fa_xi + xi_fa_acumulada[-1][0], xi))
                     fa_acumulada_list.append(fa_xi + fa_acumulada_list[-1])
-
+            
             total_n = xi_fa_acumulada[-1][0]
             dict_xi_fa_acumulada = dict(xi_fa_acumulada)
             
+            # si n no es par
             if total_n % 2 > 0:
                 
                 numero_medio = int(round(total_n/2, 0))
                 ubicacion_mediana = fa_acumulada_list[Busqueda_binaria(
                     fa_acumulada_list).ubicacion_binaria(numero_medio)+1]
+                
                 mediana = dict_xi_fa_acumulada[ubicacion_mediana]
             else:
+                
+                fa_acumulada_list_binaria = Busqueda_binaria(fa_acumulada_list)
                 
                 numero_medio1 = int(round(total_n/2, 0)-1)
                 
                 numero_medio2 = int(round(total_n/2, 0))
                 
-                ubicacion_numero_medio1 = fa_acumulada_list[Busqueda_binaria(
-                    fa_acumulada_list).ubicacion_binaria(numero_medio1)+1]
+                ubicacion_numero_medio1 = fa_acumulada_list[fa_acumulada_list_binaria.ubicacion_binaria(numero_medio1)]
                 
-                
-                ubicacion_numero_medio2 = fa_acumulada_list[Busqueda_binaria(
-                    fa_acumulada_list).ubicacion_binaria(numero_medio2)+1]
+                ubicacion_numero_medio2 = fa_acumulada_list[fa_acumulada_list_binaria.ubicacion_binaria(numero_medio2)]
                 
                 if ubicacion_numero_medio1 == ubicacion_numero_medio2:
                     numero_medio = media([numero_medio1, numero_medio2])
-                    ubicacion_mediana = fa_acumulada_list[Busqueda_binaria(
-                        fa_acumulada_list).ubicacion_binaria(numero_medio)+1]
+                    ubicacion_mediana = fa_acumulada_list[fa_acumulada_list_binaria.ubicacion_binaria(numero_medio)]
                     mediana = dict_xi_fa_acumulada[ubicacion_mediana]
                 else:
                     mediana = media([
