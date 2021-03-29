@@ -1,3 +1,10 @@
+# Este archivo crea una clase para analisis de datos estadisticos.
+# 
+# Puede importar datos de un archivo conteniendo los datos de 
+# invervalos y frecuencias absolutas para convertirlos en diccionarios para analisis 
+# de la informacion.
+
+
 import pandas as pd
 from formulas_estadisticas import media, mediana, moda, varianza, desviacion_estandar
 
