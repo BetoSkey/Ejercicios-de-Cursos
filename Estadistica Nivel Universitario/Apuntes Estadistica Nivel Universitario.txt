@@ -1,0 +1,28 @@
+ESTADISTICA DESCRIPTIVA.
+    Describe una variable aleatoria, resume, analiza y saca conclusiones del conjunto de datos 
+    Analisis Descriptivos:
+        1) Tablas de frecuencias
+            Si las clases estan representadas con intervalos, seria un "intervalo modal"
+            * absoluta
+            * relativa
+            * absoluta acumulada
+            * relativa acumulada
+        2) Graficos
+            * pastel
+            * histograma
+        3) Analisis numericos
+            * media
+            * mediana
+            * moda
+            * desviacion estandar
+            * varianza
+    
+    Asimetria:
+      Asimetria negativa:
+        media < mediana < moda
+      Asimetria positiva:
+        moda < mediana < media
+    
+    Simetria:
+        media = mediana = moda
+    
