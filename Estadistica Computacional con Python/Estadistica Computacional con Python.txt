@@ -1,0 +1,165 @@
+Estadistica Computacional con Python
+    PROGRAMACION DINAMICA:
+        El nombre no tiene nada que ver con lo que es.
+
+        Subestructura optima:
+            Una solucion global optima se puede encontrar al combinar soluciones optimas de subproblemas locales. 
+            (Partir en problemas mas pequeños)
+        
+        Problemas empalmados:
+            Una solucion optima que involucra resolver el mismo problema en varias ocasiones.
+            (Fibonacci y Problema del morral), (ejemplo, recursividad)
+
+            Soluciones a problemas empalmados:
+                Memoization .- (memorizacion) Es una tecnica para guardar computos previos y evitar realizarlos nuevamente.
+                    (DRY, evitar computos adicionales guardando el resultado de computaciones previas adentro de un diccionario, o
+                    de una estructura de datos (diccionarios / sets)).
+
+                    Las consultas a diccionarios o sets se pueden hacer en O(1).
+
+                    Con esto se puede "intercambiar tiempo por espacio"
+        
+        Caminos Aleatorios:
+            # A un mismo input pudiera haber un distinto output (estocastico = sometido al azar y es objeto de analisis estadistico)
+            Es una simulacion que elige aleatoriamente una decision dentro de un conjunto de desiciones validas.
+            * Se utiliza cuando los sistemas no son deterministas (deterministico = un mismo input tiene un solo resultado) 
+                e incluyen elementos de aleatoriedad.
+            Para realizar un analisis estocastico, tenemos que realizar la simulacion varias veces y analizar la media de 
+            todas las simulaciones.
+                
+                Ejemplo de caminos aleatorios seria tratar de simular el 'movimiento brauniano' = moleculas de polen en agua explicado
+                por Albert Einstein.
+                
+                Quantum Cloud Structure fue hecha por Antony Gormley a traves de un algoritmo.
+                
+            Problema del borracho:
+                Con la abstraccion podemos definir 3 objetos:
+                    El Borracho
+                    El Campo
+                    La Coordenada
+                
+                La idea es realizar multiples simulaciones con diferentes numeros de pasos determinar la media de los resultados para
+                posteriormente graficar el movimiento del borracho
+                    # Para calcular la distancia recorrida entre la coordenada inicial y final de cada corrida 
+                    se utilizara el teorema de pitagoras
+
+    PROGRAMACION ESTOCASTICA:
+
+        Programa Deterministico: con el mismo input produce el mismo output
+            Existen problemas que no pueden resolverse de esa manera.
+        
+        Programa Estocastico: permite introducir aleatoriedad para crear simulaciones que permiten      
+            resolver otro tipo de problemas.
+            * Las distribuciones probabilisticas de un problema se conocen o pueden ser estimadas
+            a traves de "inferencia estadistica", implica conocer la poblacion.
+            
+        Calculo de probabilidades:
+            Se calcula entre 0 y 1:
+                0 = jamas sucedera
+                1 = garantizado que sucedera en el futuro  
+            
+            * La probabilidad habla de la fraccion de todos los posibles eventos tiene la propiedad que buscamos
+            
+            Probabilidades:
+              * La suma del complemento de las probabilidades siempre sera 1
+                P(A) + P(~A)=1
+                
+              * Ley multiplicativa .- La probabilidad de que suceda un evento "y" otro evento:
+                    P(A y B) = P(A) * P(B)
+                    # Siempre sera menor la probabilidad de que suceda A y B a que solo suceda A o solo suceda B
+            
+              * Ley aditiva .- La probalbilidad de que suceda un evento "o" otro evento:
+                    P(A o B) = P(A) + P(B) (mutuamente exclusivos)
+                    P(A o B) = P(A) + P(B) - P(A y B) (no exclusivos)
+            
+                Ejemplo:
+                    En un dado de 6 lados:
+                    Probabilidad de que salga un 1:
+                    P(1)   + P(~1)  = 1
+                    P(1/6) + P(1-(1/6)) = 1
+
+                    Probabilidad de que salga un 1 y un 2:
+                    P(1 y 2) + P(~(1 y 2)) = 1
+                    P(1/6 * 1/6) + P(~(1-(1/6 * 1/6))) = 1
+
+                    Probabilidad de que salga un 1 o un 2:
+                    P(1 o 2) + P(~(1 o 2)) = 1
+                    P(1/6 + 1/6) + P(~(1-(1/6 + 1/6))) = 1
+
+                    # En el ejercicio tiros.py, crea una lista de tiros, que contiene listas de tiros 
+                        por cada intento para despues verificar si se encuentra un 1 dentro y cuenta 
+                        cuantas veces se encontro un 1 dentro de estas listas; posteriormente se saca 
+                        un promedio de cuantas veces se encontro un 1 en cada intento.
+                            tiros = [[xxxxx1xxx], [xxxxxxxx], [xxxxx1xxx]]
+                            tiros_con_1 = 2
+                            probabilidad_tiros_con_1 = 2/3 intentos(listas dentro de la lista tiros)
+
+    
+    Inferencia Estadística:
+    
+        * Con las simulaciones podemos calcular la probabilidad de eventos mas complejos 
+            sabiendo las probabilidades de eventos simples
+            
+        * Para saber la probabilidad de eventos simples, la tecnica de inferencia estadistica permite inferir/concluir
+            las propiedades de una poblacion a partir de una muestra aleatoria.
+        
+        Proceso:
+            Tomar una muestra "representativa" y "aleatoria" para generar conclusiones de la poblacion en general.
+            
+            Ley de los grandes numeros:
+                * En pruebas independientes repetidas con la misma probabilidad p de un resultado, la fracción de 
+                    desviaciones de p converge a cero conforme la cantidad de pruebas se acerca al infinito.
+                    
+                    P( lim n -> ∞ (media(n) = media(mu) ) = 1
+                    
+                    la probabilidad de que la media de la muestra sea igual a la media de la poblacion, mientras que 
+                    los limites (o eventos) se acerquen al infinito (osea mientras mas eventos existan) sera igual a 1 (100%)
+                    
+                    # Osea que mientras mas pruebas de muestras aleatorias se hagan, la probabilidad de los eventos se acercaran
+                        cada vez mas a la probabilidad de la real.
+                    
+            Falacia del apostador
+                * Señala que despues de un evento extremo, ocuriran eventos menos extremos para nivelar la media
+                * La regresion a la media señala que despues de un evento aleatorio extremo, el siguiente evento 
+                    probablemente sera menos extremo.
+                    
+            Medidas de tendencia central:
+                * media aritmetica (promedio)
+                * mediana
+                * σ2 (Varianza)
+                * σ (Desviacion Estandar / sigma)
+            
+            Distribucion Normal:
+                * Se define completamente por su media y su desviacion estandar
+                * Permite calcular intervalos de confianza con la regla empirica.
+                * Se puede convertir una distribucion que no es normal a una normal a traves del "teorema de limite central".
+                * Las distribuciones normales son "simetricas"
+                * Para graficar se puede usar un histograma.
+
+                Regla empirica:
+                * Tambien se conoce como la regla del 68-95-99.7
+                * Señala cual es la dispersion de los datos en una distribucion normal a uno, dos o tres sigmas
+                * Permite calcular probabilidades con la densidad de la distribucion normal
+                    Pr(mu -1σ <= X <= mu +1σ) = 0.6827
+                    Pr(mu -2σ <= X <= mu +2σ) = 0.9545
+                    Pr(mu -3σ <= X <= mu +3σ) = 0.9973
+            
+            SIMULACIONES DE MONTECARLO:
+                Metodo estadistico para resolver problemas matematicos complejos a traves de variables aleatorias.
+                
+                * Consiste en repetir o duplicar las caracteristicas y comportamientos de un sistema real, esto es, intentar
+                imitar el comportamiento de variables para analizar o predecir como van a evolucionar.
+                
+                Usos comunes:
+                    * analizar carteras de inversion.
+                    * valorar productos financieros complejos como las "opciones financieras".
+                    * creacion de modelos de gestion de riesgo.
+                    * Bolsa de Valores (movimientos de una accion)
+                    
+                   
+                
+
+                    
+
+        
+
