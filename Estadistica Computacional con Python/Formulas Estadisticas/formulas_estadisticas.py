@@ -1,3 +1,5 @@
+# Archivo con formulas estadisticas, se diseño con el curso de Estadistica nivel universitario de udemy
+
 import math
 import pandas
 from collections import Counter
