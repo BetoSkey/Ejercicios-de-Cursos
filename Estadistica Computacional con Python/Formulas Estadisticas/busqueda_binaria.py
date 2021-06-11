@@ -1,3 +1,7 @@
+# Archivo terminado con una clase para realizar metodos binarios 
+# y utilizarlos en diferentes formulas por ejemplo las formulas etadisticas.
+
+
 import unittest
 
 
