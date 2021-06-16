@@ -8,7 +8,7 @@ from busqueda_binaria import Metodo_binario
 from formulas_especiales import ceiling_to_a_number, floor_to_a_number
 
 # FORMULAS ESTADISTICA DESCRIPTIVA
-def media(datos):
+def media(datos, agrupados=False, columna=0):
     '''
     Puede recibir:
     
@@ -17,7 +17,23 @@ def media(datos):
     * diccionario_simple (valores: frecuencias absolutas) = {1:3, 2:1, 3:4}
     
     * diccionario_intervalos ((intervalos):frecuencias absolutas) = {(1,10):3, (10,20):4, (20,30):7}
+
+    * DataFrame de la libreria de pandas:
+        - Se debera definir si los datos estan agrupados (default: agrupados=False) y definir el nombre de la columna
+        que contiene los datos o las frecuencias acumuladas en caso que aplique (default: columna=0)
     '''
+    if type(datos) is pandas.core.frame.DataFrame:
+        
+        try:
+            if agrupados == True:
+                datos = datos.iloc[:,columna].to_dict()
+            else:
+                datos = datos.iloc[:, columna].to_list()
+        except:
+            if agrupados == True:
+                datos = datos.loc[:,columna].to_dict()
+            else:
+                datos = datos.loc[:, columna].to_list()
 
     if type(datos) is dict:
 
@@ -47,7 +63,7 @@ def media(datos):
     return media
 
 
-def mediana(datos):
+def mediana(datos, agrupados=False, columna=0):
     '''Puede recibir:
     
     * lista.- [1, 2, 3...]
@@ -55,7 +71,24 @@ def mediana(datos):
     * diccionario numeros y frecuencas absolutas.- {1:4, 2:10, 3:30...}
     
     * diccionario intervalos y frecuencias absolutas.- {(1,5):3, (5,10):10, (10,15):20...}
+
+    * DataFrame de la libreria de pandas:
+        - Se debera definir si los datos estan agrupados (default: agrupados=False) y definir el nombre de la columna
+        que contiene los datos o las frecuencias acumuladas en caso que aplique (default: columna=0)
     '''
+    if type(datos) is pandas.core.frame.DataFrame:
+        
+        try:
+            if agrupados == True:
+                datos = datos.iloc[:,columna].to_dict()
+            else:
+                datos = datos.iloc[:, columna].to_list()
+        except:
+            if agrupados == True:
+                datos = datos.loc[:,columna].to_dict()
+            else:
+                datos = datos.loc[:, columna].to_list()
+
     if type(datos) is dict:
         if type(list(datos)[0]) is tuple:
             # Creacion de tabla con marcas de clase y frecuencias absolutas acumuladas
@@ -161,7 +194,7 @@ def mediana(datos):
     return mediana
 
 
-def moda(datos):
+def moda(datos, agrupados=False, columna=0):
     '''Puede recibir:
     
     * lista.- [1, 2, 3...]
@@ -169,7 +202,26 @@ def moda(datos):
     * diccionario numeros y frecuencas absolutas.- {1:4, 2:10, 3:30...}
     
     * diccionario intervalos y frecuencias absolutas.- {(1,5):3, (5,10):10, (10,15):20...}
+
+    * DataFrame de la libreria de pandas:
+        - Se debera definir si los datos estan agrupados (default: agrupados=False) y definir el nombre de la columna
+        que contiene los datos o las frecuencias acumuladas en caso que aplique (default: columna=0)
+
+    ** Si el resultado es mas de 1 moda, regresa una lista de los valores con mayor frecuencia
     '''
+    if type(datos) is pandas.core.frame.DataFrame:
+        
+        try:
+            if agrupados == True:
+                datos = datos.iloc[:,columna].to_dict()
+            else:
+                datos = datos.iloc[:, columna].to_list()
+        except:
+            if agrupados == True:
+                datos = datos.loc[:,columna].to_dict()
+            else:
+                datos = datos.loc[:, columna].to_list()
+
     # Si los datos son un diccionario
     if type(datos) is dict:
         
@@ -229,7 +281,7 @@ def moda(datos):
         return moda
 
 
-def varianza(datos, muestra=False):
+def varianza(datos, agrupados=False, columna=0, muestra=False):
     '''Puede recibir:
     
     * lista.- [1, 2, 3...]
@@ -237,9 +289,28 @@ def varianza(datos, muestra=False):
     * diccionario numeros y frecuencas absolutas.- {1:4, 2:10, 3:30...}
     
     * diccionario intervalos y frecuencias absolutas.- {(1,5):3, (5,10):10, (10,15):20...}
+
+    * DataFrame de la libreria de pandas:
+        - Se debera definir si los datos estan agrupados (default: agrupados=False) y definir el nombre de la columna
+        que contiene los datos o las frecuencias acumuladas en caso que aplique (default: columna=0)
     '''
     
+    if type(datos) is pandas.core.frame.DataFrame:
+
+        try:
+            if agrupados == True:
+                datos = datos.iloc[:,columna].to_dict()
+            else:
+                datos = datos.iloc[:, columna].to_list()
+        except:
+            if agrupados == True:
+                datos = datos.loc[:,columna].to_dict()
+            else:
+                datos = datos.loc[:, columna].to_list()
+
     if muestra == False:
+        
+        
         if type(datos) is dict:
             
             # Si es diccionario de datos agrupados con intervalos
@@ -278,6 +349,7 @@ def varianza(datos, muestra=False):
             varianza = media(diferencias_vs_media)
 
     else:
+        
         if type(datos) is dict:
             media_dict_xi_fa = media(datos)
             total_n = sum(datos.values())-1
@@ -300,8 +372,21 @@ def varianza(datos, muestra=False):
     return varianza
 
 
-def desviacion_estandar(datos, muestra=False):
-    formula_varianza = varianza(datos, muestra=muestra)
+def desviacion_estandar(datos, agrupados=False, columna=0, muestra=False):
+    '''Puede recibir:
+    
+    * lista.- [1, 2, 3...]
+    
+    * diccionario numeros y frecuencas absolutas.- {1:4, 2:10, 3:30...}
+    
+    * diccionario intervalos y frecuencias absolutas.- {(1,5):3, (5,10):10, (10,15):20...}
+
+    * DataFrame de la libreria de pandas:
+        - Se debera definir si los datos estan agrupados (default: agrupados=False) y definir el nombre de la columna
+        que contiene los datos o las frecuencias acumuladas en caso que aplique (default: columna=0)
+    '''
+    
+    formula_varianza = varianza(datos, agrupados=agrupados, columna=columna, muestra=muestra)
     desviacion_estandar = formula_varianza ** 0.5
 
     return desviacion_estandar
@@ -356,51 +441,128 @@ def creacion_intervalos(datos, rango_intervalos):
     return intervalos
 
 
-def calculo_frecuencias_absolutas(datos, rango_intervalos):
+def calculo_frecuencias(datos, intervalos=None, rango_intervalos=1, columna=0):
     '''
-    Crea intervalos y regresa sus frecuencias absolutas y frecuencias relativas.
+    Calcula las frecuencias absolutas de intervalos.
+    
+    * datos.- Acepta lista o DataFrame de la libreria de pandas:
+        - Se debera definir el nombre de la columna que contiene los datos(default: columna=0)
+    
+    * intervalos.- acepta lista de numeros [1, 2, ...] o de intervalos [[1, 2], [2, 3], ...] (intervalos: default=None)
+
+    * rango_intervalos.- Si no se otorga una lista de intervalos, crea intervalos de acuerdo un rango dado (default: rango_intervalos=1)
+
+    * columna.- En caso de ser DataFrame, se debe especifiar el nombre o el numero de la columna que contiene los datos (default: columna=0)
 
     *** El ultimo numero de cada intervalo no es considerado hasta su siguiente intervalo,
     el ultimo intervalo considera el ultimo numero dentro del intervalo***
-    
-    *** Regresa una lista [[intervalo], fa, faa]***
+
+     *** Regresa una lista [[intervalo], fa, faa, fr, far]***
+
+    ejemplos:
+        calculo_frecuencias([1, 1, 2, 3, 3], intervalos=[1, 2, 3])
+            output: [[intervalo], fa, faa, fr, far]
+                [(1, 2, 2, 0.4), (2, 1, 3, 0.6), (3, 2, 5, 1.0)]
+
+        calculo_frecuencias([1, 2, 2, 4, 5, 6 , 4, 7 , 8, 10, 10], rango_intervalos=3)
+            output: [[intervalo], fa, faa, fr, far]
+                [([0, 3], 3, 3, 0.27),
+                ([3, 6], 3, 6, 0.55),
+                ([6, 9], 3, 9, 0.81),
+                ([9, 12], 2, 11, 1.0)]
+   
     '''
+    if type(datos) is pandas.core.frame.DataFrame:
+        
+        try:
 
-    intervalos = creacion_intervalos(datos, rango_intervalos)
-    ultimo_intervalo = intervalos[len(intervalos)-1]
-    contar_datos = Counter(datos)
+            datos = datos.iloc[:, columna].to_list()
+        except:
 
-    faa = 0
-    fa = []
+            datos = datos.loc[:, columna].to_list()
 
-    for intervalo in intervalos:
-        conteo = 0
+    if intervalos == None:
+        intervalos = creacion_intervalos(datos, rango_intervalos)
+    
+    if type(intervalos[0]) == list:
+    
+        ultimo_intervalo = intervalos[len(intervalos)-1]
+        contar_datos = Counter(datos)
+        n = len(datos)
+        
+        frecuencias = [('xi', 'fa', 'faa', 'fr', 'far')]
+        faa = 0
+        
 
-        if intervalo == ultimo_intervalo:
+        for intervalo in intervalos:
+            conteo = 0
+
+            if intervalo == ultimo_intervalo:
+                for key, value in contar_datos.items():
+
+                    if key in range(intervalo[0], intervalo[1]+1):
+                        conteo += value
+
+            else:
+
+                for key, value in contar_datos.items():
+
+                    if key in range(intervalo[0], intervalo[1]):
+                        conteo += value
+            
+            fa = conteo
+            faa += conteo
+            fr = fa/n
+            far = faa/n
+
+            frecuencias.append((intervalo, fa, faa, fr, far))
+
+        
+
+    else:
+        contar_datos = Counter(datos)
+        n = len(datos)
+
+        frecuencias = [('xi', 'fa', 'faa', 'fr', 'far')]
+        faa = 0
+        far = 0
+
+        for intervalo in intervalos:
+            conteo = 0
+            
             for key, value in contar_datos.items():
 
-                if key in range(intervalo[0], intervalo[1]+1):
+                if key == intervalo:
                     conteo += value
+            
+            fa = conteo
+            faa += conteo
+            fr = fa/n
+            far = faa/n
 
-        else:
+            frecuencias.append((intervalo, fa, faa, fr, far))
 
-            for key, value in contar_datos.items():
-
-                if key in range(intervalo[0], intervalo[1]):
-                    conteo += value
-        faa += conteo
-
-        fa.append((intervalo, conteo, faa))
-
-    return fa
+    return frecuencias
 
 
-def medidas_posicion(datos, k=4):
+def medidas_posicion(datos, k=4, columna=0):
     '''Ubica las posiciones para la agrupacion de los datos en cuartiles (k=4), deciles (k=10) y percentiles (k=100)
 
-    Entrada: lista de datos no agrupados (pueden no estar ordenados)
+    Entrada:    -Lista de datos no agrupados (pueden no estar ordenados)
+                -DataFrame de la libreria de pandas:
+                    Se debera definir el nombre de la columna que contiene los datos (default: columna=0)
 
     Regresa un diccionario {Posicion: (ubicacion, valor)}'''
+
+    if type(datos) is pandas.core.frame.DataFrame:
+        
+        try:
+
+            datos = datos.iloc[:, columna].to_list()
+        except:
+
+            datos = datos.loc[:, columna].to_list()
+
 
     n = len(datos)
     if k != 4 and k != 10 and k != 100:
@@ -788,11 +950,11 @@ class Pruebas_caja_cristal(unittest.TestCase):
             [50, 55], [55, 60], [60, 65], [65, 70], [70, 75], [75, 80], [80, 85]
         ])
 
-    def test_calculo_frecuencias_absolutas(self):
-        formula_calculo_frecuencias_absolutas = calculo_frecuencias_absolutas(
+    def test_calculo_frecuencias(self):
+        formula_calculo_frecuencias = calculo_frecuencias(
             analisis_lista2, 5)
 
-        self.assertEqual(formula_calculo_frecuencias_absolutas, [
+        self.assertEqual(formula_calculo_frecuencias, [
             ([50, 55], 2, 2), ([55, 60], 7, 9), ([
                 60, 65], 17, 26), ([65, 70], 30, 56),
             ([70, 75], 14, 70), ([75, 80], 7, 77), ([80, 85], 3, 80)
